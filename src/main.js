@@ -33,7 +33,18 @@ class App {
             this.trophySystem.show();
         };
         
+        // Afficher le score max au chargement
+        this.displayMaxScore();
+        
         console.log('✅ Application prête !');
+    }
+    
+    displayMaxScore() {
+        const maxScore = localStorage.getItem('xsheep_maxScore') || '0';
+        const displayElement = document.getElementById('display-max-score');
+        if (displayElement) {
+            displayElement.textContent = parseInt(maxScore).toLocaleString('fr-FR');
+        }
     }
     
     startGame(mode) {

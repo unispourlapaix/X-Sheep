@@ -666,6 +666,11 @@ export class ObstacleManager {
         // Ajouter XP directement au total (power-ups, boss)
         this.totalXP += amount;
         
+        // Sauvegarder dans localStorage via ScoreManager si disponible
+        if (this.game && this.game.endlessMode && this.game.endlessMode.scoreManager) {
+            this.game.endlessMode.scoreManager.addXP(amount);
+        }
+        
         // Log seulement pour les gros gains (>50 XP)
         if (amount >= 50) {
             console.log(`🎉 +${amount} XP! Total: ${this.totalXP}`);
