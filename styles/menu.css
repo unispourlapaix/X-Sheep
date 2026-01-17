@@ -261,3 +261,200 @@ body {
 .author-signature:active {
     transform: scale(0.95);
 }
+/* Optimisation Mobile Paysage */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+    .menu-container {
+        width: 95vw;
+        height: 90vh;
+        padding: 15px;
+    }
+
+    .logo-title h1 {
+        font-size: 28px;
+        letter-spacing: 3px;
+        margin-bottom: 10px;
+    }
+
+    .logo-subtitle {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    .mode-selector {
+        flex-direction: row;
+        gap: 15px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mode-card {
+        width: 45%;
+        max-width: 320px;
+        padding: 15px;
+    }
+
+    .mode-icon {
+        font-size: 40px;
+    }
+
+    .mode-title {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .mode-description {
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .stat-value {
+        font-size: 16px;
+    }
+
+    .stat-label {
+        font-size: 9px;
+    }
+
+    .menu-header {
+        font-size: 9px;
+        top: 10px;
+    }
+
+    #menu-max-score {
+        font-size: 11px;
+        padding: 6px 12px;
+        bottom: 8px;
+    }
+
+    .trophy-center-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .trophy-center-icon > div:first-child {
+        font-size: 50px;
+    }
+
+    .trophy-center-icon > div:last-child {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 700px) and (orientation: landscape) {
+    .menu-container {
+        width: 98vw;
+        height: 95vh;
+        padding: 10px;
+    }
+
+    .logo-title {
+        margin-bottom: 15px;
+    }
+
+    .logo-title h1 {
+        font-size: 24px;
+        letter-spacing: 2px;
+    }
+
+    .logo-subtitle {
+        font-size: 10px;
+    }
+
+    .mode-card {
+        padding: 12px;
+    }
+
+    .mode-icon {
+        font-size: 35px;
+        margin-bottom: 6px;
+    }
+
+    .mode-title {
+        font-size: 16px;
+    }
+
+    .mode-description {
+        font-size: 9px;
+        margin-bottom: 10px;
+    }
+
+    .mode-stats {
+        padding-top: 10px;
+    }
+
+    .stat-value {
+        font-size: 14px;
+    }
+}
+
+/* Petits écrans paysage (smartphones) */
+@media screen and (max-height: 450px) and (orientation: landscape) {
+    .menu-container {
+        height: 98vh;
+        padding: 8px;
+    }
+
+    .logo-title h1 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .logo-subtitle {
+        font-size: 9px;
+        margin-bottom: 8px;
+    }
+
+    .mode-selector {
+        gap: 10px;
+    }
+
+    .mode-card {
+        padding: 10px;
+    }
+
+    .mode-icon {
+        font-size: 30px;
+        margin-bottom: 5px;
+    }
+
+    .mode-title {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .mode-description {
+        font-size: 8px;
+        margin-bottom: 8px;
+    }
+
+    .mode-stats {
+        padding-top: 8px;
+    }
+
+    .stat-value {
+        font-size: 13px;
+    }
+
+    .stat-label {
+        font-size: 8px;
+    }
+
+    #menu-max-score {
+        font-size: 10px;
+        padding: 4px 10px;
+        bottom: 5px;
+    }
+
+    .trophy-center-icon {
+        width: 80px;
+        height: 80px;
+    }
+
+    .trophy-center-icon > div:first-child {
+        font-size: 40px;
+    }
+
+    .trophy-center-icon > div:last-child {
+        font-size: 10px;
+    }
+}

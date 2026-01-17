@@ -5,6 +5,7 @@ import { ParticleSystem } from './ParticleSystem.js';
 import { PixelArtRenderer } from './PixelArtRenderer.js';
 import { CloudBackground } from './CloudBackground.js';
 import { WaterBackground } from './WaterBackground.js';
+import { ResponsiveHelper } from '../utils/ResponsiveHelper.js';
 
 export class Renderer {
     constructor(game) {
@@ -1042,10 +1043,11 @@ export class Renderer {
     
     drawHealthBar() {
         const player = this.game.player;
-        const heartSize = 25;
-        const spacing = 5;
-        const startX = 20;
-        const startY = 20;
+        const scale = ResponsiveHelper.getScaleFactor();
+        const heartSize = ResponsiveHelper.getUISize(25);
+        const spacing = ResponsiveHelper.getMargin(5);
+        const startX = ResponsiveHelper.getMargin(20);
+        const startY = ResponsiveHelper.getMargin(20);
         
         // Dessiner chaque cœur
         for (let i = 0; i < player.maxLives; i++) {
@@ -1105,10 +1107,10 @@ export class Renderer {
         const player = this.game.player;
         const fuelPercent = player.fuel / player.maxFuel;
         
-        const gaugeX = 20;
-        const gaugeY = 110; // Déplacé sous les cœurs
-        const gaugeWidth = 200;
-        const gaugeHeight = 25;
+        const gaugeX = ResponsiveHelper.getMargin(20);
+        const gaugeY = ResponsiveHelper.getMargin(110); // Déplacé sous les cœurs
+        const gaugeWidth = ResponsiveHelper.getUISize(200);
+        const gaugeHeight = ResponsiveHelper.getUISize(25);
         
         // Calculer extension pour bonus
         const bonusPercent = Math.min(player.bonusFuel / player.maxFuel, 0.5);
@@ -1169,7 +1171,7 @@ export class Renderer {
         
         // Texte
         this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.font = 'bold 14px Arial';
+        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px Arial`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         const totalFuel = Math.floor(player.fuel + player.bonusFuel);
@@ -1178,7 +1180,7 @@ export class Renderer {
         // Avertissement si carburant bas
         if (fuelPercent < 0.25 && player.bonusFuel <= 0 && Math.floor(Date.now() / 500) % 2 === 0) {
             this.ctx.fillStyle = '#FF0000';
-            this.ctx.font = 'bold 12px Arial';
+            this.ctx.font = `bold ${ResponsiveHelper.getFontSize(12)}px Arial`;
             this.ctx.fillText('⚠️ CARBURANT FAIBLE', gaugeX + gaugeWidth/2, gaugeY - 10);
         }
     }
@@ -1446,7 +1448,8 @@ export class Renderer {
     }
     
     drawLEDPanel() {
-        const panelHeight = 60;
+        const isMobile = ResponsiveHelper.isMobileLandscape();
+        const panelHeight = ResponsiveHelper.getUISize(60);
         const panelY = this.canvas.height - panelHeight;
         
         // Fond du panneau LED noir avec bordure
@@ -1469,55 +1472,55 @@ export class Renderer {
         
         // NIVEAU 3: Afficher la sagesse au lieu du score
         if (this.game.level3Active || this.game.level3Entering) {
-            const livesX = 30;
-            const livesY = panelY + 35;
+            const livesX = ResponsiveHelper.getMargin(30);
+            const livesY = panelY + ResponsiveHelper.getUISize(35);
             
             // Label VIES
             this.ctx.fillStyle = '#4A90A4';
-            this.ctx.font = 'bold 14px monospace';
-            this.ctx.fillText('VIES', livesX, panelY + 18);
+            this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px monospace`;
+            this.ctx.fillText('VIES', livesX, panelY + ResponsiveHelper.getUISize(18));
             
             // Coeurs pour les vies
             const player = this.game.player;
             const heartsText = '❤️'.repeat(player.lives);
-            this.ctx.font = '16px Arial';
+            this.ctx.font = `${ResponsiveHelper.getFontSize(16)}px Arial`;
             this.ctx.fillText(heartsText, livesX, livesY);
             
             // Compteur numérique
             this.ctx.fillStyle = '#888';
-            this.ctx.font = 'bold 12px monospace';
-            this.ctx.fillText(`${player.lives}/${player.maxLives}`, livesX + player.lives * 18 + 10, livesY + 5);
+            this.ctx.font = `bold ${ResponsiveHelper.getFontSize(12)}px monospace`;
+            this.ctx.fillText(`${player.lives}/${player.maxLives}`, livesX + player.lives * ResponsiveHelper.getUISize(18) + 10, livesY + 5);
             
             this.ctx.restore();
             return;
         }
         
         // SCORE à gauche (niveaux 1 et 2)
-        const scoreX = 30;
-        const scoreY = panelY + 35;
+        const scoreX = ResponsiveHelper.getMargin(30);
+        const scoreY = panelY + ResponsiveHelper.getUISize(35);
         
         // Label SCORE
         this.ctx.fillStyle = '#555';
-        this.ctx.font = 'bold 14px monospace';
-        this.ctx.fillText('SCORE', scoreX, panelY + 18);
+        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px monospace`;
+        this.ctx.fillText('SCORE', scoreX, panelY + ResponsiveHelper.getUISize(18));
         
         // Chiffres LED rouges pour le score
-        this.drawLEDNumber(this.game.score.toString().padStart(6, '0'), scoreX, scoreY, '#FF0000', 28);
+        this.drawLEDNumber(this.game.score.toString().padStart(6, '0'), scoreX, scoreY, '#FF0000', ResponsiveHelper.getFontSize(28));
         
         // Nombre de bulles éclatées juste après le score
         const bubblesPopped = this.game.obstacleManager?.narrativeBubblesPopped || 0;
         this.ctx.fillStyle = '#888';
-        this.ctx.font = 'bold 12px monospace';
-        this.ctx.fillText(`💭 ${bubblesPopped}`, scoreX + 175, scoreY + 5);
+        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(12)}px monospace`;
+        this.ctx.fillText(`💭 ${bubblesPopped}`, scoreX + ResponsiveHelper.getUISize(175), scoreY + 5);
         
         // CARBURANT au centre
-        const fuelX = this.canvas.width / 2 - 80;
-        const fuelY = panelY + 35;
+        const fuelX = this.canvas.width / 2 - ResponsiveHelper.getUISize(80);
+        const fuelY = panelY + ResponsiveHelper.getUISize(35);
         
         // Label FUEL
         this.ctx.fillStyle = '#555';
-        this.ctx.font = 'bold 14px monospace';
-        this.ctx.fillText('FUEL', fuelX, panelY + 18);
+        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px monospace`;
+        this.ctx.fillText('FUEL', fuelX, panelY + ResponsiveHelper.getUISize(18));
         
         // Carburant total (normal + bonus)
         const totalFuel = Math.max(0, Math.floor(this.game.player.fuel + this.game.player.bonusFuel));
@@ -1526,13 +1529,13 @@ export class Renderer {
         
         // Chiffres LED verts pour le carburant
         const fuelColor = normalFuel > 50 ? '#00FF00' : normalFuel > 20 ? '#FFAA00' : '#FF0000';
-        this.drawLEDNumber(totalFuel.toString().padStart(3, '0'), fuelX, fuelY, fuelColor, 28);
+        this.drawLEDNumber(totalFuel.toString().padStart(3, '0'), fuelX, fuelY, fuelColor, ResponsiveHelper.getFontSize(28));
         
         // Barre de carburant visuelle
-        const barX = fuelX + 120;
-        const barY = panelY + 20;
-        const barWidth = 150;
-        const barHeight = 20;
+        const barX = fuelX + ResponsiveHelper.getUISize(120);
+        const barY = panelY + ResponsiveHelper.getUISize(20);
+        const barWidth = ResponsiveHelper.getUISize(150);
+        const barHeight = ResponsiveHelper.getUISize(20);
         
         // Calculer l'extension pour le bonus (max 50% de la barre)
         const bonusPercent = Math.min(bonusFuel / 100, 0.5);
