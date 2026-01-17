@@ -14,12 +14,20 @@
     <meta name="apple-mobile-web-app-title" content="X-Sheep">
     
     <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" id="manifest-link" href="/manifest.json">
     
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/icon-180x180.png">
+    
+    <script>
+        // Charger le bon manifest selon l'environnement
+        const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+        if (!isProduction) {
+            document.getElementById('manifest-link').href = '/manifest-dev.json';
+        }
+    </script>
     
     <link rel="stylesheet" href="styles/menu.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -165,7 +173,9 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                // Détecter le bon chemin selon l'environnement
+                const swPath = window.location.pathname.includes('/X-Sheep/') ? '/X-Sheep/sw.js' : '/sw.js';
+                navigator.serviceWorker.register(swPath)
                     .then((registration) => {
                         console.log('✅ Service Worker enregistré:', registration.scope);
                         

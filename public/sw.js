@@ -3,9 +3,10 @@
  * Cache pour fonctionnement offline
  */
 
-const CACHE_NAME = 'x-sheep-v1.0.0';
+const CACHE_NAME = 'x-sheep-v1.0.1';
 // Détecter si on est en production (GitHub Pages) ou en local
-const BASE_PATH = self.location.pathname.includes('/X-Sheep/') ? '/X-Sheep' : '';
+const isProduction = self.location.hostname !== 'localhost' && self.location.hostname !== '127.0.0.1';
+const BASE_PATH = isProduction ? '/X-Sheep' : '';
 
 const urlsToCache = [
   `${BASE_PATH}/`,
@@ -89,7 +90,7 @@ self.addEventListener('fetch', (event) => {
             
             // Retourner une page offline basique si rien dans le cache
             if (event.request.mode === 'navigate') {
-              return caches.match('/X-Sheep/index.html');
+              return caches.match(`${BASE_PATH}/index.html`);
             }
           });
       })
