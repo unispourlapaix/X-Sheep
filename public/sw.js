@@ -4,11 +4,12 @@
  */
 
 const CACHE_NAME = 'x-sheep-v1.0.0';
+// Détecter si on est en production (GitHub Pages) ou en local
+const BASE_PATH = self.location.pathname.includes('/X-Sheep/') ? '/X-Sheep' : '';
+
 const urlsToCache = [
-  '/X-Sheep/',
-  '/X-Sheep/index.html',
-  '/X-Sheep/assets/index.js',
-  '/X-Sheep/assets/index.css'
+  `${BASE_PATH}/`,
+  `${BASE_PATH}/index.html`
 ];
 
 // Installation du Service Worker
@@ -18,11 +19,11 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('[SW] Cache ouvert');
-        return cache.addAll(urlsToCache.map(url => new Request(url, { cache: 'reload' })));
-      })
-      .catch((error) => {
-        console.warn('[SW] Erreur de cache initial:', error);
-        return Promise.resolve();
+        // Ne pas cacher les assets au début, ils seront mis en cache à la demande
+        return cache.addAll(urlsToCache).catch(error => {
+          console.warn('[SW] Erreur cache initial (normal en dev):', error);
+          return Promise.resolve();
+        });
       })
   );
   self.skipWaiting();
