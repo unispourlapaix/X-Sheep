@@ -1,4 +1,5 @@
 // main.js - Point d'entrée de l'application
+import './config/ConsoleConfig.js'; // Désactiver logs en production
 import { MenuSystem } from './ui/MenuSystem.js';
 import { Game } from './core/Game.js';
 import { MolecularBackground } from './ui/MolecularBackground.js';
