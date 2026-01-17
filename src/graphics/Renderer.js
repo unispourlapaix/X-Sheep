@@ -1022,6 +1022,13 @@ export class Renderer {
         this.ctx.font = 'bold 18px Arial';
         this.ctx.fillText(`🎯 SCORE: ${this.game.score.toLocaleString()}`, this.canvas.width - 240, 35);
         
+        // Score maximum en bas de l'écran (petit, noir, centré)
+        this.ctx.fillStyle = '#000000';
+        this.ctx.font = '12px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(`Max: ${this.game.maxScore.toLocaleString()}`, this.canvas.width / 2, this.canvas.height - 10);
+        this.ctx.textAlign = 'left'; // Reset
+        
         // Distance
         this.ctx.fillStyle = GameConfig.COLORS.SKY_BLUE;
         this.ctx.fillText(`📏 ${Math.floor(endless.distance)}m`, this.canvas.width - 240, 60);
@@ -1038,6 +1045,13 @@ export class Renderer {
         this.ctx.fillStyle = '#DDA0DD';
         this.ctx.font = 'bold 14px Arial';
         this.ctx.fillText(`🏆 Record: ${endless.highScore.toLocaleString()}`, this.canvas.width - 240, 175);
+        
+        // Score maximum en bas de l'écran (petit, noir, centré)
+        this.ctx.fillStyle = '#000000';
+        this.ctx.font = '12px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(`Max: ${this.game.maxScore.toLocaleString()}`, this.canvas.width / 2, this.canvas.height - 10);
+        this.ctx.textAlign = 'left'; // Reset
     }
     
     drawHealthBar() {

@@ -50,6 +50,7 @@ export class Game {
         
         // État du jeu
         this.score = 0;
+        this.maxScore = this.loadMaxScore();
         this.obstaclesCleared = 0;
         this.gameSpeed = GameConfig.GAME_SPEED_INITIAL;
         this.gameOverAnimation = false; // Animation vers le paradis
@@ -739,6 +740,7 @@ export class Game {
     
     gameOver() {
         console.log('💀 Game Over');
+        this.updateMaxScore();
         
         // Si on est en niveau 2, afficher le choix de la grâce
         if (this.level2Active) {
@@ -1294,5 +1296,42 @@ export class Game {
         );
         
         console.log('✨ Mode infini redémarré avec succès!');
+    }
+    
+    /**
+     * Charger le score maximum depuis localStorage
+     */
+    loadMaxScore() {
+        try {
+            const saved = localStorage.getItem('xsheep_maxScore');
+            return saved ? parseInt(saved, 10) : 0;
+        } catch (e) {
+            console.warn('Erreur chargement score max:', e);
+            return 0;
+        }
+    }
+    
+    /**
+     * Sauvegarder le score maximum dans localStorage
+     */
+    saveMaxScore(score) {
+        try {
+            localStorage.setItem('xsheep_maxScore', score.toString());
+            console.log('💾 Score max sauvegardé:', score);
+        } catch (e) {
+            console.warn('Erreur sauvegarde score max:', e);
+        }
+    }
+    
+    /**
+     * Mettre à jour le score maximum si nécessaire
+     */
+    updateMaxScore() {
+        if (this.score > this.maxScore) {
+            this.maxScore = this.score;
+            this.saveMaxScore(this.maxScore);
+            return true; // Nouveau record!
+        }
+        return false;
     }
 }
