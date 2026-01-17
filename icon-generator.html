@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur d'Icônes - X-Sheep</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .preview-section {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .preview-item {
+            text-align: center;
+        }
+        
+        .preview-item h3 {
+            margin: 10px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: 
+                repeating-conic-gradient(#ddd 0% 25%, white 0% 50%) 
+                50% / 20px 20px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .info {
+            background: #f0f8ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        
+        .info h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        
+        .info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .info li {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐑 Générateur d'Icônes X-Sheep</h1>
+        <p class="subtitle">Icônes rondes avec fond transparent</p>
+        
+        <div class="preview-section">
+            <div class="preview-item">
+                <canvas id="icon512" width="512" height="512"></canvas>
+                <h3>512x512 (App Icon)</h3>
+            </div>
+            <div class="preview-item">
+                <canvas id="icon192" width="192" height="192"></canvas>
+                <h3>192x192 (PWA)</h3>
+            </div>
+            <div class="preview-item">
+                <canvas id="icon180" width="180" height="180"></canvas>
+                <h3>180x180 (Apple)</h3>
+            </div>
+            <div class="preview-item">
+                <canvas id="icon32" width="32" height="32"></canvas>
+                <h3>32x32 (Favicon)</h3>
+            </div>
+            <div class="preview-item">
+                <canvas id="icon16" width="16" height="16"></canvas>
+                <h3>16x16 (Favicon)</h3>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button onclick="downloadIcon(512)">📥 Télécharger 512x512</button>
+            <button onclick="downloadIcon(192)">📥 Télécharger 192x192</button>
+            <button onclick="downloadIcon(180)">📥 Télécharger 180x180</button>
+            <button onclick="downloadIcon(32)">📥 Télécharger 32x32</button>
+            <button onclick="downloadIcon(16)">📥 Télécharger 16x16</button>
+            <button onclick="downloadAllIcons()">📦 Télécharger Tout</button>
+        </div>
+        
+        <div class="info">
+            <h3>📋 Instructions</h3>
+            <ul>
+                <li><strong>512x512</strong> : Pour icon-512.png (PWA)</li>
+                <li><strong>192x192</strong> : Pour icon-192.png (PWA)</li>
+                <li><strong>180x180</strong> : Pour apple-touch-icon.png (iOS)</li>
+                <li><strong>32x32</strong> : Pour favicon-32x32.png</li>
+                <li><strong>16x16</strong> : Pour favicon-16x16.png et favicon.ico</li>
+            </ul>
+            <p><strong>Placez les fichiers dans le dossier <code>public/</code> de votre projet.</strong></p>
+        </div>
+    </div>
+    
+    <script>
+        // Dessiner le mouton avec SheepAnimator simplifié
+        function drawSheep(ctx, x, y, size) {
+            ctx.save();
+            
+            // Centrer
+            ctx.translate(x, y);
+            ctx.scale(size, size);
+            
+            // Corps du mouton (blanc avec gradient)
+            const gradient = ctx.createRadialGradient(0, 0, 5, 0, 0, 20);
+            gradient.addColorStop(0, '#FFFFFF');
+            gradient.addColorStop(1, '#F0F8FF');
+            ctx.fillStyle = gradient;
+            ctx.strokeStyle = '#DDD';
+            ctx.lineWidth = 2 / size;
+            
+            ctx.beginPath();
+            ctx.arc(0, 0, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Tête
+            ctx.fillStyle = '#FFFFFF';
+            ctx.strokeStyle = '#DDD';
+            ctx.beginPath();
+            ctx.arc(15, -10, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Yeux
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(12, -13, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(18, -13, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Étincelles dans les yeux (doré)
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(13, -14, 0.8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(19, -14, 0.8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sourire
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1.5 / size;
+            ctx.beginPath();
+            ctx.arc(15, -8, 4, 0.2, Math.PI - 0.2);
+            ctx.stroke();
+            
+            // Pattes - fines, juste des traits
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1.5 / size;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(-10, 10);
+            ctx.lineTo(-10, 20);
+            ctx.moveTo(10, 10);
+            ctx.lineTo(10, 20);
+            ctx.stroke();
+            
+            // Sabots (pas visibles sur petites tailles)
+            if (size > 1) {
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fillRect(-12, 19, 4, 3);
+                ctx.fillRect(8, 19, 4, 3);
+            }
+            
+            ctx.restore();
+        }
+        
+        // Créer une icône ronde
+        function createRoundIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            const center = size / 2;
+            
+            // Fond transparent
+            ctx.clearRect(0, 0, size, size);
+            
+            // Créer un cercle de clipping
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(center, center, center, 0, Math.PI * 2);
+            ctx.clip();
+            
+            // Fond dégradé ciel
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, size);
+            bgGradient.addColorStop(0, '#87CEEB');
+            bgGradient.addColorStop(1, '#4A90E2');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Nuages décoratifs
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            const cloudSize = size / 10;
+            ctx.beginPath();
+            ctx.arc(size * 0.2, size * 0.2, cloudSize, 0, Math.PI * 2);
+            ctx.arc(size * 0.8, size * 0.8, cloudSize, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+            
+            // Dessiner le mouton au centre
+            const sheepSize = size / 80; // Échelle adaptative
+            drawSheep(ctx, center, center, sheepSize);
+        }
+        
+        // Générer toutes les tailles
+        function generateAllIcons() {
+            const sizes = [512, 192, 180, 32, 16];
+            sizes.forEach(size => {
+                const canvas = document.getElementById(`icon${size}`);
+                createRoundIcon(canvas, size);
+            });
+        }
+        
+        // Télécharger une icône
+        function downloadIcon(size) {
+            const canvas = document.getElementById(`icon${size}`);
+            const link = document.createElement('a');
+            link.download = `icon-${size}x${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Télécharger toutes les icônes
+        function downloadAllIcons() {
+            const sizes = [512, 192, 180, 32, 16];
+            sizes.forEach((size, index) => {
+                setTimeout(() => downloadIcon(size), index * 500);
+            });
+        }
+        
+        // Générer au chargement
+        window.addEventListener('load', generateAllIcons);
+    </script>
+</body>
+</html>
