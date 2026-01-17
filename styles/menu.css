@@ -36,12 +36,51 @@ body {
     }
 }
 
-.trophy-center-icon:hover > div:first-child {
+.trophy-center-icon:hover .trophy-icon {
     animation: trophy-pulse 1s ease-in-out infinite;
 }
 
-.trophy-center-icon:hover > div:last-child {
+.trophy-center-icon:hover .trophy-label {
     animation: trophy-glow 1s ease-in-out infinite;
+}
+
+.trophy-center-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    text-align: center;
+    z-index: 10;
+}
+
+.trophy-icon {
+    font-size: 80px;
+    filter: drop-shadow(0 8px 25px rgba(255,215,0,0.6));
+    animation: trophy-pulse 2s ease-in-out infinite;
+}
+
+.trophy-label {
+    font-size: 11px;
+    font-weight: 900;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    color: #000000;
+    text-shadow: none;
+    margin-top: -5px;
+}
+
+#menu-max-score {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0.7;
 }
 
 #molecular-canvas {
@@ -327,15 +366,15 @@ body {
     }
 
     .trophy-center-icon {
-        width: 100px;
-        height: 100px;
+        width: auto;
+        height: auto;
     }
 
-    .trophy-center-icon > div:first-child {
+    .trophy-icon {
         font-size: 50px;
     }
 
-    .trophy-center-icon > div:last-child {
+    .trophy-label {
         font-size: 11px;
     }
 }
@@ -446,15 +485,316 @@ body {
     }
 
     .trophy-center-icon {
+        width: auto;
+        height: auto;
+    }
+
+    .trophy-icon {
+        font-size: 40px;
+    }
+
+    .trophy-label {
+        font-size: 10px;
+    }
+}
+
+/* Mode Portrait (Mobile et Tablettes) */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    .menu-container {
+        width: 95vw;
+        height: auto;
+        max-height: 95vh;
+        padding: 20px 15px;
+    }
+
+    .logo-title {
+        margin-bottom: 20px;
+    }
+
+    .logo-title h1 {
+        font-size: 32px;
+        letter-spacing: 3px;
+    }
+
+    .logo-subtitle {
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+    .mode-selector {
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .mode-card {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        padding: 20px;
+    }
+
+    .mode-nucleus {
+        width: 120px;
+        height: 120px;
+        margin: 15px auto;
+    }
+
+    .nucleus-core {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .mode-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .mode-description {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .stat-value {
+        font-size: 18px;
+    }
+
+    .stat-label {
+        font-size: 10px;
+    }
+
+    .menu-header {
+        font-size: 10px;
+        top: 12px;
+    }
+
+    #menu-max-score {
+        font-size: 12px;
+        padding: 8px 15px;
+        bottom: 15px;
+    }
+
+    .trophy-center-icon {
+        width: auto;
+        height: auto;
+        top: 45%;
+    }
+
+    .trophy-icon {
+        font-size: 60px;
+    }
+
+    .trophy-label {
+        font-size: 11px;
+    }
+}
+
+/* Petits écrans portrait (smartphones) */
+@media screen and (max-width: 480px) and (orientation: portrait) {
+    .menu-container {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        padding: 15px 10px;
+    }
+
+    .logo-title {
+        margin-bottom: 15px;
+    }
+
+    .logo-title h1 {
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+
+    .logo-subtitle {
+        font-size: 11px;
+    }
+
+    .mode-selector {
+        gap: 15px;
+    }
+
+    .mode-card {
+        padding: 15px;
+        height: auto;
+    }
+
+    .mode-nucleus {
+        width: 100px;
+        height: 100px;
+        margin: 10px auto;
+    }
+
+    .nucleus-core {
+        width: 70px !important;
+        height: 70px !important;
+    }
+
+    .nucleus-orbit {
+        border-width: 1px;
+    }
+
+    .electron {
+        width: 8px;
+        height: 8px;
+    }
+
+    .mode-title {
+        font-size: 18px;
+    }
+
+    .mode-description {
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .mode-stats {
+        padding-top: 12px;
+    }
+
+    .stat-value {
+        font-size: 16px;
+    }
+
+    .stat-label {
+        font-size: 9px;
+    }
+
+    .menu-header {
+        font-size: 9px;
+        top: 10px;
+    }
+
+    #menu-max-score {
+        font-size: 11px;
+        padding: 6px 12px;
+        bottom: 10px;
+    }
+
+    .trophy-center-icon {
+        width: auto;
+        height: auto;
+        top: 42%;
+    }
+
+    .trophy-icon {
+        font-size: 50px;
+    }
+
+    .trophy-label {
+        font-size: 10px;
+    }
+}
+
+/* Très petits écrans (< 360px) */
+@media screen and (max-width: 360px) {
+    .menu-container {
+        padding: 10px 8px;
+    }
+
+    .logo-title h1 {
+        font-size: 24px;
+        letter-spacing: 1px;
+    }
+
+    .logo-subtitle {
+        font-size: 10px;
+    }
+
+    .mode-selector {
+        gap: 12px;
+    }
+
+    .mode-card {
+        padding: 12px;
+    }
+
+    .mode-nucleus {
         width: 80px;
         height: 80px;
     }
 
-    .trophy-center-icon > div:first-child {
-        font-size: 40px;
+    .nucleus-core {
+        width: 60px !important;
+        height: 60px !important;
     }
 
-    .trophy-center-icon > div:last-child {
-        font-size: 10px;
+    .mode-title {
+        font-size: 16px;
+    }
+
+    .mode-description {
+        font-size: 9px;
+    }
+
+    .stat-value {
+        font-size: 14px;
+    }
+
+    .stat-label {
+        font-size: 8px;
+    }
+
+    .trophy-center-icon {
+        width: auto;
+        height: auto;
+    }
+
+    .trophy-icon {
+        font-size: 45px;
+    }
+
+    .trophy-label {
+        font-size: 9px;
+    }
+}
+
+/* Mode paysage ultra-large (desktop) */
+@media screen and (min-width: 1400px) {
+    .menu-container {
+        width: 1100px;
+        height: 700px;
+    }
+
+    .logo-title h1 {
+        font-size: 50px;
+        letter-spacing: 8px;
+    }
+
+    .logo-subtitle {
+        font-size: 16px;
+    }
+
+    .mode-card {
+        width: 280px;
+        height: 380px;
+        padding: 30px 25px;
+    }
+
+    .mode-nucleus {
+        width: 160px;
+        height: 160px;
+    }
+
+    .nucleus-core {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .mode-title {
+        font-size: 28px;
+    }
+
+    .mode-description {
+        font-size: 14px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .stat-label {
+        font-size: 12px;
     }
 }
