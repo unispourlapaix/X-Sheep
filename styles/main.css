@@ -1,4 +1,5 @@
 /* Styles globaux si nécessaires */
+
 body {
     overflow: hidden;
     position: fixed;
@@ -8,7 +9,15 @@ body {
     padding: 0;
 }
 
-/* Optimisation Mobile Paysage */
+/* Mode Portrait - Comportement par défaut */
+@media screen and (orientation: portrait) {
+    body {
+        overflow: auto;
+        position: relative;
+    }
+}
+
+/* Optimisation Mobile Paysage UNIQUEMENT */
 @media screen and (max-width: 900px) and (orientation: landscape) {
     body {
         overflow: hidden;
@@ -20,8 +29,8 @@ body {
     }
 }
 
-/* Empêcher le zoom sur mobile */
-@media screen and (max-width: 900px) {
+/* Empêcher le zoom sur mobile en paysage uniquement */
+@media screen and (max-width: 900px) and (orientation: landscape) {
     input, button, select, textarea {
         font-size: 16px !important;
     }

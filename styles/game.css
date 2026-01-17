@@ -9,7 +9,19 @@
     object-fit: contain;
 }
 
-/* Optimisation Mobile Paysage */
+/* Mode Portrait - Garder configuration desktop */
+@media screen and (orientation: portrait) {
+    #game-canvas {
+        /* Pas d'adaptation en portrait, configuration fixe */
+        width: 800px !important;
+        height: 500px !important;
+        border: 3px solid #FFF;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+}
+
+/* Optimisation Mobile Paysage UNIQUEMENT */
 @media screen and (max-width: 900px) and (orientation: landscape) {
     #game-canvas {
         width: 100vw !important;
