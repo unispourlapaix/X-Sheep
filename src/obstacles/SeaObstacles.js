@@ -10,10 +10,10 @@ export class SeaObstacles {
             y: y,
             width: 80,
             height: 60,
-            speed: 2,
+            speed: 0.8,
             amplitude: 15,
             phase: Math.random() * Math.PI * 2,
-            damage: 1,
+            damage: 0,
             icon: '🌊'
         };
     }
@@ -25,8 +25,8 @@ export class SeaObstacles {
             y: y,
             width: 50,
             height: 50,
-            speed: 1.5,
-            damage: 2,
+            speed: 0.7,
+            damage: 1,
             icon: '🪨',
             rotation: Math.random() * Math.PI * 2
         };
@@ -39,8 +39,8 @@ export class SeaObstacles {
             y: y,
             width: 40,
             height: 60,
-            speed: 1,
-            damage: 1,
+            speed: 0.5,
+            damage: 0,
             icon: '🪼',
             bobPhase: Math.random() * Math.PI * 2,
             tentacles: true
@@ -54,8 +54,8 @@ export class SeaObstacles {
             y: y,
             width: 100,
             height: 50,
-            speed: 3,
-            damage: 2,
+            speed: 1.2,
+            damage: 1,
             icon: '🦈',
             aggressive: true
         };
@@ -68,10 +68,10 @@ export class SeaObstacles {
             y: y,
             width: 120,
             height: 120,
-            speed: 0.5,
+            speed: 0.3,
             damage: 0, // Ne fait pas de dégâts, aspire seulement
             rotation: 0,
-            pullForce: 2, // Force d'aspiration
+            pullForce: 0.8, // Force d'aspiration réduite
             icon: '🌀'
         };
     }
@@ -83,11 +83,11 @@ export class SeaObstacles {
             y: y,
             width: 40,
             height: 60,
-            speed: 1.5,
-            damage: 1,
+            speed: 0.6,
+            damage: 0,
             icon: '🧜‍♀️',
             singing: false,
-            charmRadius: 150
+            charmRadius: 100
         };
     }
 
@@ -96,12 +96,13 @@ export class SeaObstacles {
         const y = 200 + Math.random() * 200; // Zone eau
         const rand = Math.random();
 
-        if (rand < 0.3) return this.createWave(x, y);
-        if (rand < 0.5) return this.createRock(x, y);
-        if (rand < 0.65) return this.createJellyfish(x, y);
-        if (rand < 0.8) return this.createShark(x, y);
-        if (rand < 0.9) return this.createWhirlpool(x, y);
-        return this.createSiren(x, y);
+        // Plus de vagues et méduses (inoffensives), moins de requins
+        if (rand < 0.4) return this.createWave(x, y);
+        if (rand < 0.6) return this.createJellyfish(x, y);
+        if (rand < 0.75) return this.createWhirlpool(x, y);
+        if (rand < 0.85) return this.createSiren(x, y);
+        if (rand < 0.95) return this.createRock(x, y);
+        return this.createShark(x, y);
     }
 }
 
@@ -111,12 +112,12 @@ export class Leviathan {
         this.y = canvasHeight / 2;
         this.width = 200;
         this.height = 150;
-        this.speed = 1;
-        this.health = 10;
-        this.maxHealth = 10;
+        this.speed = 0.5;
+        this.health = 5;
+        this.maxHealth = 5;
         this.phase = 0; // 0: approche, 1: attaque, 2: fuite
         this.attackTimer = 0;
-        this.attackCooldown = 180; // 3 secondes
+        this.attackCooldown = 360; // 6 secondes (plus lent)
         this.isActive = false;
         this.defeated = false;
     }
@@ -171,10 +172,10 @@ export class Leviathan {
             y: this.y + this.height / 2,
             width: 30,
             height: 30,
-            speed: 4,
-            damage: 2,
+            speed: 2,
+            damage: 1,
             icon: '💧',
-            velX: -4,
+            velX: -2,
             velY: 0
         };
     }

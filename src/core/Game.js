@@ -73,8 +73,8 @@ export class Game {
         this.level3Timer = 0;
         this.level3Proverbs = []; // Proverbes flottants
         this.level3Wisdom = 0; // Sagesse accumulée
-        this.level3SpawnRate = 180; // Nouveau proverbe toutes les 3 secondes
-        this.level3ObstacleSpawnRate = 120; // Obstacles toutes les 2 secondes
+        this.level3SpawnRate = 120; // Nouveau proverbe toutes les 2 secondes (plus rapide)
+        this.level3ObstacleSpawnRate = 300; // Obstacles toutes les 5 secondes (plus lent)
         this.level3ObstacleTimer = 0;
         this.level3Obstacles = []; // Obstacles marins
         this.level3Projectiles = []; // Projectiles du Léviathan
@@ -588,12 +588,12 @@ export class Game {
                 this.level3Obstacles.push(obstacle);
                 this.level3ObstacleTimer = 0;
                 
-                // Augmenter progressivement la difficulté
-                this.level3ObstacleSpawnRate = Math.max(60, this.level3ObstacleSpawnRate - 2);
+                // Augmenter très légèrement la difficulté
+                this.level3ObstacleSpawnRate = Math.max(180, this.level3ObstacleSpawnRate - 1);
             }
             
-            // Faire apparaître le Léviathan après 30 secondes (si pas déjà vaincu)
-            if (this.level3Timer > 1800 && !this.leviathan && !this.leviathanDefeated) {
+            // Faire apparaître le Léviathan après 60 secondes (si pas déjà vaincu)
+            if (this.level3Timer > 3600 && !this.leviathan && !this.leviathanDefeated) {
                 this.leviathan = new Leviathan(this.canvas.width, this.canvas.height);
                 this.leviathan.isActive = true;
                 
@@ -617,9 +617,9 @@ export class Game {
                 
                 // Collision avec le Léviathan
                 if (this.leviathan.checkCollision(this.player) && !this.player.invincible) {
-                    this.player.lives -= 2;
+                    this.player.lives -= 1;
                     this.player.invincible = true;
-                    this.player.invincibleTimer = 120;
+                    this.player.invincibleTimer = 180;
                     
                     if (this.audioManager && this.audioManager.initialized) {
                         this.audioManager.playCollisionSound();
