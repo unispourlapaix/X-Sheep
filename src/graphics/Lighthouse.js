@@ -55,9 +55,56 @@ export class Lighthouse {
             ctx.restore();
         }
 
-        // Base du phare (rocher/plateforme)
-        ctx.fillStyle = '#2C2C2C';
-        ctx.fillRect(this.x - 10, this.y + this.height - 10, this.width + 20, 20);
+        // Rocher réaliste sous le phare
+        ctx.save();
+        
+        // Ombre du rocher
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.beginPath();
+        ctx.ellipse(this.x + this.width / 2, this.y + this.height + 35, this.width + 25, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Rocher principal (forme irrégulière)
+        ctx.fillStyle = '#4A4A4A';
+        ctx.beginPath();
+        ctx.moveTo(this.x - 20, this.y + this.height + 30);
+        ctx.lineTo(this.x - 15, this.y + this.height);
+        ctx.lineTo(this.x - 5, this.y + this.height - 10);
+        ctx.lineTo(this.x + 10, this.y + this.height - 5);
+        ctx.lineTo(this.x + this.width - 10, this.y + this.height - 5);
+        ctx.lineTo(this.x + this.width + 5, this.y + this.height - 10);
+        ctx.lineTo(this.x + this.width + 15, this.y + this.height);
+        ctx.lineTo(this.x + this.width + 20, this.y + this.height + 30);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Détails du rocher (fissures)
+        ctx.strokeStyle = '#2A2A2A';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(this.x - 10, this.y + this.height + 10);
+        ctx.lineTo(this.x - 5, this.y + this.height + 20);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x + this.width + 10, this.y + this.height + 15);
+        ctx.lineTo(this.x + this.width + 5, this.y + this.height + 25);
+        ctx.stroke();
+        
+        // Lumière sur le rocher
+        ctx.fillStyle = '#6A6A6A';
+        ctx.beginPath();
+        ctx.moveTo(this.x + 5, this.y + this.height);
+        ctx.lineTo(this.x + 15, this.y + this.height - 5);
+        ctx.lineTo(this.x + 25, this.y + this.height + 5);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.restore();
+
+        // Base du phare (plateforme sur le rocher)
+        ctx.fillStyle = '#5A5A5A';
+        ctx.fillRect(this.x - 5, this.y + this.height - 5, this.width + 10, 10);
 
         // Tour du phare (rayures rouges et blanches)
         const stripeHeight = this.height / 6;

@@ -10,7 +10,7 @@ export class SeaObstacles {
             y: y,
             width: 80,
             height: 60,
-            speed: 0.8,
+            speed: 0.4,
             amplitude: 15,
             phase: Math.random() * Math.PI * 2,
             damage: 0,
@@ -25,7 +25,7 @@ export class SeaObstacles {
             y: y,
             width: 50,
             height: 50,
-            speed: 0.7,
+            speed: 0.4,
             damage: 1,
             icon: '🪨',
             rotation: Math.random() * Math.PI * 2
@@ -39,7 +39,7 @@ export class SeaObstacles {
             y: y,
             width: 40,
             height: 60,
-            speed: 0.5,
+            speed: 0.3,
             damage: 0,
             icon: '🪼',
             bobPhase: Math.random() * Math.PI * 2,
@@ -54,7 +54,7 @@ export class SeaObstacles {
             y: y,
             width: 100,
             height: 50,
-            speed: 1.2,
+            speed: 0.6,
             damage: 1,
             icon: '🦈',
             aggressive: true
@@ -68,10 +68,10 @@ export class SeaObstacles {
             y: y,
             width: 120,
             height: 120,
-            speed: 0.3,
+            speed: 0.2,
             damage: 0, // Ne fait pas de dégâts, aspire seulement
             rotation: 0,
-            pullForce: 0.8, // Force d'aspiration réduite
+            pullForce: 0.5, // Force d'aspiration faible
             icon: '🌀'
         };
     }
@@ -83,7 +83,7 @@ export class SeaObstacles {
             y: y,
             width: 40,
             height: 60,
-            speed: 0.6,
+            speed: 0.3,
             damage: 0,
             icon: '🧜‍♀️',
             singing: false,

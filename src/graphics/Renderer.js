@@ -802,30 +802,111 @@ export class Renderer {
             const waterLevel = 400; // Niveau de l'eau
             const isFlying = p.y < waterLevel - 20; // Bateau hors de l'eau
             
-            // Fusées si le bateau vole
+            // Fusées améliorées si le bateau vole
             if (isFlying) {
-                // Fusée arrière gauche (mieux positionnée)
+                const time = Date.now() * 0.01;
+                
+                // Fusée arrière gauche
+                this.ctx.save();
+                
+                // Corps de la fusée (métal)
+                const gradient1 = this.ctx.createLinearGradient(p.x + 10, p.y + boatHeight + 20, p.x + 20, p.y + boatHeight + 20);
+                gradient1.addColorStop(0, '#666666');
+                gradient1.addColorStop(0.5, '#999999');
+                gradient1.addColorStop(1, '#666666');
+                this.ctx.fillStyle = gradient1;
+                this.ctx.fillRect(p.x + 12, p.y + boatHeight + 15, 8, 15);
+                
+                // Cône de la fusée
                 this.ctx.fillStyle = '#FF6600';
                 this.ctx.beginPath();
-                this.ctx.moveTo(p.x + 15, p.y + boatHeight + 20);
-                this.ctx.lineTo(p.x + 10, p.y + boatHeight + 30);
-                this.ctx.lineTo(p.x + 20, p.y + boatHeight + 30);
+                this.ctx.moveTo(p.x + 16, p.y + boatHeight + 15);
+                this.ctx.lineTo(p.x + 12, p.y + boatHeight + 20);
+                this.ctx.lineTo(p.x + 20, p.y + boatHeight + 20);
                 this.ctx.closePath();
                 this.ctx.fill();
                 
-                // Fusée arrière droite (mieux positionnée)
+                // Flammes animées (dégradé)
+                for (let i = 0; i < 3; i++) {
+                    const flameY = p.y + boatHeight + 30 + i * 8 + Math.sin(time + i) * 3;
+                    const flameSize = 12 - i * 3;
+                    
+                    const flameGradient = this.ctx.createRadialGradient(
+                        p.x + 16, flameY, 0,
+                        p.x + 16, flameY, flameSize
+                    );
+                    flameGradient.addColorStop(0, 'rgba(255, 255, 100, 0.9)');
+                    flameGradient.addColorStop(0.4, 'rgba(255, 150, 0, 0.7)');
+                    flameGradient.addColorStop(1, 'rgba(255, 50, 0, 0)');
+                    
+                    this.ctx.fillStyle = flameGradient;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x + 16, flameY, flameSize, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                
+                // Étincelles
+                for (let i = 0; i < 3; i++) {
+                    const sparkY = p.y + boatHeight + 35 + Math.random() * 15;
+                    const sparkX = p.x + 16 + (Math.random() - 0.5) * 8;
+                    this.ctx.fillStyle = 'rgba(255, 200, 50, 0.8)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(sparkX, sparkY, 2, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                
+                this.ctx.restore();
+                
+                // Fusée arrière droite (même style)
+                this.ctx.save();
+                
+                // Corps de la fusée (métal)
+                const gradient2 = this.ctx.createLinearGradient(p.x + boatWidth - 20, p.y + boatHeight + 20, p.x + boatWidth - 10, p.y + boatHeight + 20);
+                gradient2.addColorStop(0, '#666666');
+                gradient2.addColorStop(0.5, '#999999');
+                gradient2.addColorStop(1, '#666666');
+                this.ctx.fillStyle = gradient2;
+                this.ctx.fillRect(p.x + boatWidth - 20, p.y + boatHeight + 15, 8, 15);
+                
+                // Cône de la fusée
+                this.ctx.fillStyle = '#FF6600';
                 this.ctx.beginPath();
-                this.ctx.moveTo(p.x + boatWidth - 15, p.y + boatHeight + 20);
-                this.ctx.lineTo(p.x + boatWidth - 20, p.y + boatHeight + 30);
-                this.ctx.lineTo(p.x + boatWidth - 10, p.y + boatHeight + 30);
+                this.ctx.moveTo(p.x + boatWidth - 16, p.y + boatHeight + 15);
+                this.ctx.lineTo(p.x + boatWidth - 20, p.y + boatHeight + 20);
+                this.ctx.lineTo(p.x + boatWidth - 12, p.y + boatHeight + 20);
                 this.ctx.closePath();
                 this.ctx.fill();
                 
-                // Flammes (plus proches des fusées)
-                this.ctx.fillStyle = '#FFD700';
-                this.ctx.font = '18px Arial';
-                this.ctx.fillText('🔥', p.x + 8, p.y + boatHeight + 38);
-                this.ctx.fillText('🔥', p.x + boatWidth - 18, p.y + boatHeight + 38);
+                // Flammes animées (dégradé)
+                for (let i = 0; i < 3; i++) {
+                    const flameY = p.y + boatHeight + 30 + i * 8 + Math.sin(time + i + 1) * 3;
+                    const flameSize = 12 - i * 3;
+                    
+                    const flameGradient = this.ctx.createRadialGradient(
+                        p.x + boatWidth - 16, flameY, 0,
+                        p.x + boatWidth - 16, flameY, flameSize
+                    );
+                    flameGradient.addColorStop(0, 'rgba(255, 255, 100, 0.9)');
+                    flameGradient.addColorStop(0.4, 'rgba(255, 150, 0, 0.7)');
+                    flameGradient.addColorStop(1, 'rgba(255, 50, 0, 0)');
+                    
+                    this.ctx.fillStyle = flameGradient;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x + boatWidth - 16, flameY, flameSize, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                
+                // Étincelles
+                for (let i = 0; i < 3; i++) {
+                    const sparkY = p.y + boatHeight + 35 + Math.random() * 15;
+                    const sparkX = p.x + boatWidth - 16 + (Math.random() - 0.5) * 8;
+                    this.ctx.fillStyle = 'rgba(255, 200, 50, 0.8)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(sparkX, sparkY, 2, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                
+                this.ctx.restore();
             }
             
             // Coque du bateau

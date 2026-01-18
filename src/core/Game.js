@@ -74,7 +74,7 @@ export class Game {
         this.level3Proverbs = []; // Proverbes flottants
         this.level3Wisdom = 0; // Sagesse accumulée
         this.level3SpawnRate = 120; // Nouveau proverbe toutes les 2 secondes (plus rapide)
-        this.level3ObstacleSpawnRate = 300; // Obstacles toutes les 5 secondes (plus lent)
+        this.level3ObstacleSpawnRate = 480; // Obstacles toutes les 8 secondes (très lent)
         this.level3ObstacleTimer = 0;
         this.level3Obstacles = []; // Obstacles marins
         this.level3Projectiles = []; // Projectiles du Léviathan
@@ -588,8 +588,8 @@ export class Game {
                 this.level3Obstacles.push(obstacle);
                 this.level3ObstacleTimer = 0;
                 
-                // Augmenter très légèrement la difficulté
-                this.level3ObstacleSpawnRate = Math.max(180, this.level3ObstacleSpawnRate - 1);
+                // Difficulté fixe - pas d'augmentation
+                // this.level3ObstacleSpawnRate reste constant
             }
             
             // Faire apparaître le Léviathan après 60 secondes (si pas déjà vaincu)
@@ -668,7 +668,7 @@ export class Game {
             // Limiter les mouvements du bateau
             if (this.boatMode) {
                 this.player.x = Math.max(10, Math.min(this.canvas.width - 90, this.player.x));
-                this.player.y = Math.max(80, Math.min(480, this.player.y));
+                this.player.y = Math.max(300, Math.min(480, this.player.y)); // Vol limité au-dessus de l'eau
             }
             
             // Animer les obstacles marins
@@ -1074,8 +1074,8 @@ export class Game {
         this.boatMode = true;
         this.leviathanDefeated = false;
         
-        // Créer le phare au fond à gauche
-        this.lighthouse = new Lighthouse(50, 280);
+        // Créer le phare au fond à gauche sur un rocher
+        this.lighthouse = new Lighthouse(30, 250);
         
         // Réinitialiser le joueur
         this.player.lives = 3;
