@@ -33,6 +33,16 @@ export class KeyboardControls {
             return;
         }
         
+        // CHEAT: Touche ":" pour passer directement au niveau 3
+        if (e.key === ':') {
+            console.log('🎮 CHEAT: Passage au niveau 3');
+            this.game.startLevel2Transition();
+            setTimeout(() => {
+                this.game.startLevel3();
+            }, 100);
+            return;
+        }
+        
         switch(e.code) {
             case 'Space':
                 e.preventDefault();
