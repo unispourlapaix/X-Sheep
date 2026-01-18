@@ -18,6 +18,8 @@ import { ProverbCollectibles } from '../narrative/ProverbCollectibles.js';
 import { IntroSequence } from '../narrative/IntroSequence.js';
 import { getRandomComment, getOnomatopoeia } from '../narrative/BossComments.js';
 import { audioManager } from '../audio/AudioManager.js';
+import { Lighthouse } from '../graphics/Lighthouse.js';
+import { SeaObstacles, Leviathan } from '../obstacles/SeaObstacles.js';
 
 export class Game {
     constructor(mode, trophySystem = null) {
@@ -72,9 +74,16 @@ export class Game {
         this.level3Proverbs = []; // Proverbes flottants
         this.level3Wisdom = 0; // Sagesse accumulée
         this.level3SpawnRate = 180; // Nouveau proverbe toutes les 3 secondes
+        this.level3ObstacleSpawnRate = 120; // Obstacles toutes les 2 secondes
+        this.level3ObstacleTimer = 0;
+        this.level3Obstacles = []; // Obstacles marins
+        this.level3Projectiles = []; // Projectiles du Léviathan
         this.boatMode = false; // Le mouton est dans un bateau
         this.level3Entering = false; // Animation d'entrée au paradis
         this.level3EnterTimer = 0;
+        this.lighthouse = null; // Phare
+        this.leviathan = null; // Boss du niveau 3
+        this.leviathanDefeated = false;
         
         this.init();
     }
@@ -559,6 +568,12 @@ export class Game {
         // NIVEAU 3: Navigation et Sagesse
         if (this.level3Active) {
             this.level3Timer++;
+            this.level3ObstacleTimer++;
+            
+            // Mettre à jour le phare
+            if (this.lighthouse) {
+                this.lighthouse.update();
+            }
             
             // Spawner des proverbes
             if (this.level3Timer >= this.level3SpawnRate) {
@@ -567,22 +582,166 @@ export class Game {
                 this.level3Timer = 0;
             }
             
-            // Mettre à jour le joueur (mouvement limité en bateau)
+            // Spawner des obstacles marins
+            if (this.level3ObstacleTimer >= this.level3ObstacleSpawnRate && !this.leviathan) {
+                const obstacle = SeaObstacles.getRandom(this.canvas.width, this.canvas.height);
+                this.level3Obstacles.push(obstacle);
+                this.level3ObstacleTimer = 0;
+                
+                // Augmenter progressivement la difficulté
+                this.level3ObstacleSpawnRate = Math.max(60, this.level3ObstacleSpawnRate - 2);
+            }
+            
+            // Faire apparaître le Léviathan après 30 secondes (si pas déjà vaincu)
+            if (this.level3Timer > 1800 && !this.leviathan && !this.leviathanDefeated) {
+                this.leviathan = new Leviathan(this.canvas.width, this.canvas.height);
+                this.leviathan.isActive = true;
+                
+                if (this.notificationSystem) {
+                    this.notificationSystem.showNarrative({
+                        text: '🐉 LE LÉVIATHAN APPARAÎT ! Esquive ses attaques !',
+                        duration: 4000
+                    });
+                }
+                
+                // Ralentir le spawn des obstacles normaux
+                this.level3ObstacleSpawnRate = 200;
+            }
+            
+            // Mettre à jour le Léviathan
+            if (this.leviathan && this.leviathan.isActive) {
+                const projectile = this.leviathan.update(this.player);
+                if (projectile) {
+                    this.level3Projectiles.push(projectile);
+                }
+                
+                // Collision avec le Léviathan
+                if (this.leviathan.checkCollision(this.player) && !this.player.invincible) {
+                    this.player.lives -= 2;
+                    this.player.invincible = true;
+                    this.player.invincibleTimer = 120;
+                    
+                    if (this.audioManager && this.audioManager.initialized) {
+                        this.audioManager.playHitSound();
+                    }
+                    
+                    if (this.player.lives <= 0) {
+                        this.gameOver();
+                        return;
+                    }
+                }
+            }
+            
+            // Mettre à jour les projectiles du Léviathan
+            this.level3Projectiles.forEach((proj, index) => {
+                proj.x += proj.velX;
+                proj.y += proj.velY;
+                
+                // Collision avec le joueur
+                const dx = proj.x - this.player.x;
+                const dy = proj.y - this.player.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 40 && !this.player.invincible) {
+                    this.player.lives -= proj.damage;
+                    this.player.invincible = true;
+                    this.player.invincibleTimer = 60;
+                    proj.hit = true;
+                    
+                    if (this.audioManager && this.audioManager.initialized) {
+                        this.audioManager.playHitSound();
+                    }
+                    
+                    if (this.player.lives <= 0) {
+                        this.gameOver();
+                        return;
+                    }
+                }
+            });
+            
+            // Nettoyer les projectiles
+            this.level3Projectiles = this.level3Projectiles.filter(p => !p.hit && p.x > -50 && p.x < this.canvas.width + 50);
+            
+            // Mettre à jour le joueur
             this.player.update();
             
             // Limiter les mouvements du bateau
             if (this.boatMode) {
-                this.player.x = Math.max(10, Math.min(this.canvas.width - 90, this.player.x)); // Garder dans le canvas
-                this.player.y = Math.max(80, Math.min(480, this.player.y)); // Peut voler en haut
-                // Pas de limite sur jumping/flying en mode bateau - peut voler!
+                this.player.x = Math.max(10, Math.min(this.canvas.width - 90, this.player.x));
+                this.player.y = Math.max(80, Math.min(480, this.player.y));
             }
+            
+            // Animer les obstacles marins
+            this.level3Obstacles.forEach((obstacle, index) => {
+                obstacle.x -= obstacle.speed;
+                
+                // Comportements spécifiques
+                if (obstacle.type === 'wave') {
+                    obstacle.phase += 0.1;
+                    obstacle.y += Math.sin(obstacle.phase) * obstacle.amplitude * 0.1;
+                } else if (obstacle.type === 'jellyfish') {
+                    obstacle.bobPhase += 0.05;
+                    obstacle.y += Math.sin(obstacle.bobPhase) * 2;
+                } else if (obstacle.type === 'whirlpool') {
+                    obstacle.rotation += 0.1;
+                    
+                    // Force d'aspiration
+                    const dx = obstacle.x - this.player.x;
+                    const dy = obstacle.y - this.player.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < obstacle.width) {
+                        const pullX = (dx / distance) * obstacle.pullForce;
+                        const pullY = (dy / distance) * obstacle.pullForce;
+                        this.player.x += pullX;
+                        this.player.y += pullY;
+                    }
+                } else if (obstacle.type === 'siren') {
+                    obstacle.bobPhase = (obstacle.bobPhase || 0) + 0.05;
+                    obstacle.y += Math.sin(obstacle.bobPhase) * 1.5;
+                    
+                    // Charme du joueur (le ralentit)
+                    const dx = obstacle.x - this.player.x;
+                    const dy = obstacle.y - this.player.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < obstacle.charmRadius) {
+                        this.player.velX *= 0.95;
+                        obstacle.singing = true;
+                    }
+                }
+                
+                // Collision avec le joueur
+                const dx = obstacle.x - this.player.x;
+                const dy = obstacle.y - this.player.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 50 && !obstacle.hit && !this.player.invincible && obstacle.damage > 0) {
+                    this.player.lives -= obstacle.damage;
+                    this.player.invincible = true;
+                    this.player.invincibleTimer = 90;
+                    obstacle.hit = true;
+                    
+                    if (this.audioManager && this.audioManager.initialized) {
+                        this.audioManager.playHitSound();
+                    }
+                    
+                    // Effet d'impact
+                    this.renderer.addParticle(obstacle.x, obstacle.y, '💥', '#FF0000');
+                    
+                    if (this.player.lives <= 0) {
+                        this.gameOver();
+                        return;
+                    }
+                }
+            });
+            
+            // Nettoyer les obstacles sortis ou touchés
+            this.level3Obstacles = this.level3Obstacles.filter(o => !o.hit && o.x > -150);
             
             // Animer les proverbes (viennent de droite)
             this.level3Proverbs.forEach((proverb, index) => {
-                // Mouvement horizontal de droite à gauche
                 proverb.x -= proverb.speed;
-                
-                // Léger flottement vertical
                 proverb.bobPhase += 0.05;
                 proverb.y += Math.sin(proverb.bobPhase) * 0.5;
                 
@@ -594,21 +753,17 @@ export class Game {
                 if (distance < 50 && !proverb.collected) {
                     proverb.collected = true;
                     
-                    // Son de collecte "poc"
                     if (this.audioManager && this.audioManager.initialized) {
                         this.audioManager.playPocSound();
                     }
                     
-                    // Redonner de la vie
                     this.player.lives = Math.min(this.player.maxLives, this.player.lives + 1);
                     
-                    // Effet d'éclatement de bulle
                     this.renderer.addParticle(proverb.x, proverb.y, '💦', '#4A90A4');
                     this.renderer.addParticle(proverb.x - 10, proverb.y - 10, '💧', '#87CEEB');
                     this.renderer.addParticle(proverb.x + 10, proverb.y - 10, '💧', '#87CEEB');
                     this.renderer.addParticle(proverb.x, proverb.y + 10, '✨', '#FFD700');
                     
-                    // Afficher le proverbe en haut milieu (bulle BD non-bloquante)
                     if (this.notificationSystem) {
                         this.notificationSystem.showSplash(
                             `${proverb.icon} ${proverb.text}`,
@@ -621,14 +776,14 @@ export class Game {
                     
                     console.log(`📖 Proverbe collecté! Vies: ${this.player.lives}/${this.player.maxLives}`);
                     
-                    // Vérifier victoire (max vies)
-                    if (this.player.lives >= this.player.maxLives) {
+                    // Si Léviathan vaincu et max vies atteint
+                    if (this.player.lives >= this.player.maxLives && this.leviathanDefeated) {
                         this.triggerLevel3Victory();
                     }
                 }
             });
             
-            // Nettoyer les proverbes collectés ou sortis à gauche
+            // Nettoyer les proverbes collectés ou sortis
             this.level3Proverbs = this.level3Proverbs.filter(p => !p.collected && p.x > -100);
             
             return;
@@ -911,9 +1066,16 @@ export class Game {
         this.level3Active = true;
         this.level2Active = false;
         this.level3Timer = 0;
+        this.level3ObstacleTimer = 0;
         this.level3Wisdom = 0;
         this.level3Proverbs = [];
+        this.level3Obstacles = [];
+        this.level3Projectiles = [];
         this.boatMode = true;
+        this.leviathanDefeated = false;
+        
+        // Créer le phare au fond à gauche
+        this.lighthouse = new Lighthouse(50, 280);
         
         // Réinitialiser le joueur
         this.player.lives = 3;
@@ -931,8 +1093,8 @@ export class Game {
         // Message d'instruction
         if (this.notificationSystem) {
             this.notificationSystem.showNarrative({
-                text: 'Navigue sur les eaux nocturnes et collecte la sagesse des proverbes...',
-                duration: 4000
+                text: 'Navigue sur les eaux nocturnes, collecte la sagesse et évite les dangers marins !',
+                duration: 5000
             });
         }
         
@@ -941,7 +1103,7 @@ export class Game {
     }
     
     triggerLevel3Victory() {
-        console.log('🎊 MAX VIES! Porte du paradis apparaît!');
+        console.log('🎊 Sagesse complète ! Porte du paradis apparaît!');
         
         // Faire apparaître la porte du paradis
         if (this.heavenGate) {
@@ -953,8 +1115,8 @@ export class Game {
         // Message
         if (this.notificationSystem) {
             this.notificationSystem.showNarrative({
-                text: '🚪 La Porte du Paradis s\'ouvre!',
-                duration: 3000
+                text: '🚪 La Porte du Paradis s\'ouvre ! Tu as vaincu le Léviathan et atteint la sagesse !',
+                duration: 4000
             });
         }
         
@@ -968,6 +1130,60 @@ export class Game {
         console.log('✨ Le mouton entre au paradis...');
         this.level3Entering = true;
         this.level3EnterTimer = 0;
+    }
+    
+    fireBulletAtLeviathan() {
+        if (!this.leviathan || !this.leviathan.isActive || this.leviathan.defeated) return;
+        
+        // Créer un projectile du joueur vers le Léviathan
+        const bullet = {
+            x: this.player.x + 40,
+            y: this.player.y,
+            width: 20,
+            height: 20,
+            velX: 6,
+            velY: 0,
+            icon: '⚡',
+            damage: 1
+        };
+        
+        this.level3Projectiles.push(bullet);
+        
+        // Son de tir
+        if (this.audioManager && this.audioManager.initialized) {
+            this.audioManager.playPocSound();
+        }
+        
+        // Vérifier collision avec le Léviathan
+        setTimeout(() => {
+            const dx = bullet.x - (this.leviathan.x + this.leviathan.width / 2);
+            const dy = bullet.y - (this.leviathan.y + this.leviathan.height / 2);
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+                const defeated = this.leviathan.takeDamage(bullet.damage);
+                bullet.hit = true;
+                
+                // Effet d'impact
+                this.renderer.addParticle(this.leviathan.x + this.leviathan.width / 2, this.leviathan.y + this.leviathan.height / 2, '💥', '#FFD700');
+                
+                if (defeated) {
+                    this.leviathanDefeated = true;
+                    
+                    if (this.notificationSystem) {
+                        this.notificationSystem.showNarrative({
+                            text: '🐉 LÉVIATHAN VAINCU ! Collecte la sagesse pour ouvrir le paradis !',
+                            duration: 4000
+                        });
+                    }
+                    
+                    // Son de victoire
+                    if (this.audioManager && this.audioManager.initialized) {
+                        this.audioManager.playCollectSound();
+                    }
+                }
+            }
+        }, 100);
     }
     
     showLevel3Victory() {

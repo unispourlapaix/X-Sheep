@@ -97,6 +97,13 @@ export class KeyboardControls {
                     }
                     this.xKeyDown = true;
                 }
+                // Niveau 3: Tirer sur le Léviathan
+                else if (this.game.level3Active && this.game.leviathan && this.game.leviathan.isActive) {
+                    if (!this.xKeyDown) {
+                        this.game.fireBulletAtLeviathan();
+                    }
+                    this.xKeyDown = true;
+                }
                 break;
         }
     }

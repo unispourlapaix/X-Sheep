@@ -118,31 +118,28 @@ export class HeavenGate {
         const modal = document.createElement('div');
         modal.innerHTML = `
             <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-                        background:rgba(255,255,255,0.98);padding:40px;border-radius:20px;
+                        background:rgba(255,255,255,0.98);padding:20px 30px;border-radius:15px;
                         text-align:center;z-index:9999;border:3px solid #FFD700;
-                        box-shadow:0 10px 40px rgba(0,0,0,0.5)">
-                <h2 style="color:#FFD700;font-size:36px">🎉 VICTOIRE CÉLESTE ! 🎉</h2>
-                <div style="font-size:80px;margin:30px 0">🐑✨</div>
-                <p style="font-size:28px;color:#DAA520">☁️ BIENVENUE AU PARADIS ! ☁️</p>
-                <br>
-                <div style="text-align:left;max-width:600px;margin:20px auto">
-                    <p><strong>👼 Les Anges :</strong><br>
-                    "Bienvenue petit frère ! Tu as compris la vraie leçon !"</p><br>
+                        box-shadow:0 10px 40px rgba(0,0,0,0.5);max-width:700px;max-height:90vh;overflow-y:auto">
+                <h2 style="color:#FFD700;font-size:28px;margin:10px 0">🎉 VICTOIRE CÉLESTE ! 🎉</h2>
+                <div style="font-size:50px;margin:15px 0">🐑✨</div>
+                <p style="font-size:20px;color:#DAA520;margin:10px 0">☁️ BIENVENUE AU PARADIS ! ☁️</p>
+                <div style="text-align:left;max-width:500px;margin:15px auto;font-size:14px;line-height:1.4">
+                    <p style="margin:8px 0"><strong>👼 Les Anges :</strong><br>
+                    "Bienvenue petit frère ! Tu as compris la vraie leçon !"</p>
                     
-                    <p><strong>🐑 Le Mouton :</strong><br>
-                    "J'ai laissé mes richesses derrière moi. Mon cœur est léger !"</p><br>
+                    <p style="margin:8px 0"><strong>🐑 Le Mouton :</strong><br>
+                    "J'ai laissé mes richesses derrière moi. Mon cœur est léger !"</p>
                     
-                    <p><strong>✝️ Message Divin :</strong><br>
+                    <p style="margin:8px 0"><strong>✝️ Message Divin :</strong><br>
                     "Il est plus facile à un chameau de passer par le trou d'une aiguille qu'à un riche d'entrer dans le royaume de Dieu. 
                     Mais toi, tu as choisi la VRAIE richesse : l'amour, la générosité, l'humilité."</p>
                 </div>
-                <br>
-                <p style="font-size:20px"><strong>Score Final : ${Math.floor(this.game.score/10)} âmes touchées 💖</strong></p>
-                <p style="font-style:italic;color:#888">- Emmanuel Payet</p>
-                <br>
+                <p style="font-size:18px;margin:12px 0"><strong>Score Final : ${Math.floor(this.game.score/10)} âmes touchées 💖</strong></p>
+                <p style="font-style:italic;color:#888;font-size:13px;margin:8px 0">- Emmanuel Payet</p>
                 <button onclick="location.reload()" style="background:linear-gradient(45deg,#FFD700,#FFA500);
-                        border:none;padding:15px 40px;border-radius:25px;font-size:18px;
-                        font-weight:bold;cursor:pointer">👑 TU AS GAGNÉ !</button>
+                        border:none;padding:12px 30px;border-radius:20px;font-size:16px;
+                        font-weight:bold;cursor:pointer;margin-top:10px">👑 TU AS GAGNÉ !</button>
             </div>
         `;
         document.body.appendChild(modal);
@@ -152,35 +149,32 @@ export class HeavenGate {
         const modal = document.createElement('div');
         modal.innerHTML = `
             <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-                        background:rgba(255,255,255,0.98);padding:40px;border-radius:20px;
+                        background:rgba(255,255,255,0.98);padding:20px 30px;border-radius:15px;
                         text-align:center;z-index:9999;border:3px solid #FF0000;
-                        box-shadow:0 10px 40px rgba(0,0,0,0.5)">
-                <h2 style="color:#FF0000;font-size:36px">💥 GAME OVER - TROP LOURD ! 💥</h2>
-                <div style="font-size:80px;margin:30px 0">🐑💰😵</div>
-                <p style="font-size:24px;color:#DC143C">*BONK!* Tu t'es cogné sur la porte !</p>
-                <br>
-                <div style="text-align:left;max-width:600px;margin:20px auto">
-                    <p><strong>🚪 La Porte :</strong><br>
-                    "Désolé, tu es trop gros avec tous ces sacs d'or !"</p><br>
+                        box-shadow:0 10px 40px rgba(0,0,0,0.5);max-width:700px;max-height:90vh;overflow-y:auto">
+                <h2 style="color:#FF0000;font-size:26px;margin:10px 0">💥 GAME OVER - TROP LOURD ! 💥</h2>
+                <div style="font-size:50px;margin:15px 0">🐑💰😵</div>
+                <p style="font-size:18px;color:#DC143C;margin:10px 0">*BONK!* Tu t'es cogné sur la porte !</p>
+                <div style="text-align:left;max-width:500px;margin:15px auto;font-size:14px;line-height:1.4">
+                    <p style="margin:8px 0"><strong>🚪 La Porte :</strong><br>
+                    "Désolé, tu es trop gros avec tous ces sacs d'or !"</p>
                     
-                    <p><strong>🐑 Le Mouton (avec mèche) :</strong><br>
-                    "Mais... mais... j'ai tant de richesses !"</p><br>
+                    <p style="margin:8px 0"><strong>🐑 Le Mouton (avec mèche) :</strong><br>
+                    "Mais... mais... j'ai tant de richesses !"</p>
                     
-                    <p><strong>👼 Un Ange :</strong><br>
-                    "Tu ne peux pas emporter tes richesses au Paradis. Lâche prise et recommence !"</p><br>
+                    <p style="margin:8px 0"><strong>👼 Un Ange :</strong><br>
+                    "Tu ne peux pas emporter tes richesses au Paradis. Lâche prise et recommence !"</p>
                     
-                    <p><strong>✝️ Leçon :</strong><br>
+                    <p style="margin:8px 0"><strong>✝️ Leçon :</strong><br>
                     "La cupidité t'a alourdi. Le Paradis n'est pas pour ceux qui accumulent, 
                     mais pour ceux qui donnent. Essaie encore, mais voyage LÉGER !"</p>
                 </div>
-                <br>
-                <p><strong>Or collecté : ${this.game.player.goldCollected} 💰 (Trop !)</strong></p>
-                <p><strong>Taille : ${(this.game.player.size * 100).toFixed(0)}% (Trop gros !)</strong></p>
-                <p style="font-style:italic;color:#888">- Emmanuel Payet</p>
-                <br>
+                <p style="margin:8px 0;font-size:15px"><strong>Or collecté : ${this.game.player.goldCollected} 💰 (Trop !)</strong></p>
+                <p style="margin:8px 0;font-size:15px"><strong>Taille : ${(this.game.player.size * 100).toFixed(0)}% (Trop gros !)</strong></p>
+                <p style="font-style:italic;color:#888;font-size:13px;margin:8px 0">- Emmanuel Payet</p>
                 <button onclick="location.reload()" style="background:linear-gradient(45deg,#FFD700,#FFA500);
-                        border:none;padding:15px 40px;border-radius:25px;font-size:18px;
-                        font-weight:bold;cursor:pointer">🔄 Recommencer Plus Humble</button>
+                        border:none;padding:12px 30px;border-radius:20px;font-size:16px;
+                        font-weight:bold;cursor:pointer;margin-top:10px">🔄 Recommencer Plus Humble</button>
             </div>
         `;
         document.body.appendChild(modal);

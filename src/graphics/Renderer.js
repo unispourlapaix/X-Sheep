@@ -57,9 +57,39 @@ export class Renderer {
             this.waterBackground.update();
             this.waterBackground.render(this.ctx);
             
+            // Dessiner le phare en arrière-plan
+            if (this.game.lighthouse) {
+                this.game.lighthouse.render(this.ctx);
+            }
+            
             // Dessiner la porte du paradis si visible
             if (this.game.heavenGate && this.game.heavenGate.visible) {
                 this.game.heavenGate.render(this.ctx);
+            }
+            
+            // Dessiner les obstacles marins
+            this.game.level3Obstacles.forEach(obstacle => {
+                this.drawSeaObstacle(obstacle);
+            });
+            
+            // Dessiner les projectiles du Léviathan
+            this.game.level3Projectiles.forEach(proj => {
+                this.ctx.save();
+                this.ctx.font = '28px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                
+                // Effet de lueur
+                this.ctx.shadowColor = '#4A90A4';
+                this.ctx.shadowBlur = 10;
+                
+                this.ctx.fillText(proj.icon, proj.x, proj.y);
+                this.ctx.restore();
+            });
+            
+            // Dessiner le Léviathan
+            if (this.game.leviathan && this.game.leviathan.isActive) {
+                this.game.leviathan.render(this.ctx);
             }
             
             // Dessiner les proverbes (viennent de droite)
@@ -600,6 +630,86 @@ export class Renderer {
         this.ctx.beginPath();
         this.ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
         this.ctx.stroke();
+        
+        this.ctx.restore();
+    }
+    
+    drawSeaObstacle(obstacle) {
+        this.ctx.save();
+        
+        // Effet de lueur selon le type
+        if (obstacle.type === 'whirlpool') {
+            this.ctx.save();
+            this.ctx.translate(obstacle.x, obstacle.y);
+            this.ctx.rotate(obstacle.rotation);
+            
+            // Tourbillon
+            for (let i = 0; i < 5; i++) {
+                const radius = (i + 1) * 15;
+                const alpha = 0.3 - i * 0.05;
+                this.ctx.strokeStyle = `rgba(30, 144, 255, ${alpha})`;
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, radius, 0, Math.PI * 1.5);
+                this.ctx.stroke();
+            }
+            
+            this.ctx.restore();
+            
+            // Icône au centre
+            this.ctx.font = '32px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText(obstacle.icon, obstacle.x, obstacle.y);
+        } else {
+            // Ombre sous l'obstacle
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            this.ctx.fillRect(obstacle.x - 5, obstacle.y + 5, obstacle.width + 10, 10);
+            
+            // Effet de lueur rouge si dangereux
+            if (obstacle.damage > 0) {
+                this.ctx.shadowColor = '#FF0000';
+                this.ctx.shadowBlur = 15;
+            }
+            
+            // Icône de l'obstacle
+            this.ctx.font = `${obstacle.width}px Arial`;
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            
+            if (obstacle.rotation) {
+                this.ctx.save();
+                this.ctx.translate(obstacle.x, obstacle.y);
+                this.ctx.rotate(obstacle.rotation);
+                this.ctx.fillText(obstacle.icon, 0, 0);
+                this.ctx.restore();
+            } else {
+                this.ctx.fillText(obstacle.icon, obstacle.x, obstacle.y);
+            }
+            
+            // Animation spéciale pour la sirène qui chante
+            if (obstacle.type === 'siren' && obstacle.singing) {
+                this.ctx.font = '16px Arial';
+                this.ctx.fillStyle = '#FFD700';
+                this.ctx.fillText('♪', obstacle.x - 20, obstacle.y - 30);
+                this.ctx.fillText('♫', obstacle.x + 20, obstacle.y - 25);
+                this.ctx.fillText('♪', obstacle.x, obstacle.y - 35);
+            }
+            
+            // Tentacules pour méduse
+            if (obstacle.type === 'jellyfish' && obstacle.tentacles) {
+                this.ctx.strokeStyle = 'rgba(255, 20, 147, 0.5)';
+                this.ctx.lineWidth = 2;
+                for (let i = 0; i < 4; i++) {
+                    const x = obstacle.x - 10 + i * 8;
+                    const wave = Math.sin(Date.now() * 0.01 + i) * 5;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, obstacle.y + 20);
+                    this.ctx.lineTo(x + wave, obstacle.y + 40);
+                    this.ctx.stroke();
+                }
+            }
+        }
         
         this.ctx.restore();
     }

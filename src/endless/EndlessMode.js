@@ -831,23 +831,23 @@ export class EndlessMode {
                         background:rgba(0,0,0,0.95);display:flex;align-items:center;
                         justify-content:center;z-index:9999">
                 <div style="text-align:center">
-                    <h1 style="color:#FF0000;font-size:120px;margin:0;
+                    <h1 style="color:#FF0000;font-size:80px;margin:0;
                                text-shadow:0 0 30px #FF0000, 0 0 60px #FF0000;
                                animation:pulse 2s ease-in-out infinite">
                         GAME OVER
                     </h1>
-                    <div style="font-size:60px;margin:40px 0">💀</div>
-                    <p style="color:#FFD700;font-size:36px;margin:20px 0">
+                    <div style="font-size:50px;margin:25px 0">💀</div>
+                    <p style="color:#FFD700;font-size:32px;margin:15px 0">
                         SCORE: ${this.game.score.toLocaleString()}
                     </p>
                     ${isNewRecord ? 
-                        '<p style="color:#FFD700;font-size:28px">🏆 NOUVEAU RECORD ! 🏆</p>' :
-                        `<p style="color:#999;font-size:24px">Record: ${this.highScore.toLocaleString()}</p>`
+                        '<p style="color:#FFD700;font-size:26px;margin:10px 0">🏆 NOUVEAU RECORD ! 🏆</p>' :
+                        `<p style="color:#999;font-size:22px;margin:10px 0">Record: ${this.highScore.toLocaleString()}</p>`
                     }
-                    <br><br>
+                    <br>
                     <button onclick="location.reload()" 
                             style="background:#FF0000;color:white;border:none;
-                                   padding:20px 50px;border-radius:10px;font-size:24px;
+                                   padding:15px 40px;border-radius:10px;font-size:20px;
                                    font-weight:bold;cursor:pointer;
                                    box-shadow:0 5px 20px rgba(255,0,0,0.5);
                                    transition:transform 0.2s"
