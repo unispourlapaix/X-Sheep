@@ -51,6 +51,9 @@ export class Player {
         // Direction du regard
         this.facingDirection = 1; // 1 = droite, -1 = gauche
         
+        // Son de fusée continu
+        this.rocketSoundActive = false;
+        
         // Invincibilité après collision
         this.invincible = true; // Commence avec invincibilité
         this.invincibleTimer = 30; // 0.5 seconde d'invincibilité au début
@@ -79,6 +82,11 @@ export class Player {
             this.bonusFuel = 0;
             if (!this.flying) {
                 this.flying = true;
+            }
+            // Son de fusée continu en mode infini
+            if (this.flying && !this.rocketSoundActive && this.game.audioManager) {
+                this.game.audioManager.startRocketSound();
+                this.rocketSoundActive = true;
             }
             // Appliquer friction pour l'inertie
             this.velX *= 0.95;
@@ -307,6 +315,13 @@ export class Player {
         if (this.fuel >= this.maxFuel * 0.05) {
             this.flying = true;
             this.velY = GameConfig.PLAYER.FLY_SPEED;
+            
+            // Démarrer le son de fusée
+            if (!this.rocketSoundActive && this.game.audioManager) {
+                this.game.audioManager.startRocketSound();
+                this.rocketSoundActive = true;
+            }
+            
             return true;
         }
         return false;
@@ -314,6 +329,12 @@ export class Player {
     
     stopFlying() {
         this.flying = false;
+        
+        // Arrêter le son de fusée
+        if (this.rocketSoundActive && this.game.audioManager) {
+            this.game.audioManager.stopRocketSound();
+            this.rocketSoundActive = false;
+        }
         
         // Activer l'effet parachute avec inertie
         this.parachuting = true;
@@ -483,6 +504,12 @@ export class Player {
         // Activer l'animation fusée si riche
         if (this.goldCollected > 0) {
             this.isRich = true;
+            
+            // Démarrer le son de fusée quand on devient riche
+            if (!this.rocketSoundActive && this.game.audioManager) {
+                this.game.audioManager.startRocketSound();
+                this.rocketSoundActive = true;
+            }
         }
         
         // Grossissement progressif
@@ -503,10 +530,27 @@ export class Player {
     
     giveGold() {
         // Système de charité - redevenir humble
+        const hadGold = this.goldCollected > 0;
+        
         this.goldCollected = 0;
         this.size = 1.0;
         this.hairLength = 0;
         this.width = GameConfig.PLAYER.WIDTH;
+        this.height = GameConfig.PLAYER.HEIGHT;
+        this.isRich = false;
+        
+        // Arrêter le son de fusée si actif (sauf si en vol)
+        if (this.rocketSoundActive && !this.flying && this.game.audioManager) {
+            this.game.audioManager.stopRocketSound();
+            this.rocketSoundActive = false;
+        }
+        
+        // Débloquer le trophée de charité si on avait de l'or
+        if (hadGold && this.game.trophySystem) {
+            this.game.trophySystem.unlockTrophy('charity');
+        }
+        
+        console.log('💝 Charité ! Tu as donné ton or pour redevenir humble.');
         this.height = GameConfig.PLAYER.HEIGHT;
     }
     

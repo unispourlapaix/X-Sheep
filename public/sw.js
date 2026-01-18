@@ -3,26 +3,30 @@
  * Cache pour fonctionnement offline
  */
 
-const CACHE_NAME = 'x-sheep-v1.0.1';
+const CACHE_NAME = 'x-sheep-v1.0.0';
 // Détecter si on est en production (GitHub Pages) ou en local
-const isProduction = self.location.hostname !== 'localhost' && self.location.hostname !== '127.0.0.1';
-const BASE_PATH = isProduction ? '/X-Sheep' : '';
-
-const urlsToCache = [
-  `${BASE_PATH}/`,
-  `${BASE_PATH}/index.html`
-];
+const BASE_PATH = self.location.pathname.includes('/X-Sheep/') ? '/X-Sheep' : '';
+const isDev = self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1';
 
 // Installation du Service Worker
 self.addEventListener('install', (event) => {
   console.log('[SW] Installation...');
+  // En dev, ne rien mettre en cache au départ
+  if (isDev) {
+    self.skipWaiting();
+    return;
+  }
+  
+  // En production, cacher les fichiers essentiels
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('[SW] Cache ouvert');
-        // Ne pas cacher les assets au début, ils seront mis en cache à la demande
-        return cache.addAll(urlsToCache).catch(error => {
-          console.warn('[SW] Erreur cache initial (normal en dev):', error);
+        return cache.addAll([
+          `${BASE_PATH}/`,
+          `${BASE_PATH}/index.html`
+        ]).catch(error => {
+          console.warn('[SW] Erreur cache initial:', error);
           return Promise.resolve();
         });
       })
@@ -90,7 +94,7 @@ self.addEventListener('fetch', (event) => {
             
             // Retourner une page offline basique si rien dans le cache
             if (event.request.mode === 'navigate') {
-              return caches.match(`${BASE_PATH}/index.html`);
+              return caches.match('/X-Sheep/index.html');
             }
           });
       })

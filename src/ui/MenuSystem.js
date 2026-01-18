@@ -28,33 +28,33 @@ export class MenuSystem {
             frame++;
             
             // Mouton aventure (normal, centré)
-            adventureCtx.clearRect(0, 0, 100, 100);
+            adventureCtx.clearRect(0, 0, 80, 80);
             adventureCtx.save();
             
             // Fond dégradé ciel
-            const skyGradient = adventureCtx.createLinearGradient(0, 0, 0, 100);
+            const skyGradient = adventureCtx.createLinearGradient(0, 0, 0, 80);
             skyGradient.addColorStop(0, '#87CEEB');
             skyGradient.addColorStop(1, '#E0F6FF');
             adventureCtx.fillStyle = skyGradient;
-            adventureCtx.fillRect(0, 0, 100, 100);
+            adventureCtx.fillRect(0, 0, 80, 80);
             
-            const bounce1 = Math.sin(frame * 0.05) * 3;
-            this.sheepAnimator.draw(adventureCtx, 30, 45 + bounce1, 1.0, 0, 'normal');
+            const bounce1 = Math.sin(frame * 0.05) * 2;
+            this.sheepAnimator.draw(adventureCtx, 20, 35 + bounce1, 0.8, 0, 'normal');
             adventureCtx.restore();
             
             // Mouton infini (avec ailes, cheveux et plus grand)
-            endlessCtx.clearRect(0, 0, 100, 100);
+            endlessCtx.clearRect(0, 0, 80, 80);
             endlessCtx.save();
             
             // Fond dégradé doré
-            const goldGradient = endlessCtx.createLinearGradient(0, 0, 0, 100);
+            const goldGradient = endlessCtx.createLinearGradient(0, 0, 0, 80);
             goldGradient.addColorStop(0, '#FFE5B4');
             goldGradient.addColorStop(1, '#FFD700');
             endlessCtx.fillStyle = goldGradient;
-            endlessCtx.fillRect(0, 0, 100, 100);
+            endlessCtx.fillRect(0, 0, 80, 80);
             
-            const bounce2 = Math.sin(frame * 0.08) * 5;
-            this.sheepAnimator.draw(endlessCtx, 25, 45 + bounce2, 1.3, 0, 'flying');
+            const bounce2 = Math.sin(frame * 0.08) * 4;
+            this.sheepAnimator.draw(endlessCtx, 15, 35 + bounce2, 1.0, 0, 'flying');
             endlessCtx.restore();
             
             requestAnimationFrame(animate);

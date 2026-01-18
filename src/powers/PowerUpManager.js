@@ -130,6 +130,16 @@ export class PowerUpManager {
             this.game.audioManager.playGlineSound();
         }
         
+        // Si c'est le powerup liberté, démarrer le son de fusée
+        if (powerUp.id === 'liberte' && this.game.player && this.game.audioManager) {
+            setTimeout(() => {
+                if (!this.game.player.rocketSoundActive) {
+                    this.game.audioManager.startRocketSound();
+                    this.game.player.rocketSoundActive = true;
+                }
+            }, 200); // Court délai après le son "gline"
+        }
+        
         // Message motivant
         console.log(`💪 ${powerUp.name} activé !`);
         

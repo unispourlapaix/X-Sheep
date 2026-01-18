@@ -1,16 +1,16 @@
 // GameConfig.js - Configuration centralisée du jeu
 export const GameConfig = {
-    // Canvas
-    CANVAS_WIDTH: 800,
-    CANVAS_HEIGHT: 500,
+    // Canvas (991x512 - Mobile landscape)
+    CANVAS_WIDTH: 991,
+    CANVAS_HEIGHT: 512,
     
     // Joueur
     PLAYER: {
         START_X: 100,
-        START_Y: 370,
+        START_Y: 382,
         WIDTH: 40,
         HEIGHT: 40,
-        GROUND_Y: 370,
+        GROUND_Y: 382,
         JUMP_FORCE: -8,
         JUMP_FORCE_BOOSTED: -10,
         FLY_SPEED: -3,

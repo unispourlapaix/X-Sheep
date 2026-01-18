@@ -11,6 +11,9 @@ export class AudioManager {
         
         // Cache des oscillateurs actifs
         this.activeOscillators = [];
+        
+        // Son de fusée continu
+        this.rocketSound = null;
     }
     
     /**
@@ -59,10 +62,12 @@ export class AudioManager {
     }
     
     /**
-     * Son de fusée - bruit blanc filtré "fuzzzzz"
+     * Son de fusée continu - bruit blanc filtré "fizezzeu"
+     * Retourne un objet avec méthode stop()
      */
-    playRocketSound() {
-        if (!this.initialized) return;
+    startRocketSound() {
+        if (!this.initialized) return null;
+        if (this.rocketSound) return this.rocketSound; // Déjà en cours
         
         // Créer un buffer de bruit blanc
         const bufferSize = this.audioContext.sampleRate * 2;
@@ -77,20 +82,31 @@ export class AudioManager {
         whiteNoise.buffer = noiseBuffer;
         whiteNoise.loop = true;
         
-        // Filtre passe-bande pour le son "fuzzzz"
+        // Filtre passe-bande pour le son "fizezzeu"
         const bandpassFilter = this.audioContext.createBiquadFilter();
         bandpassFilter.type = 'bandpass';
-        bandpassFilter.frequency.setValueAtTime(120, this.audioContext.currentTime);
-        bandpassFilter.Q.setValueAtTime(1.5, this.audioContext.currentTime);
+        bandpassFilter.frequency.setValueAtTime(150, this.audioContext.currentTime);
+        bandpassFilter.Q.setValueAtTime(2.0, this.audioContext.currentTime);
         
-        // Filtre passe-bas pour rendre plus grave
+        // Filtre passe-bas pour adoucir
         const lowpassFilter = this.audioContext.createBiquadFilter();
         lowpassFilter.type = 'lowpass';
-        lowpassFilter.frequency.setValueAtTime(300, this.audioContext.currentTime);
+        lowpassFilter.frequency.setValueAtTime(400, this.audioContext.currentTime);
+        
+        // Oscillateur supplémentaire pour variation "zeu zeu"
+        const modulator = this.audioContext.createOscillator();
+        modulator.type = 'sine';
+        modulator.frequency.setValueAtTime(3, this.audioContext.currentTime); // Oscillation lente
+        
+        const modulatorGain = this.audioContext.createGain();
+        modulatorGain.gain.setValueAtTime(30, this.audioContext.currentTime);
+        
+        modulator.connect(modulatorGain);
+        modulatorGain.connect(bandpassFilter.frequency);
         
         const gainNode = this.audioContext.createGain();
         gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.08 * this.masterVolume, this.audioContext.currentTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0.25 * this.masterVolume, this.audioContext.currentTime + 0.2);
         
         // Connexions
         whiteNoise.connect(bandpassFilter);
@@ -99,15 +115,35 @@ export class AudioManager {
         gainNode.connect(this.audioContext.destination);
         
         whiteNoise.start();
+        modulator.start();
         
-        return {
+        this.rocketSound = {
             source: whiteNoise,
+            modulator: modulator,
             gainNode,
             stop: () => {
-                gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.15);
-                setTimeout(() => whiteNoise.stop(), 150);
+                if (!this.rocketSound) return;
+                gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.3);
+                setTimeout(() => {
+                    try {
+                        whiteNoise.stop();
+                        modulator.stop();
+                    } catch(e) {}
+                    this.rocketSound = null;
+                }, 300);
             }
         };
+        
+        return this.rocketSound;
+    }
+    
+    /**
+     * Arrêter le son de fusée
+     */
+    stopRocketSound() {
+        if (this.rocketSound) {
+            this.rocketSound.stop();
+        }
     }
     
     /**

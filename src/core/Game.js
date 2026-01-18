@@ -111,6 +111,13 @@ export class Game {
             this.player.y = GameConfig.CANVAS_HEIGHT / 2;
             this.player.flying = true;
             this.player.fuel = this.player.maxFuel;
+            // Démarrer le son de fusée pour le mode infini
+            if (this.audioManager) {
+                setTimeout(() => {
+                    this.audioManager.startRocketSound();
+                    this.player.rocketSoundActive = true;
+                }, 100); // Court délai pour s'assurer que l'audio est initialisé
+            }
         } else {
             this.heavenGate = new HeavenGate(this);
             // Porte invisible au début - apparaît seulement au Game Over
@@ -129,62 +136,22 @@ export class Game {
             document.body.appendChild(this.canvas);
         }
         
-        // Détecter si mobile en paysage
-        const isMobileLandscape = window.innerWidth <= 900 && 
-                                   window.innerWidth > window.innerHeight;
-        
-        if (isMobileLandscape) {
-            // Plein écran pour mobile paysage
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-            
-            // Mettre à jour GameConfig pour adapter le gameplay
-            GameConfig.CANVAS_WIDTH = window.innerWidth;
-            GameConfig.CANVAS_HEIGHT = window.innerHeight;
-            GameConfig.PLAYER.GROUND_Y = window.innerHeight - 130;
-            
-            this.canvas.style.position = 'fixed';
-            this.canvas.style.top = '0';
-            this.canvas.style.left = '0';
-            this.canvas.style.width = '100vw';
-            this.canvas.style.height = '100vh';
-            this.canvas.style.transform = 'none';
-        } else {
-            // Configuration normale pour desktop
-            this.canvas.width = GameConfig.CANVAS_WIDTH;
-            this.canvas.height = GameConfig.CANVAS_HEIGHT;
-            
-            // Centrer le canvas au milieu de l'écran
-            this.canvas.style.display = 'block';
-            this.canvas.style.position = 'absolute';
-            this.canvas.style.top = '50%';
-            this.canvas.style.left = '50%';
-            this.canvas.style.transform = 'translate(-50%, -50%)';
-        }
-        
+        this.canvas.width = GameConfig.CANVAS_WIDTH;
+        this.canvas.height = GameConfig.CANVAS_HEIGHT;
         this.ctx = this.canvas.getContext('2d');
+        
+        // Centrer le canvas au milieu de l'écran
+        this.canvas.style.display = 'block';
+        this.canvas.style.position = 'absolute';
+        this.canvas.style.top = '50%';
+        this.canvas.style.left = '50%';
+        this.canvas.style.transform = 'translate(-50%, -50%)';
         this.canvas.style.border = '2px solid #333';
         this.canvas.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
         
         // Cacher le background moléculaire
         const molCanvas = document.getElementById('molecular-canvas');
         if (molCanvas) molCanvas.style.display = 'none';
-        
-        // Écouter le redimensionnement pour adapter le canvas
-        window.addEventListener('resize', () => this.handleResize());
-    }
-    
-    handleResize() {
-        const isMobileLandscape = window.innerWidth <= 900 && 
-                                   window.innerWidth > window.innerHeight;
-        
-        if (isMobileLandscape) {
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-            GameConfig.CANVAS_WIDTH = window.innerWidth;
-            GameConfig.CANVAS_HEIGHT = window.innerHeight;
-            GameConfig.PLAYER.GROUND_Y = window.innerHeight - 130;
-        }
     }
     
     start() {

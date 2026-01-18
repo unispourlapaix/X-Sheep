@@ -5,7 +5,6 @@ import { ParticleSystem } from './ParticleSystem.js';
 import { PixelArtRenderer } from './PixelArtRenderer.js';
 import { CloudBackground } from './CloudBackground.js';
 import { WaterBackground } from './WaterBackground.js';
-import { ResponsiveHelper } from '../utils/ResponsiveHelper.js';
 
 export class Renderer {
     constructor(game) {
@@ -159,11 +158,8 @@ export class Renderer {
         // Particules
         this.particleSystem.render(this.ctx);
         
-        // Barre de vies (cœurs)
-        this.drawHealthBar();
-        
-        // Panneau LED numérique en bas pour score et carburant
-        this.drawLEDPanel();
+        // Interface utilisateur unifiée
+        this.drawUnifiedUI();
         
         // Porte du Paradis (mode aventure)
         if (this.game.heavenGate) {
@@ -1012,42 +1008,269 @@ export class Renderer {
         const endless = this.game.endlessMode;
         if (!endless) return;
         
-        // Fond UI
-        this.ctx.fillStyle = 'rgba(0,0,0,0.7)';
-        this.ctx.fillRect(this.canvas.width - 250, 10, 240, 180);
+        const isMobile = this.canvas.width <= 1024 || this.canvas.height <= 768;
         
+        if (isMobile) {
+            // UI Mobile compacte en bas à droite
+            const boxWidth = 150;
+            const boxHeight = 80;
+            const boxX = this.canvas.width - boxWidth - 10;
+            const boxY = this.canvas.height - boxHeight - 35; // Au-dessus de la jauge de fuel
+            
+            this.ctx.fillStyle = 'rgba(0,0,0,0.7)';
+            this.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+            
+            this.ctx.textAlign = 'left';
+            this.ctx.font = 'bold 11px monospace';
+            
+            // Score
+            this.ctx.fillStyle = '#FFD700';
+            this.ctx.fillText(`🎯 ${this.game.score.toLocaleString()}`, boxX + 5, boxY + 15);
+            
+            // Distance
+            this.ctx.fillStyle = '#87CEEB';
+            this.ctx.fillText(`📏 ${Math.floor(endless.distance)}m`, boxX + 5, boxY + 32);
+            
+            // Vague
+            this.ctx.fillStyle = '#FF4500';
+            this.ctx.fillText(`🔥 V${endless.waveLevel}`, boxX + 5, boxY + 49);
+            
+            // Multiplicateur
+            this.ctx.fillStyle = '#32CD32';
+            this.ctx.fillText(`⚡ x${endless.multiplier.toFixed(1)}`, boxX + 5, boxY + 66);
+            
+        } else {
+            // UI Desktop - panneau en haut à droite
+            this.ctx.fillStyle = 'rgba(0,0,0,0.7)';
+            this.ctx.fillRect(this.canvas.width - 250, 10, 240, 180);
+            
+            this.ctx.textAlign = 'left';
+            
+            // Score
+            this.ctx.fillStyle = GameConfig.COLORS.GOLD_LIGHT;
+            this.ctx.font = 'bold 18px Arial';
+            this.ctx.fillText(`� SCORE: ${this.game.score.toLocaleString()}`, this.canvas.width - 240, 35);
+            
+            // Distance
+            this.ctx.fillStyle = GameConfig.COLORS.SKY_BLUE;
+            this.ctx.fillText(`📏 ${Math.floor(endless.distance)}m`, this.canvas.width - 240, 60);
+            
+            // Vague
+            this.ctx.fillStyle = '#FF4500';
+            this.ctx.fillText(`🔥 Vague ${endless.waveLevel}`, this.canvas.width - 240, 130);
+            
+            // Multiplicateur
+            this.ctx.fillStyle = '#32CD32';
+            this.ctx.fillText(`⚡ x${endless.multiplier.toFixed(1)}`, this.canvas.width - 240, 155);
+            
+            // Record
+            this.ctx.fillStyle = '#DDA0DD';
+            this.ctx.font = 'bold 14px Arial';
+            this.ctx.fillText(`🏆 Record: ${endless.highScore.toLocaleString()}`, this.canvas.width - 240, 175);
+        }
+    }
+    
+    /**
+     * Interface utilisateur unifiée - optimisée PC et Mobile
+     */
+    drawUnifiedUI() {
+        const player = this.game.player;
+        const isMobile = this.canvas.width <= 1024 || this.canvas.height <= 768;
+        
+        // === BARRE DU BAS (PC et Mobile) ===
+        this.drawBottomBar(isMobile);
+        
+        // === INFO DU HAUT (selon le mode) ===
+        if (this.game.mode === 'endless' && this.game.endlessMode) {
+            this.drawTopInfo(isMobile);
+        }
+    }
+    
+    /**
+     * Barre du bas unifiée : Vies + Fuel + Score + XP
+     */
+    drawBottomBar(isMobile) {
+        const player = this.game.player;
+        const barHeight = isMobile ? 35 : 45;
+        const barY = this.canvas.height - barHeight;
+        
+        // Fond noir semi-transparent
+        this.ctx.save();
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+        this.ctx.fillRect(0, barY, this.canvas.width, barHeight);
+        
+        // Bordure supérieure
+        this.ctx.strokeStyle = '#333';
+        this.ctx.lineWidth = 2;
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, barY);
+        this.ctx.lineTo(this.canvas.width, barY);
+        this.ctx.stroke();
+        
+        const fontSize = isMobile ? 10 : 12;
+        const iconSize = isMobile ? 14 : 18;
+        const padding = isMobile ? 8 : 12;
+        const centerY = barY + barHeight / 2;
+        
+        this.ctx.font = `bold ${fontSize}px monospace`;
+        this.ctx.textBaseline = 'middle';
+        
+        // === VIES (Gauche) ===
+        let currentX = padding;
+        
+        // Icône cœur
+        this.ctx.font = `${iconSize}px Arial`;
+        this.ctx.fillStyle = '#FF0000';
+        this.ctx.fillText('❤️', currentX, centerY);
+        currentX += iconSize + 4;
+        
+        // Nombre de vies
+        this.ctx.font = `bold ${fontSize + 2}px monospace`;
+        this.ctx.fillStyle = '#FFFFFF';
         this.ctx.textAlign = 'left';
+        this.ctx.fillText(`${player.lives}`, currentX, centerY);
+        currentX += this.ctx.measureText(`${player.lives}`).width + padding * 2;
+        
+        // Séparateur
+        this.ctx.fillStyle = '#444';
+        this.ctx.fillRect(currentX, barY + 8, 2, barHeight - 16);
+        currentX += padding * 2;
+        
+        // === FUEL (Après vies) ===
+        const fuelBarWidth = isMobile ? this.canvas.width * 0.3 : 200;
+        const fuelBarHeight = isMobile ? 16 : 20;
+        const fuelBarY = centerY - fuelBarHeight / 2;
+        
+        // Barre de fuel
+        const totalFuel = Math.max(0, Math.floor(player.fuel + player.bonusFuel));
+        const fuelPercent = Math.min(1, totalFuel / 100);
+        
+        // Fond
+        this.ctx.fillStyle = '#1a1a1a';
+        this.ctx.fillRect(currentX, fuelBarY, fuelBarWidth, fuelBarHeight);
+        
+        // Remplissage
+        let fuelColor;
+        if (fuelPercent > 0.5) fuelColor = '#00FF00';
+        else if (fuelPercent > 0.25) fuelColor = '#FFD700';
+        else fuelColor = '#FF0000';
+        
+        this.ctx.fillStyle = fuelColor;
+        this.ctx.fillRect(currentX + 1, fuelBarY + 1, (fuelBarWidth - 2) * fuelPercent, fuelBarHeight - 2);
+        
+        // Texte fuel
+        this.ctx.font = `bold ${fontSize}px monospace`;
+        this.ctx.fillStyle = fuelPercent > 0.3 ? '#000' : '#FFF';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(`💧${totalFuel}%`, currentX + fuelBarWidth / 2, centerY);
+        
+        // Bordure
+        this.ctx.strokeStyle = '#666';
+        this.ctx.lineWidth = 1;
+        this.ctx.strokeRect(currentX, fuelBarY, fuelBarWidth, fuelBarHeight);
+        
+        currentX += fuelBarWidth + padding * 2;
+        
+        // === SCORE ET XP (Droite) ===
+        this.ctx.textAlign = 'right';
+        let rightX = this.canvas.width - padding;
+        
+        // XP
+        const xpValue = this.game.obstacleManager?.totalXP || 0;
+        this.ctx.font = `bold ${fontSize + 2}px monospace`;
+        this.ctx.fillStyle = '#FFD700';
+        this.ctx.fillText(`${xpValue}`, rightX, centerY);
+        rightX -= this.ctx.measureText(`${xpValue}`).width + 4;
+        
+        // Label XP
+        this.ctx.font = `bold ${fontSize}px monospace`;
+        this.ctx.fillStyle = '#888';
+        this.ctx.fillText('XP', rightX, centerY);
+        rightX -= this.ctx.measureText('XP').width + padding * 2;
+        
+        // Séparateur
+        this.ctx.fillStyle = '#444';
+        this.ctx.fillRect(rightX, barY + 8, 2, barHeight - 16);
+        rightX -= padding * 2;
         
         // Score
-        this.ctx.fillStyle = GameConfig.COLORS.GOLD_LIGHT;
-        this.ctx.font = 'bold 18px Arial';
-        this.ctx.fillText(`🎯 SCORE: ${this.game.score.toLocaleString()}`, this.canvas.width - 240, 35);
+        this.ctx.font = `bold ${fontSize + 2}px monospace`;
+        this.ctx.fillStyle = '#FFFFFF';
+        const scoreText = this.game.score.toLocaleString('fr-FR');
+        this.ctx.fillText(scoreText, rightX, centerY);
+        rightX -= this.ctx.measureText(scoreText).width + 4;
+        
+        // Label Score
+        this.ctx.font = `bold ${fontSize}px monospace`;
+        this.ctx.fillStyle = '#888';
+        this.ctx.fillText('🎯', rightX, centerY);
+        
+        this.ctx.restore();
+    }
+    
+    /**
+     * Info du haut pour mode Endless
+     */
+    drawTopInfo(isMobile) {
+        const endless = this.game.endlessMode;
+        if (!endless) return;
+        
+        this.ctx.save();
+        
+        const boxHeight = isMobile ? 60 : 75;
+        const boxWidth = isMobile ? 140 : 200;
+        const boxX = this.canvas.width - boxWidth - (isMobile ? 8 : 15);
+        const boxY = isMobile ? 8 : 15;
+        const fontSize = isMobile ? 10 : 12;
+        const lineHeight = isMobile ? 14 : 18;
+        
+        // Fond
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        this.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        
+        // Bordure
+        this.ctx.strokeStyle = '#333';
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+        
+        this.ctx.font = `bold ${fontSize}px monospace`;
+        this.ctx.textAlign = 'left';
+        
+        let currentY = boxY + lineHeight;
         
         // Distance
-        this.ctx.fillStyle = GameConfig.COLORS.SKY_BLUE;
-        this.ctx.fillText(`📏 ${Math.floor(endless.distance)}m`, this.canvas.width - 240, 60);
+        this.ctx.fillStyle = '#87CEEB';
+        this.ctx.fillText(`📏 ${Math.floor(endless.distance)}m`, boxX + 8, currentY);
+        currentY += lineHeight;
         
         // Vague
         this.ctx.fillStyle = '#FF4500';
-        this.ctx.fillText(`🔥 Vague ${endless.waveLevel}`, this.canvas.width - 240, 130);
+        this.ctx.fillText(`🔥 Vague ${endless.waveLevel}`, boxX + 8, currentY);
+        currentY += lineHeight;
         
         // Multiplicateur
         this.ctx.fillStyle = '#32CD32';
-        this.ctx.fillText(`⚡ x${endless.multiplier.toFixed(1)}`, this.canvas.width - 240, 155);
+        this.ctx.fillText(`⚡ x${endless.multiplier.toFixed(1)}`, boxX + 8, currentY);
         
-        // Record
-        this.ctx.fillStyle = '#DDA0DD';
-        this.ctx.font = 'bold 14px Arial';
-        this.ctx.fillText(`🏆 Record: ${endless.highScore.toLocaleString()}`, this.canvas.width - 240, 175);
+        // Record (desktop seulement)
+        if (!isMobile) {
+            currentY += lineHeight;
+            this.ctx.fillStyle = '#DDA0DD';
+            this.ctx.font = `bold ${fontSize - 1}px monospace`;
+            this.ctx.fillText(`🏆 ${endless.highScore.toLocaleString('fr-FR')}`, boxX + 8, currentY);
+        }
+        
+        this.ctx.restore();
     }
     
     drawHealthBar() {
         const player = this.game.player;
-        const scale = ResponsiveHelper.getScaleFactor();
-        const heartSize = ResponsiveHelper.getUISize(25);
-        const spacing = ResponsiveHelper.getMargin(5);
-        const startX = ResponsiveHelper.getMargin(20);
-        const startY = ResponsiveHelper.getMargin(20);
+        const isMobile = this.canvas.width <= 1024 || this.canvas.height <= 768;
+        
+        const heartSize = isMobile ? 18 : 25;
+        const spacing = isMobile ? 3 : 5;
+        const startX = isMobile ? 10 : 20;
+        const startY = isMobile ? 8 : 20;
         
         // Dessiner chaque cœur
         for (let i = 0; i < player.maxLives; i++) {
@@ -1087,7 +1310,7 @@ export class Renderer {
             
             // Contour blanc (style vitrail)
             this.ctx.strokeStyle = '#FFFFFF';
-            this.ctx.lineWidth = 3;
+            this.ctx.lineWidth = isMobile ? 2 : 3;
             this.ctx.lineJoin = 'round';
             this.ctx.stroke();
             
@@ -1106,15 +1329,17 @@ export class Renderer {
     drawFuelGauge() {
         const player = this.game.player;
         const fuelPercent = player.fuel / player.maxFuel;
+        const isMobile = this.canvas.width <= 1024 || this.canvas.height <= 768;
         
-        const gaugeX = ResponsiveHelper.getMargin(20);
-        const gaugeY = ResponsiveHelper.getMargin(110); // Déplacé sous les cœurs
-        const gaugeWidth = ResponsiveHelper.getUISize(200);
-        const gaugeHeight = ResponsiveHelper.getUISize(25);
+        // Position en bas de l'écran sur mobile, sous les cœurs sur desktop
+        const gaugeX = isMobile ? 10 : 20;
+        const gaugeY = isMobile ? this.canvas.height - 32 : 110;
+        const gaugeWidth = isMobile ? this.canvas.width - 20 : 200;
+        const gaugeHeight = isMobile ? 20 : 25;
         
         // Calculer extension pour bonus
         const bonusPercent = Math.min(player.bonusFuel / player.maxFuel, 0.5);
-        const bonusExtension = gaugeWidth * bonusPercent;
+        const bonusExtension = isMobile ? 0 : gaugeWidth * bonusPercent; // Pas d'extension sur mobile
         const totalGaugeWidth = gaugeWidth + bonusExtension;
         
         // Fond de la jauge (étendu si bonus)
@@ -1142,8 +1367,8 @@ export class Renderer {
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(gaugeX + 2, gaugeY + 2, (gaugeWidth - 4) * fuelPercent, gaugeHeight - 4);
         
-        // Carrés jaunes de bonus fuel (étendent la jauge vers la droite)
-        if (player.bonusFuel > 0) {
+        // Carrés jaunes de bonus fuel (étendent la jauge vers la droite) - Desktop seulement
+        if (player.bonusFuel > 0 && !isMobile) {
             const squareSize = 18;
             const numSquares = Math.ceil(bonusExtension / squareSize);
             const pulse = Math.sin(Date.now() * 0.005) * 0.2 + 0.8;
@@ -1169,18 +1394,19 @@ export class Renderer {
             this.ctx.restore();
         }
         
-        // Texte
+        // Texte - pixel art style et plus petit sur mobile
         this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px Arial`;
+        this.ctx.font = isMobile ? 'bold 10px monospace' : 'bold 14px Arial';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         const totalFuel = Math.floor(player.fuel + player.bonusFuel);
-        this.ctx.fillText(`💧 CARBURANT ${totalFuel}%`, gaugeX + gaugeWidth/2, gaugeY + gaugeHeight/2);
+        const fuelText = isMobile ? `💧 ${totalFuel}%` : `💧 CARBURANT ${totalFuel}%`;
+        this.ctx.fillText(fuelText, gaugeX + gaugeWidth/2, gaugeY + gaugeHeight/2);
         
         // Avertissement si carburant bas
         if (fuelPercent < 0.25 && player.bonusFuel <= 0 && Math.floor(Date.now() / 500) % 2 === 0) {
             this.ctx.fillStyle = '#FF0000';
-            this.ctx.font = `bold ${ResponsiveHelper.getFontSize(12)}px Arial`;
+            this.ctx.font = 'bold 12px Arial';
             this.ctx.fillText('⚠️ CARBURANT FAIBLE', gaugeX + gaugeWidth/2, gaugeY - 10);
         }
     }
@@ -1448,179 +1674,8 @@ export class Renderer {
     }
     
     drawLEDPanel() {
-        const isMobile = ResponsiveHelper.isMobileLandscape();
-        const panelHeight = ResponsiveHelper.getUISize(60);
-        const panelY = this.canvas.height - panelHeight;
-        
-        // Fond du panneau LED noir avec bordure
-        this.ctx.save();
-        
-        // Panneau noir brillant
-        const panelGradient = this.ctx.createLinearGradient(0, panelY, 0, this.canvas.height);
-        panelGradient.addColorStop(0, '#1a1a1a');
-        panelGradient.addColorStop(0.5, '#0a0a0a');
-        panelGradient.addColorStop(1, '#1a1a1a');
-        this.ctx.fillStyle = panelGradient;
-        this.ctx.fillRect(0, panelY, this.canvas.width, panelHeight);
-        
-        // Bordure supérieure brillante
-        const borderGradient = this.ctx.createLinearGradient(0, panelY, 0, panelY + 3);
-        borderGradient.addColorStop(0, '#444');
-        borderGradient.addColorStop(1, '#222');
-        this.ctx.fillStyle = borderGradient;
-        this.ctx.fillRect(0, panelY, this.canvas.width, 3);
-        
-        // NIVEAU 3: Afficher la sagesse au lieu du score
-        if (this.game.level3Active || this.game.level3Entering) {
-            const livesX = ResponsiveHelper.getMargin(30);
-            const livesY = panelY + ResponsiveHelper.getUISize(35);
-            
-            // Label VIES
-            this.ctx.fillStyle = '#4A90A4';
-            this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px monospace`;
-            this.ctx.fillText('VIES', livesX, panelY + ResponsiveHelper.getUISize(18));
-            
-            // Coeurs pour les vies
-            const player = this.game.player;
-            const heartsText = '❤️'.repeat(player.lives);
-            this.ctx.font = `${ResponsiveHelper.getFontSize(16)}px Arial`;
-            this.ctx.fillText(heartsText, livesX, livesY);
-            
-            // Compteur numérique
-            this.ctx.fillStyle = '#888';
-            this.ctx.font = `bold ${ResponsiveHelper.getFontSize(12)}px monospace`;
-            this.ctx.fillText(`${player.lives}/${player.maxLives}`, livesX + player.lives * ResponsiveHelper.getUISize(18) + 10, livesY + 5);
-            
-            this.ctx.restore();
-            return;
-        }
-        
-        // SCORE à gauche (niveaux 1 et 2)
-        const scoreX = ResponsiveHelper.getMargin(30);
-        const scoreY = panelY + ResponsiveHelper.getUISize(35);
-        
-        // Label SCORE
-        this.ctx.fillStyle = '#555';
-        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px monospace`;
-        this.ctx.fillText('SCORE', scoreX, panelY + ResponsiveHelper.getUISize(18));
-        
-        // Chiffres LED rouges pour le score
-        this.drawLEDNumber(this.game.score.toString().padStart(6, '0'), scoreX, scoreY, '#FF0000', ResponsiveHelper.getFontSize(28));
-        
-        // Nombre de bulles éclatées juste après le score
-        const bubblesPopped = this.game.obstacleManager?.narrativeBubblesPopped || 0;
-        this.ctx.fillStyle = '#888';
-        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(12)}px monospace`;
-        this.ctx.fillText(`💭 ${bubblesPopped}`, scoreX + ResponsiveHelper.getUISize(175), scoreY + 5);
-        
-        // CARBURANT au centre
-        const fuelX = this.canvas.width / 2 - ResponsiveHelper.getUISize(80);
-        const fuelY = panelY + ResponsiveHelper.getUISize(35);
-        
-        // Label FUEL
-        this.ctx.fillStyle = '#555';
-        this.ctx.font = `bold ${ResponsiveHelper.getFontSize(14)}px monospace`;
-        this.ctx.fillText('FUEL', fuelX, panelY + ResponsiveHelper.getUISize(18));
-        
-        // Carburant total (normal + bonus)
-        const totalFuel = Math.max(0, Math.floor(this.game.player.fuel + this.game.player.bonusFuel));
-        const normalFuel = Math.max(0, Math.floor(this.game.player.fuel));
-        const bonusFuel = Math.max(0, Math.floor(this.game.player.bonusFuel));
-        
-        // Chiffres LED verts pour le carburant
-        const fuelColor = normalFuel > 50 ? '#00FF00' : normalFuel > 20 ? '#FFAA00' : '#FF0000';
-        this.drawLEDNumber(totalFuel.toString().padStart(3, '0'), fuelX, fuelY, fuelColor, ResponsiveHelper.getFontSize(28));
-        
-        // Barre de carburant visuelle
-        const barX = fuelX + ResponsiveHelper.getUISize(120);
-        const barY = panelY + ResponsiveHelper.getUISize(20);
-        const barWidth = ResponsiveHelper.getUISize(150);
-        const barHeight = ResponsiveHelper.getUISize(20);
-        
-        // Calculer l'extension pour le bonus (max 50% de la barre)
-        const bonusPercent = Math.min(bonusFuel / 100, 0.5);
-        const bonusExtension = barWidth * bonusPercent;
-        const totalBarWidth = barWidth + bonusExtension;
-        
-        // Fond de la barre (étendu si bonus)
-        this.ctx.fillStyle = '#222';
-        this.ctx.fillRect(barX, barY, totalBarWidth, barHeight);
-        
-        // Remplissage de la barre normale
-        const fuelPercent = Math.max(0, Math.min(100, normalFuel)) / 100;
-        const fillWidth = barWidth * fuelPercent;
-        
-        const barGradient = this.ctx.createLinearGradient(barX, 0, barX + barWidth, 0);
-        if (fuelPercent > 0.5) {
-            barGradient.addColorStop(0, '#00FF00');
-            barGradient.addColorStop(1, '#00AA00');
-        } else if (fuelPercent > 0.2) {
-            barGradient.addColorStop(0, '#FFAA00');
-            barGradient.addColorStop(1, '#FF8800');
-        } else {
-            barGradient.addColorStop(0, '#FF0000');
-            barGradient.addColorStop(1, '#AA0000');
-        }
-        
-        this.ctx.fillStyle = barGradient;
-        this.ctx.fillRect(barX, barY, fillWidth, barHeight);
-        
-        // Carrés jaunes pour le bonus fuel (étendent la barre)
-        if (bonusFuel > 0) {
-            const squareSize = 18;
-            const numSquares = Math.ceil(bonusExtension / squareSize);
-            const pulse = Math.sin(Date.now() * 0.005) * 0.2 + 0.8;
-            
-            for (let i = 0; i < numSquares; i++) {
-                const sqX = barX + barWidth + i * squareSize + 2;
-                
-                // Carré jaune pulsant
-                this.ctx.fillStyle = `rgba(255, 215, 0, ${pulse})`;
-                this.ctx.fillRect(sqX, barY + 1, squareSize - 4, barHeight - 2);
-                
-                // Bordure brillante
-                this.ctx.strokeStyle = `rgba(255, 255, 255, ${pulse})`;
-                this.ctx.lineWidth = 1;
-                this.ctx.strokeRect(sqX, barY + 1, squareSize - 4, barHeight - 2);
-                
-                // Étincelle au centre
-                this.ctx.fillStyle = `rgba(255, 255, 255, ${pulse * 0.8})`;
-                this.ctx.beginPath();
-                this.ctx.arc(sqX + (squareSize - 4) / 2, barY + barHeight / 2, 2, 0, Math.PI * 2);
-                this.ctx.fill();
-            }
-        }
-        
-        // Bordure de la barre (étendue si bonus)
-        this.ctx.strokeStyle = '#666';
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeRect(barX, barY, totalBarWidth, barHeight);
-        
-        // Effet de brillance sur la barre normale
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-        this.ctx.fillRect(barX, barY, fillWidth, barHeight / 2);
-        
-        // XP à droite
-        const xpX = this.canvas.width - 180;
-        const xpY = panelY + 35;
-        
-        // Label XP
-        this.ctx.fillStyle = '#555';
-        this.ctx.font = 'bold 14px monospace';
-        this.ctx.fillText('XP', xpX, panelY + 18);
-        
-        // Compteur XP total
-        const xpValue = this.game.obstacleManager?.totalXP || 0;
-        const xpColor = '#FFD700'; // Or
-        this.drawLEDNumber(xpValue.toString().padStart(3, '0'), xpX, xpY, xpColor, 28);
-        
-        // Indicateur d'arme tous les 7 bulles narratives
-        const xpToNextWeapon = 7 - (bubblesPopped % 7);
-        this.ctx.fillStyle = '#888';
-        this.ctx.font = 'bold 10px monospace';
-        this.ctx.fillText(`⚔️ in ${xpToNextWeapon}`, xpX + 90, panelY + 35);
-        
-        this.ctx.restore();
+        // Obsolète - remplacé par drawUnifiedUI
+        // Gardé pour rétrocompatibilité
     }
     
     drawLEDNumber(text, x, y, color, size) {

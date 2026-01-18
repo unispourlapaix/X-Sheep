@@ -134,6 +134,12 @@ export const NarrativeData = {
         hope: "Tes rêves n'ont pas de limites !"
     },
     
+    // Trophée de charité
+    charity: {
+        text: "💝 Tu as donné ton or ! Quelle belle humilité ! La vraie richesse n'est pas dans ce qu'on possède, mais dans ce qu'on donne. L'amour se partage et se donne sagement. En donnant, tu reçois l'infini. 🎁✨",
+        hope: "L'amour se partage et se donne sagement"
+    },
+    
     // Dialogue final
     finalDialogue: {
         ant: "Tant qu'il y a de la vie, il y a de l'espoir...",
