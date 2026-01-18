@@ -622,7 +622,7 @@ export class Game {
                     this.player.invincibleTimer = 120;
                     
                     if (this.audioManager && this.audioManager.initialized) {
-                        this.audioManager.playHitSound();
+                        this.audioManager.playCollisionSound();
                     }
                     
                     if (this.player.lives <= 0) {
@@ -649,7 +649,7 @@ export class Game {
                     proj.hit = true;
                     
                     if (this.audioManager && this.audioManager.initialized) {
-                        this.audioManager.playHitSound();
+                        this.audioManager.playCollisionSound();
                     }
                     
                     if (this.player.lives <= 0) {
@@ -723,7 +723,7 @@ export class Game {
                     obstacle.hit = true;
                     
                     if (this.audioManager && this.audioManager.initialized) {
-                        this.audioManager.playHitSound();
+                        this.audioManager.playCollisionSound();
                     }
                     
                     // Effet d'impact
