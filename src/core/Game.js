@@ -1074,8 +1074,8 @@ export class Game {
         this.boatMode = true;
         this.leviathanDefeated = false;
         
-        // Créer le phare au fond à gauche sur un rocher
-        this.lighthouse = new Lighthouse(30, 250);
+        // Créer le phare au fond à droite sur un rocher
+        this.lighthouse = new Lighthouse(880, 250);
         
         // Réinitialiser le joueur
         this.player.lives = 3;

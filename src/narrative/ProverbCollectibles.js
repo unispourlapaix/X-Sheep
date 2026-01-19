@@ -40,7 +40,7 @@ export class ProverbCollectibles {
             width: 40,
             height: 40,
             type: 'proverb',
-            speed: 2 + Math.random() * 1.5, // Vitesse de défilement
+            speed: 0.4 + Math.random() * 0.2, // Vitesse très lente (5x plus lent)
             bobPhase: Math.random() * Math.PI * 2,
             collected: false
         };

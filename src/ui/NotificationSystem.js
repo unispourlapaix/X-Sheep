@@ -33,19 +33,19 @@ export class NotificationSystem {
             if (index > -1) this.activeBubbles.splice(index, 1);
         }
         
-        // Clamper les coordonnées pour rester dans l'écran
-        const margin = 150; // Marge de sécurité augmentée
-        const maxWidth = Math.min(window.innerWidth, 1000); // Largeur max du canvas
-        const clampedX = Math.max(margin, Math.min(maxWidth - margin, x));
-        const clampedY = Math.max(margin, Math.min(window.innerHeight - margin, y));
+        // Position au centre-haut du canvas pour les proverbes
+        const canvas = this.game.canvas;
+        const canvasRect = canvas.getBoundingClientRect();
+        const centerX = canvasRect.left + canvasRect.width / 2;
+        const topY = canvasRect.top + 100; // 100px du haut du canvas
         
         const bubble = document.createElement('div');
         bubble.className = 'splash-bubble';
         bubble.style.cssText = `
             position: fixed;
-            top: ${clampedY}px;
-            left: ${clampedX}px;
-            transform: translate(-50%, -50%) rotate(-5deg);
+            top: ${topY}px;
+            left: ${centerX}px;
+            transform: translate(-50%, 0) rotate(-2deg);
             background: white;
             padding: 12px 20px;
             border-radius: 15px;
@@ -55,6 +55,8 @@ export class NotificationSystem {
             z-index: 2000;
             font-family: 'Comic Sans MS', 'Arial Black', sans-serif;
             pointer-events: none;
+            max-width: 500px;
+            word-wrap: break-word;
         `;
         
         bubble.innerHTML = `
