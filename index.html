@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Mouton Courage - L'Espoir en Action</title>
     
     <!-- PWA Meta Tags -->
@@ -14,12 +14,14 @@
     <meta name="apple-mobile-web-app-title" content="X-Sheep">
     
     <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/X-Sheep/manifest.json">
     
     <!-- Icons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/X-Sheep/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/X-Sheep/icon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/X-Sheep/icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/X-Sheep/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/X-Sheep/icon-512x512.png">
     
     <link rel="stylesheet" href="styles/menu.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +29,9 @@
 </head>
 <body>
     <canvas id="molecular-canvas"></canvas>
+    
+    <!-- Bouton fermeture discret pour mobile -->
+    <button id="close-btn" aria-label="Fermer" title="Fermer">×</button>
     
     <div class="menu-container" id="main-menu">
         <div class="menu-header">
@@ -165,7 +170,8 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                const swPath = window.location.pathname.includes('/X-Sheep/') ? '/X-Sheep/sw.js' : '/sw.js';
+                navigator.serviceWorker.register(swPath)
                     .then((registration) => {
                         console.log('✅ Service Worker enregistré:', registration.scope);
                         
@@ -192,6 +198,24 @@
             deferredPrompt = e;
             console.log('💾 App installable');
         });
+        
+        // Bouton fermeture - retour au menu principal
+        const closeBtn = document.getElementById('close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                // Si le jeu est en cours, revenir au menu
+                const canvas = document.getElementById('game-canvas');
+                const mainMenu = document.getElementById('main-menu');
+                if (canvas && canvas.style.display !== 'none') {
+                    canvas.style.display = 'none';
+                    if (mainMenu) {
+                        mainMenu.style.display = 'flex';
+                    }
+                    // Recharger la page pour réinitialiser proprement
+                    window.location.reload();
+                }
+            });
+        }
     </script>
 </body>
 </html>

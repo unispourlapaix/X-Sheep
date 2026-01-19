@@ -98,6 +98,18 @@ export class KeyboardControls {
                 this.game.player.moveRight();
                 break;
                 
+            case 'ArrowUp':
+                if (this.game.boatMode) {
+                    this.game.player.moveUp();
+                }
+                break;
+                
+            case 'ArrowDown':
+                if (this.game.boatMode) {
+                    this.game.player.moveDown();
+                }
+                break;
+                
             case 'KeyX':
                 // Marquer la touche X comme enfoncée et tirer immédiatement
                 if (this.game.mode === 'endless') {

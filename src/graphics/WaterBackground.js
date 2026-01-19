@@ -7,7 +7,7 @@ export class WaterBackground {
         this.canvas = canvas;
         this.waves = [];
         this.stars = [];
-        this.moonX = canvas.width * 0.8;
+        this.moonX = canvas.width * 0.2;
         this.moonY = 80;
         this.time = 0;
         
@@ -116,7 +116,7 @@ export class WaterBackground {
         
         // Reflet de la lune sur l'eau
         ctx.save();
-        ctx.globalAlpha = 0.3;
+        ctx.globalAlpha = 0.15;
         const moonReflectionGradient = ctx.createLinearGradient(
             this.moonX, 
             this.canvas.height * 0.5, 

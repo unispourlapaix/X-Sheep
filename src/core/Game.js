@@ -73,7 +73,7 @@ export class Game {
         this.level3Timer = 0;
         this.level3Proverbs = []; // Proverbes flottants
         this.level3Wisdom = 0; // Sagesse accumulée
-        this.level3SpawnRate = 120; // Nouveau proverbe toutes les 2 secondes (plus rapide)
+        this.level3SpawnRate = 480; // Nouveau proverbe toutes les 8 secondes
         this.level3ObstacleSpawnRate = 480; // Obstacles toutes les 8 secondes (très lent)
         this.level3ObstacleTimer = 0;
         this.level3Obstacles = []; // Obstacles marins
@@ -576,7 +576,12 @@ export class Game {
             }
             
             // Spawner des proverbes
-            if (this.level3Timer >= this.level3SpawnRate) {
+            if (!this.level3FirstProverbSpawned) {
+                // Premier proverbe: Liberté
+                const firstProverb = ProverbCollectibles.getFirst();
+                this.level3Proverbs.push(firstProverb);
+                this.level3FirstProverbSpawned = true;
+            } else if (this.level3Timer >= this.level3SpawnRate) {
                 const proverb = ProverbCollectibles.getRandom();
                 this.level3Proverbs.push(proverb);
                 this.level3Timer = 0;
@@ -665,10 +670,10 @@ export class Game {
             // Mettre à jour le joueur
             this.player.update();
             
-            // Limiter les mouvements du bateau
+            // Limiter les mouvements du bateau - peut naviguer sur l'eau et voler dans le ciel
             if (this.boatMode) {
                 this.player.x = Math.max(10, Math.min(this.canvas.width - 90, this.player.x));
-                this.player.y = Math.max(300, Math.min(480, this.player.y)); // Vol limité au-dessus de l'eau
+                this.player.y = Math.max(50, Math.min(480, this.player.y)); // Navigue sur l'eau et vole dans le ciel
             }
             
             // Animer les obstacles marins
@@ -745,12 +750,31 @@ export class Game {
                 proverb.bobPhase += 0.05;
                 proverb.y += Math.sin(proverb.bobPhase) * 0.5;
                 
-                // Vérifier collision avec le joueur
-                const dx = proverb.x - this.player.x;
-                const dy = proverb.y - this.player.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                // Vérifier collision avec le bateau et la voile
+                // Zone du bateau: largeur 80, hauteur 30
+                // Zone de la voile: largeur 35, hauteur 45
+                const boatWidth = 80;
+                const boatHeight = 30;
+                const boatLeft = this.player.x - 10;
+                const boatRight = this.player.x + boatWidth + 10;
+                const boatTop = this.player.y + 20;
+                const boatBottom = this.player.y + boatHeight + 20;
                 
-                if (distance < 50 && !proverb.collected) {
+                // Zone de la voile (à droite du mât)
+                const sailLeft = this.player.x + boatWidth / 2;
+                const sailRight = this.player.x + boatWidth / 2 + 35;
+                const sailTop = this.player.y - 30;
+                const sailBottom = this.player.y + 18;
+                
+                // Collision avec le bateau
+                const hitBoat = proverb.x + 20 > boatLeft && proverb.x - 20 < boatRight &&
+                               proverb.y + 20 > boatTop && proverb.y - 20 < boatBottom;
+                
+                // Collision avec la voile
+                const hitSail = proverb.x + 20 > sailLeft && proverb.x - 20 < sailRight &&
+                               proverb.y + 20 > sailTop && proverb.y - 20 < sailBottom;
+                
+                if ((hitBoat || hitSail) && !proverb.collected) {
                     proverb.collected = true;
                     
                     if (this.audioManager && this.audioManager.initialized) {
@@ -765,13 +789,14 @@ export class Game {
                     this.renderer.addParticle(proverb.x, proverb.y + 10, '✨', '#FFD700');
                     
                     if (this.notificationSystem) {
-                        this.notificationSystem.showSplash(
-                            `${proverb.icon} ${proverb.text}`,
-                            this.canvas.width / 2,
-                            80,
-                            '#4A90A4',
-                            3000
-                        );
+                        this.notificationSystem.showSplash({
+                            x: this.canvas.width / 2,
+                            y: 80,
+                            icon: proverb.icon,
+                            text: proverb.text,
+                            color: '#4A90A4',
+                            duration: 3000
+                        });
                     }
                     
                     console.log(`📖 Proverbe collecté! Vies: ${this.player.lives}/${this.player.maxLives}`);
@@ -1065,17 +1090,23 @@ export class Game {
         console.log('🚤 NIVEAU 3: Navigation et Sagesse commence!');
         this.level3Active = true;
         this.level2Active = false;
-        this.level3Timer = 0;
+        this.level3Timer = 0; // Timer normal
         this.level3ObstacleTimer = 0;
         this.level3Wisdom = 0;
+        this.level3FirstProverbSpawned = false; // Flag pour le premier proverbe
         this.level3Proverbs = [];
         this.level3Obstacles = [];
         this.level3Projectiles = [];
         this.boatMode = true;
         this.leviathanDefeated = false;
         
-        // Créer le phare au fond à droite sur un rocher
-        this.lighthouse = new Lighthouse(880, 250);
+        // Nettoyer toutes les bulles actives
+        if (this.notificationSystem) {
+            this.notificationSystem.clearAll();
+        }
+        
+        // Créer le phare au fond à droite sur un rocher au sommet de l'eau
+        this.lighthouse = new Lighthouse(880, 180);
         
         // Réinitialiser le joueur
         this.player.lives = 3;

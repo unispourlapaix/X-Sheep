@@ -305,6 +305,13 @@ export class Player {
     }
     
     startFlying() {
+        // En mode bateau (niveau 3), peut voler librement
+        if (this.game.boatMode || this.game.level3Active) {
+            this.flying = true;
+            this.velY = -4; // Vitesse de vol pour le bateau
+            return true;
+        }
+        
         // Ne peut voler qu'avec le powerup de liberté
         if (!this.game.powerUpManager?.hasPower('liberte')) {
             console.log('⛔ Tu dois avoir le powerup de liberté pour voler!');
@@ -496,6 +503,18 @@ export class Player {
     
     moveRight() {
         this.velX = 4;
+    }
+    
+    moveUp() {
+        if (this.game.boatMode) {
+            this.velY = -4;
+        }
+    }
+    
+    moveDown() {
+        if (this.game.boatMode) {
+            this.velY = 4;
+        }
     }
     
     collectGold(amount) {

@@ -3,6 +3,8 @@
  */
 
 export class ProverbCollectibles {
+    static firstProverb = { text: "La liberté est le pouvoir de voler", wisdom: 10, icon: '🕊️' };
+    
     static proverbs = [
         { text: "L'eau qui coule ne revient jamais", wisdom: 5, icon: '🌊' },
         { text: "Calme comme l'eau dormante", wisdom: 3, icon: '💧' },
@@ -25,6 +27,21 @@ export class ProverbCollectibles {
         { text: "La paix intérieure vaut tous les trésors", wisdom: 9, icon: '☮️' },
         { text: "Chaque fin est un nouveau commencement", wisdom: 7, icon: '🔄' }
     ];
+    
+    static getFirst() {
+        // Premier proverbe: Liberté
+        return {
+            ...this.firstProverb,
+            x: 1050,
+            y: 350, // Position centrale
+            width: 40,
+            height: 40,
+            type: 'proverb',
+            speed: 0.5,
+            bobPhase: 0,
+            collected: false
+        };
+    }
     
     static getRandom() {
         const proverb = this.proverbs[Math.floor(Math.random() * this.proverbs.length)];

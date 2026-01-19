@@ -909,45 +909,85 @@ export class Renderer {
                 this.ctx.restore();
             }
             
-            // Coque du bateau
+            // Coque du bateau (forme plus jolie)
             this.ctx.fillStyle = '#8B4513';
             this.ctx.beginPath();
             this.ctx.moveTo(p.x - 10, p.y + 20);
             this.ctx.lineTo(p.x + boatWidth + 10, p.y + 20);
-            this.ctx.lineTo(p.x + boatWidth, p.y + boatHeight + 20);
+            this.ctx.quadraticCurveTo(p.x + boatWidth + 5, p.y + boatHeight + 25, p.x + boatWidth, p.y + boatHeight + 20);
             this.ctx.lineTo(p.x, p.y + boatHeight + 20);
+            this.ctx.quadraticCurveTo(p.x - 5, p.y + boatHeight + 25, p.x - 10, p.y + 20);
+            this.ctx.closePath();
+            this.ctx.fill();
+            
+            // Ombre intérieure du bateau
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            this.ctx.beginPath();
+            this.ctx.moveTo(p.x - 5, p.y + 22);
+            this.ctx.lineTo(p.x + boatWidth + 5, p.y + 22);
+            this.ctx.lineTo(p.x + boatWidth, p.y + boatHeight + 18);
+            this.ctx.lineTo(p.x, p.y + boatHeight + 18);
             this.ctx.closePath();
             this.ctx.fill();
             
             // Bordure du bateau
             this.ctx.strokeStyle = '#654321';
-            this.ctx.lineWidth = 2;
-            this.ctx.stroke();
-            
-            // Mât
-            this.ctx.strokeStyle = '#8B4513';
             this.ctx.lineWidth = 3;
             this.ctx.beginPath();
-            this.ctx.moveTo(p.x + boatWidth / 2, p.y + 20);
-            this.ctx.lineTo(p.x + boatWidth / 2, p.y - 30);
+            this.ctx.moveTo(p.x - 10, p.y + 20);
+            this.ctx.lineTo(p.x + boatWidth + 10, p.y + 20);
+            this.ctx.quadraticCurveTo(p.x + boatWidth + 5, p.y + boatHeight + 25, p.x + boatWidth, p.y + boatHeight + 20);
+            this.ctx.lineTo(p.x, p.y + boatHeight + 20);
+            this.ctx.quadraticCurveTo(p.x - 5, p.y + boatHeight + 25, p.x - 10, p.y + 20);
             this.ctx.stroke();
             
-            // Voile
-            this.ctx.fillStyle = '#F0F0F0';
+            // Bancs du bateau
+            this.ctx.fillStyle = '#A0522D';
+            this.ctx.fillRect(p.x + 10, p.y + 25, boatWidth - 20, 3);
+            this.ctx.fillRect(p.x + 10, p.y + 35, boatWidth - 20, 3);
+            
+            // Mât (plus épais)
+            this.ctx.strokeStyle = '#8B4513';
+            this.ctx.lineWidth = 4;
             this.ctx.beginPath();
-            this.ctx.moveTo(p.x + boatWidth / 2, p.y - 25);
-            this.ctx.lineTo(p.x + boatWidth / 2 + 30, p.y);
-            this.ctx.lineTo(p.x + boatWidth / 2, p.y + 15);
+            this.ctx.moveTo(p.x + boatWidth / 2, p.y + 20);
+            this.ctx.lineTo(p.x + boatWidth / 2, p.y - 35);
+            this.ctx.stroke();
+            
+            // Poulie au sommet du mât
+            this.ctx.fillStyle = '#654321';
+            this.ctx.beginPath();
+            this.ctx.arc(p.x + boatWidth / 2, p.y - 35, 3, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Voile (plus grande et courbée)
+            const sailGradient = this.ctx.createLinearGradient(
+                p.x + boatWidth / 2, p.y - 30,
+                p.x + boatWidth / 2 + 35, p.y
+            );
+            sailGradient.addColorStop(0, '#FFFFFF');
+            sailGradient.addColorStop(0.5, '#F5F5F5');
+            sailGradient.addColorStop(1, '#E8E8E8');
+            this.ctx.fillStyle = sailGradient;
+            this.ctx.beginPath();
+            this.ctx.moveTo(p.x + boatWidth / 2, p.y - 30);
+            this.ctx.quadraticCurveTo(p.x + boatWidth / 2 + 25, p.y - 10, p.x + boatWidth / 2 + 35, p.y + 5);
+            this.ctx.lineTo(p.x + boatWidth / 2, p.y + 18);
             this.ctx.closePath();
             this.ctx.fill();
             
-            // Mouton dans le bateau (plus petit)
+            // Bordure de la voile
+            this.ctx.strokeStyle = '#CCCCCC';
+            this.ctx.lineWidth = 2;
+            this.ctx.stroke();
+            
+            // Mouton à l'arrière du bateau (plus petit)
             this.ctx.save();
-            const sheepScale = 0.6;
+            const sheepScale = 0.5;
             this.sheepAnimator.draw(
                 this.ctx,
-                p.x + 15,
-                p.y,
+                p.x + boatWidth - 30, // Positionné à l'arrière
+                p.y + 10,
                 sheepScale,
                 0,
                 isFlying ? 'flying' : 'normal',
