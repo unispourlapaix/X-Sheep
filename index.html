@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouton Courage - L'Espoir en Action</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Jeu spirituel qui sauve des vies avec l'espoir - Par Emmanuel Payet">
+    <meta name="theme-color" content="#4A90E2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="X-Sheep">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/X-Sheep/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/X-Sheep/icon-180x180.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/X-Sheep/assets/index-DCdvVS6z.js"></script>
+  <link rel="stylesheet" crossorigin href="/X-Sheep/assets/index-CXWFj09r.css">
+</head>
+<body>
+    <canvas id="molecular-canvas"></canvas>
+    
+    <div class="menu-container" id="main-menu">
+        <div class="menu-header">
+            Créé avec 💖 par <a href="https://www.emmanuelpayet.art/" target="_blank" rel="noopener noreferrer" class="author-signature">Emmanuel Payet</a>
+        </div>
+        
+        <div class="logo-title">
+            <h1>MOUTON COURAGEUX</h1>
+            <p class="logo-subtitle">L'Espoir en Action</p>
+        </div>
+        
+        <!-- Icône trophée au centre -->
+        <div class="trophy-center-icon" onclick="openTrophyMenu()" style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            text-align: center;
+            z-index: 10;
+        ">
+            <div style="
+                font-size: 80px;
+                filter: drop-shadow(0 8px 25px rgba(255,215,0,0.6));
+                animation: trophy-pulse 2s ease-in-out infinite;
+            ">🏆</div>
+            <div style="
+                font-size: 11px;
+                font-weight: 900;
+                font-family: 'Courier New', monospace;
+                letter-spacing: 1px;
+                color: #000000;
+                text-shadow: none;
+                margin-top: -5px;
+            ">TROPHÉES</div>
+        </div>
+        
+        <!-- Score Max en bas -->
+        <div id="menu-max-score" style="
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            color: #000;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0.7;
+        ">
+            🏆 RECORD : <span id="display-max-score">0</span>
+        </div>
+        
+        <div class="mode-selector">
+            <div class="mode-card" data-mode="adventure" onclick="selectMode('adventure')">
+                <h2 class="mode-title">AVENTURE</h2>
+                
+                <div class="mode-nucleus">
+                    <canvas id="sheep-adventure" class="nucleus-core" width="80" height="80"></canvas>
+                    <div class="nucleus-orbit orbit-1">
+                        <div class="electron electron-1"></div>
+                    </div>
+                    <div class="nucleus-orbit orbit-2">
+                        <div class="electron electron-2"></div>
+                    </div>
+                    <div class="nucleus-orbit orbit-3">
+                        <div class="electron electron-3"></div>
+                    </div>
+                </div>
+                <p class="mode-description">
+                    Traverse les épreuves de la vie.<br>
+                    Messages narratifs profonds.<br>
+                    Atteins la Porte du Paradis.
+                </p>
+                
+                <div class="mode-stats">
+                    <div class="stat">
+                        <span class="stat-value">3</span>
+                        <span class="stat-label">Chapitres</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">15</span>
+                        <span class="stat-label">Minutes</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">∞</span>
+                        <span class="stat-label">Espoir</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mode-card" data-mode="endless" onclick="selectMode('endless')">
+                <h2 class="mode-title">INFINI</h2>
+                
+                <div class="mode-nucleus">
+                    <canvas id="sheep-endless" class="nucleus-core" width="80" height="80"></canvas>
+                    <div class="nucleus-orbit orbit-1">
+                        <div class="electron electron-1"></div>
+                    </div>
+                    <div class="nucleus-orbit orbit-2">
+                        <div class="electron electron-2"></div>
+                    </div>
+                    <div class="nucleus-orbit orbit-3">
+                        <div class="electron electron-3"></div>
+                    </div>
+                </div>
+                <p class="mode-description">
+                    Survie sans fin.<br>
+                    Score et combos maximaux.<br>
+                    Bats tous les records !
+                </p>
+                
+                <div class="mode-stats">
+                    <div class="stat">
+                        <span class="stat-value">∞</span>
+                        <span class="stat-label">Vagues</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">?</span>
+                        <span class="stat-label">Durée</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">🏆</span>
+                        <span class="stat-label">Record</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <canvas id="game-canvas" style="display:none;"></canvas>
+    
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('✅ Service Worker enregistré:', registration.scope);
+                        
+                        // Vérifier les mises à jour
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('🔄 Nouvelle version disponible');
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.log('❌ Erreur Service Worker:', error);
+                    });
+            });
+        }
+        
+        // Installation prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('💾 App installable');
+        });
+    </script>
+</body>
+</html>

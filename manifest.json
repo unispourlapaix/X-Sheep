@@ -1,0 +1,58 @@
+{
+  "id": "com.unispourlapaix.xsheep",
+  "name": "X-Sheep - Mouton Courage",
+  "short_name": "X-Sheep",
+  "description": "Jeu spirituel qui sauve des vies avec l'espoir - Par Emmanuel Payet",
+  "start_url": "/X-Sheep/",
+  "scope": "/X-Sheep/",
+  "display": "standalone",
+  "background_color": "#87CEEB",
+  "theme_color": "#4A90E2",
+  "orientation": "landscape-primary",
+  "categories": ["games", "entertainment"],
+  "lang": "fr",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/X-Sheep/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/X-Sheep/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/X-Sheep/icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/X-Sheep/screenshot.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mode Infini",
+      "short_name": "Infini",
+      "description": "Jouer en mode infini",
+      "url": "/X-Sheep/?mode=endless",
+      "icons": [
+        {
+          "src": "/X-Sheep/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}
