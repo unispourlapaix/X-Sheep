@@ -243,6 +243,8 @@ body {
 .menu-header {
     position: absolute;
     top: 20px;
+}
+
 .author-signature {
     color: var(--gold-deep);
     font-weight: 500;
