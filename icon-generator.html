@@ -150,6 +150,7 @@
             <button onclick="downloadIcon(180)">📥 Télécharger 180x180</button>
             <button onclick="downloadIcon(32)">📥 Télécharger 32x32</button>
             <button onclick="downloadIcon(16)">📥 Télécharger 16x16</button>
+            <button onclick="downloadFavicon()">📥 Télécharger favicon.ico</button>
             <button onclick="downloadAllIcons()">📦 Télécharger Tout</button>
         </div>
         
@@ -159,14 +160,63 @@
                 <li><strong>512x512</strong> : Pour icon-512.png (PWA)</li>
                 <li><strong>192x192</strong> : Pour icon-192.png (PWA)</li>
                 <li><strong>180x180</strong> : Pour apple-touch-icon.png (iOS)</li>
-                <li><strong>32x32</strong> : Pour favicon-32x32.png</li>
-                <li><strong>16x16</strong> : Pour favicon-16x16.png et favicon.ico</li>
+                <li><strong>32x32</strong> : Pour favicon-32x32.png (zoom tête)</li>
+                <li><strong>16x16</strong> : Pour favicon-16x16.png (zoom tête)</li>
+                <li><strong>favicon.ico</strong> : Format ICO pour navigateurs (32x32 tête)</li>
             </ul>
             <p><strong>Placez les fichiers dans le dossier <code>public/</code> de votre projet.</strong></p>
+            <p><em>Note: Les favicons 16x16 et 32x32 affichent un zoom sur la tête du mouton pour une meilleure lisibilité.</em></p>
         </div>
     </div>
     
     <script>
+        // Dessiner juste la tête du mouton (pour favicon)
+        function drawSheepHead(ctx, x, y, size) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(size, size);
+            
+            // Tête blanche
+            const gradient = ctx.createRadialGradient(0, 0, 2, 0, 0, 12);
+            gradient.addColorStop(0, '#FFFFFF');
+            gradient.addColorStop(1, '#F0F8FF');
+            ctx.fillStyle = gradient;
+            ctx.strokeStyle = '#DDD';
+            ctx.lineWidth = 1.5 / size;
+            
+            ctx.beginPath();
+            ctx.arc(0, 0, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Yeux noirs
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(-4, -2, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(4, -2, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Étincelles dorées dans les yeux
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(-3, -3, 0.8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(5, -3, 0.8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sourire
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1.2 / size;
+            ctx.beginPath();
+            ctx.arc(0, 2, 4, 0.2, Math.PI - 0.2);
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+        
         // Dessiner le mouton avec SheepAnimator simplifié
         function drawSheep(ctx, x, y, size) {
             ctx.save();
@@ -263,19 +313,27 @@
             ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, size, size);
             
-            // Nuages décoratifs
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-            const cloudSize = size / 10;
-            ctx.beginPath();
-            ctx.arc(size * 0.2, size * 0.2, cloudSize, 0, Math.PI * 2);
-            ctx.arc(size * 0.8, size * 0.8, cloudSize, 0, Math.PI * 2);
-            ctx.fill();
+            // Nuages décoratifs (seulement pour grandes tailles)
+            if (size >= 180) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                const cloudSize = size / 10;
+                ctx.beginPath();
+                ctx.arc(size * 0.2, size * 0.2, cloudSize, 0, Math.PI * 2);
+                ctx.arc(size * 0.8, size * 0.8, cloudSize, 0, Math.PI * 2);
+                ctx.fill();
+            }
             
             ctx.restore();
             
-            // Dessiner le mouton au centre
-            const sheepSize = size / 80; // Échelle adaptative
-            drawSheep(ctx, center, center, sheepSize);
+            // Pour les petites tailles (16px et 32px), zoom sur la tête
+            if (size <= 32) {
+                const sheepSize = size / 28;
+                drawSheepHead(ctx, center, center, sheepSize);
+            } else {
+                // Pour les grandes tailles, mouton complet
+                const sheepSize = size / 80;
+                drawSheep(ctx, center, center, sheepSize);
+            }
         }
         
         // Générer toutes les tailles
@@ -302,6 +360,24 @@
             sizes.forEach((size, index) => {
                 setTimeout(() => downloadIcon(size), index * 500);
             });
+        }
+        
+        // Générer et télécharger favicon.ico
+        async function downloadFavicon() {
+            // Créer un canvas 32x32 pour l'ICO
+            const canvas = document.createElement('canvas');
+            canvas.width = 32;
+            canvas.height = 32;
+            createRoundIcon(canvas, 32);
+            
+            // Convertir en blob
+            canvas.toBlob((blob) => {
+                const link = document.createElement('a');
+                link.download = 'favicon.ico';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }, 'image/x-icon');
         }
         
         // Générer au chargement
