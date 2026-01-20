@@ -51,11 +51,11 @@ export class SeaObstacles {
         return {
             type: 'shark',
             x: x,
-            y: y,
+            y: 256, // Uniquement au niveau de l'eau
             width: 100,
             height: 50,
-            speed: 0.6,
-            damage: 1,
+            speed: 0.3, // Ralenti pour être plus visible
+            damage: 0, // Zen mode - pas de dégâts directs
             icon: '🦈',
             aggressive: true
         };

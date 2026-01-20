@@ -46,6 +46,13 @@ class App {
         if (displayElement) {
             displayElement.textContent = parseInt(maxScore).toLocaleString('fr-FR');
         }
+        
+        // Afficher le score aventure
+        const adventureScore = localStorage.getItem('xsheep_adventureScore') || '0';
+        const adventureElement = document.getElementById('adventure-total-score');
+        if (adventureElement) {
+            adventureElement.textContent = parseInt(adventureScore).toLocaleString('fr-FR');
+        }
     }
     
     startGame(mode) {

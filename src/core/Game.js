@@ -18,6 +18,7 @@ import { ProverbCollectibles } from '../narrative/ProverbCollectibles.js';
 import { IntroSequence } from '../narrative/IntroSequence.js';
 import { getRandomComment, getOnomatopoeia } from '../narrative/BossComments.js';
 import { audioManager } from '../audio/AudioManager.js';
+import { ScoreManager } from '../endless/ScoreManager.js';
 import { Lighthouse } from '../graphics/Lighthouse.js';
 import { SeaObstacles, Leviathan } from '../obstacles/SeaObstacles.js';
 
@@ -28,6 +29,9 @@ export class Game {
         this.ctx = null;
         this.running = false;
         this.paused = false;
+        
+        // Sauvegarder/restaurer le niveau actuel
+        this.currentLevel = parseInt(localStorage.getItem('xsheep_currentLevel') || '1');
         
         // Systèmes
         this.audioManager = audioManager;
@@ -84,6 +88,12 @@ export class Game {
         this.lighthouse = null; // Phare
         this.leviathan = null; // Boss du niveau 3
         this.leviathanDefeated = false;
+        this.sharkBossPause = 0; // Pause dramatique pour animation boss requin
+        this.screenShake = 0; // Timer pour tremblement d'écran
+        this.screenShakeIntensity = 0; // Intensité du tremblement
+        this.icebergSinking = false; // Animation de naufrage iceberg
+        this.sinkingTimer = 0; // Timer pour l'animation
+        this.sinkingIceberg = null; // Position de l'iceberg
         
         this.init();
     }
@@ -670,10 +680,67 @@ export class Game {
             // Mettre à jour le joueur
             this.player.update();
             
+            // Décrémenter le tremblement d'écran
+            if (this.screenShake > 0) {
+                this.screenShake--;
+            }
+            
+            // Gérer la pause dramatique du boss requin
+            if (this.sharkBossPause > 0) {
+                this.sharkBossPause--;
+                // Pendant la pause, continuer seulement l'animation du boss
+                this.level3Obstacles.forEach(obs => {
+                    if (obs.sharkBoss && obs.sharkBoss.active) {
+                        obs.sharkBoss.frame++;
+                        obs.sharkBoss.y += obs.sharkBoss.velY;
+                    }
+                });
+                return; // Skip le reste de l'update pendant la pause
+            }
+            
+            // Gérer l'animation de naufrage iceberg
+            if (this.icebergSinking) {
+                this.sinkingTimer++;
+                
+                // Animation de coulage (4 secondes = 240 frames)
+                if (this.sinkingTimer < 240) {
+                    // Bateau descend progressivement
+                    this.player.y += 1.5;
+                    // Rotation progressive (penche sur le côté)
+                    this.player.rotation = (this.sinkingTimer / 240) * (Math.PI / 6); // Penche jusqu'à 30°
+                    // Bulles qui montent
+                    if (this.sinkingTimer % 10 === 0) {
+                        this.renderer.addParticle(
+                            this.player.x + Math.random() * 80,
+                            this.player.y + Math.random() * 30,
+                            '💧',
+                            '#87CEEB'
+                        );
+                    }
+                } else {
+                    // Fin de l'animation - reprendre le jeu
+                    this.icebergSinking = false;
+                    this.player.rotation = 0;
+                    
+                    // Vérifier game over
+                    if (this.player.lives <= 0) {
+                        this.gameOver();
+                        return;
+                    }
+                    
+                    // Projeter le bateau vers le haut (réapparaît)
+                    this.player.y = 100;
+                    this.player.velY = -10;
+                    this.player.parachuting = true;
+                    this.player.parachuteTimer = 480;
+                }
+                return; // Skip le reste de l'update pendant le naufrage
+            }
+            
             // Limiter les mouvements du bateau - peut naviguer sur l'eau et voler dans le ciel
             if (this.boatMode) {
                 this.player.x = Math.max(10, Math.min(this.canvas.width - 90, this.player.x));
-                this.player.y = Math.max(50, Math.min(480, this.player.y)); // Navigue sur l'eau et vole dans le ciel
+                this.player.y = Math.max(50, Math.min(480, this.player.y)); // Navigue sur l'eau (256) et vole dans le ciel
             }
             
             // Animer les obstacles marins
@@ -681,30 +748,294 @@ export class Game {
                 obstacle.x -= obstacle.speed;
                 
                 // Comportements spécifiques
-                if (obstacle.type === 'wave') {
-                    obstacle.phase += 0.1;
-                    obstacle.y += Math.sin(obstacle.phase) * obstacle.amplitude * 0.1;
-                } else if (obstacle.type === 'jellyfish') {
-                    obstacle.bobPhase += 0.05;
-                    obstacle.y += Math.sin(obstacle.bobPhase) * 2;
-                } else if (obstacle.type === 'whirlpool') {
+                if (obstacle.type === 'whirlpool') {
                     obstacle.rotation += 0.1;
                     
-                    // Force d'aspiration
+                    // Force d'aspiration vers le centre
                     const dx = obstacle.x - this.player.x;
                     const dy = obstacle.y - this.player.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    if (distance < obstacle.width) {
+                    if (distance < obstacle.width * 2) {
                         const pullX = (dx / distance) * obstacle.pullForce;
                         const pullY = (dy / distance) * obstacle.pullForce;
                         this.player.x += pullX;
                         this.player.y += pullY;
+                        
+                        // Initialiser le timer et l'échelle si pas déjà fait
+                        if (!obstacle.trapTimer) {
+                            obstacle.trapTimer = 0;
+                            this.player.whirlpoolScale = 1.0; // Taille normale
+                        }
+                        
+                        // Si proche du centre, commencer à réduire la taille
+                        if (distance < 60) {
+                            obstacle.trapTimer++;
+                            
+                            // Réduire progressivement la taille du bateau (aspiré vers le centre)
+                            const shrinkProgress = obstacle.trapTimer / 120; // 0 à 1 sur 2 secondes
+                            this.player.whirlpoolScale = Math.max(0.1, 1.0 - shrinkProgress * 0.9); // De 1.0 à 0.1
+                            
+                            // Rotation pendant l'aspiration
+                            this.player.rotation += 0.05 * (1 - this.player.whirlpoolScale); // Tourne de plus en plus vite
+                            
+                            // Après 2 secondes (120 frames) - DISPARITION complète puis REJET
+                            if (obstacle.trapTimer >= 120) {
+                                // Syphoner le bateau : perdre 3 vies
+                                this.player.lives -= 3;
+                                obstacle.hit = true; // Désactiver le tourbillon
+                                
+                                // Effet visuel EXPLOSION du tourbillon
+                                for (let i = 0; i < 30; i++) {
+                                    this.renderer.addParticle(
+                                        obstacle.x + (Math.random() - 0.5) * 80,
+                                        obstacle.y + (Math.random() - 0.5) * 80,
+                                        '💦',
+                                        '#4A90A4'
+                                    );
+                                }
+                                this.renderer.addParticle(obstacle.x, obstacle.y, '🌪️', '#87CEEB');
+                                this.renderer.addParticle(obstacle.x, obstacle.y, '💥', '#FFFFFF');
+                                
+                                // REJET violent vers le haut avec rotation
+                                this.player.x = obstacle.x;
+                                this.player.y = obstacle.y - 50;
+                                this.player.velY = -18; // Force explosive vers le haut
+                                this.player.velX = (Math.random() - 0.5) * 6; // Direction aléatoire
+                                this.player.rotationSpeed = 0.2; // Tourne en étant rejeté
+                                this.player.flying = false;
+                                this.player.parachuting = true;
+                                this.player.parachuteTimer = 480;
+                                
+                                // Restaurer la taille normale
+                                this.player.whirlpoolScale = 1.0;
+                                
+                                if (this.audioManager && this.audioManager.initialized) {
+                                    this.audioManager.playCollisionSound();
+                                }
+                                
+                                console.log('🌪️ Aspiré et rejeté par le tourbillon!');
+                                
+                                if (this.player.lives <= 0) {
+                                    this.gameOver();
+                                    return;
+                                }
+                                
+                                obstacle.trapTimer = 0;
+                            }
+                        }
+                    } else {
+                        // Réinitialiser le timer et la taille si on sort de la zone
+                        obstacle.trapTimer = 0;
+                        if (this.player.whirlpoolScale !== undefined && this.player.whirlpoolScale < 1.0) {
+                            // Restaurer progressivement la taille
+                            this.player.whirlpoolScale = Math.min(1.0, this.player.whirlpoolScale + 0.05);
+                        }
                     }
-                } else if (obstacle.type === 'siren') {
-                    obstacle.bobPhase = (obstacle.bobPhase || 0) + 0.05;
-                    obstacle.y += Math.sin(obstacle.bobPhase) * 1.5;
+                }
+                
+                // Piège du requin - Animation boss requin qui surgit
+                if (obstacle.type === 'shark') {
+                    const dx = obstacle.x - this.player.x;
+                    const dy = obstacle.y - this.player.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
                     
+                    // Si le bateau est sur l'aileron (distance augmentée pour aileron 2x plus grand)
+                    if (distance < 70) {
+                        // Initialiser le timer si pas déjà fait
+                        if (!obstacle.trapTimer) {
+                            obstacle.trapTimer = 0;
+                            console.log('🦈 Détection requin - Timer démarré');
+                        }
+                        obstacle.trapTimer++;
+                        
+                        // Après 1 seconde (60 frames), déclencher l'attaque du boss requin
+                        if (obstacle.trapTimer >= 60 && !obstacle.bossTriggered) {
+                            obstacle.bossTriggered = true;
+                            
+                            console.log('🦈 BOSS REQUIN DÉCLENCHÉ! Position:', this.player.x, this.player.y);
+                            
+                            // PAUSE DRAMATIQUE de 2 secondes
+                            this.sharkBossPause = 120; // 2 secondes (60 frames/s)
+                            this.screenShake = 60; // 1 seconde de tremblement
+                            this.screenShakeIntensity = 8; // Intensité du tremblement
+                            
+                            // Retour haptique (vibration mobile)
+                            if (navigator.vibrate) {
+                                navigator.vibrate([200, 100, 200, 100, 300]); // 1s de vibrations
+                            }
+                            
+                            // Créer l'animation du boss requin qui surgit d'en bas
+                            obstacle.sharkBoss = {
+                                x: this.player.x,
+                                y: this.canvas.height + 200, // Part d'en bas de l'écran
+                                width: 300, // BEAUCOUP plus grand
+                                height: 400, // BEAUCOUP plus grand
+                                velY: -4, // Encore plus lent pour être bien visible
+                                active: true,
+                                captured: false, // Pas encore capturé
+                                frame: 0
+                            };
+                            
+                            console.log('🦈 Boss requin déclenché!');
+                        }
+                    } else {
+                        // Réinitialiser le timer si on s'éloigne
+                        obstacle.trapTimer = 0;
+                    }
+                    
+                    // Animation du boss requin
+                    if (obstacle.sharkBoss && obstacle.sharkBoss.active) {
+                        const boss = obstacle.sharkBoss;
+                        console.log('🦈 UPDATE BOSS:', boss.y, 'velY:', boss.velY, 'captured:', boss.captured);
+                        boss.frame++;
+                        
+                        // Si le bateau est capturé, il suit le requin EN PREMIER
+                        if (boss.captured) {
+                            this.player.x = boss.x;
+                            this.player.y = boss.y - 80; // Juste devant la gueule
+                            this.player.velX = 0;
+                            this.player.velY = boss.velY; // Suit la vitesse du requin
+                            this.player.rotation = Math.sin(boss.frame * 0.1) * 0.3; // Oscillation
+                        }
+                        
+                        // Puis déplacer le requin
+                        boss.y += boss.velY;
+                        
+                        // Vérifier si le requin attrape le bateau (une seule fois)
+                        if (!boss.captured) {
+                            const bossPlayerDist = Math.sqrt(
+                                Math.pow(boss.x - this.player.x, 2) + 
+                                Math.pow(boss.y - this.player.y, 2)
+                            );
+                            
+                            if (bossPlayerDist < 150 && boss.y > 100 && boss.y < 500) {
+                                // CAPTURE LE BATEAU!
+                                boss.captured = true;
+                                this.player.lives -= 3;
+                                
+                                // Effet visuel capture
+                                for (let i = 0; i < 30; i++) {
+                                    this.renderer.addParticle(
+                                        boss.x + (Math.random() - 0.5) * 100,
+                                        boss.y + (Math.random() - 0.5) * 120,
+                                        '💧',
+                                        '#4A90A4'
+                                    );
+                                }
+                                this.renderer.addParticle(boss.x, boss.y, '🦈', '#2A5A7A');
+                                
+                                if (this.audioManager && this.audioManager.initialized) {
+                                    this.audioManager.playCollisionSound();
+                                }
+                                
+                                console.log('🦈 BATEAU CAPTURÉ! Le requin l\'emporte vers le haut...');
+                            }
+                        }
+                        
+                        // Quand le requin sort de l'écran par le haut, relâcher le bateau
+                        if (boss.y < -200 && boss.captured) {
+                            // TROMBE D'EAU FINALE - RELÂCHE LE BATEAU
+                            for (let i = 0; i < 40; i++) {
+                                this.renderer.addParticle(
+                                    this.player.x + (Math.random() - 0.5) * 120,
+                                    this.player.y + (Math.random() - 0.5) * 140,
+                                    '💦',
+                                    '#87CEEB'
+                                );
+                            }
+                            this.renderer.addParticle(this.player.x, this.player.y, '🌊', '#1E90FF');
+                            
+                            // Projeter le bateau en rotation
+                            this.player.velY = -15; // Monte un peu
+                            this.player.velX = (Math.random() - 0.5) * 4; // Direction aléatoire
+                            this.player.rotationSpeed = 0.15; // Tourne en tombant
+                            this.player.flying = false;
+                            this.player.parachuting = true;
+                            this.player.parachuteTimer = 480;
+                            
+                            boss.active = false; // Désactiver l'animation
+                            obstacle.hit = true;
+                            
+                            console.log('🦈 Bateau relâché et retombe en tournant!');
+                            
+                            if (this.player.lives <= 0) {
+                                this.gameOver();
+                                return;
+                            }
+                        }
+                        
+                        // Désactiver si sort de l'écran par le haut
+                        if (boss.y < -400) { // Boss plus grand, attendre qu'il soit complètement sorti
+                            boss.active = false;
+                        }
+                    }
+                }
+                else if (obstacle.type === 'jellyfish') {
+                    // Collision avec la méduse/pieuvre - immobilise avec tentacules
+                    const dx = obstacle.x - this.player.x;
+                    const dy = obstacle.y - this.player.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 50 && !obstacle.hit && !this.player.frozen) {
+                        obstacle.hit = true;
+                        
+                        // Immobiliser le bateau pendant 3 secondes
+                        this.player.frozen = true;
+                        this.player.frozenTimer = 180; // 3 secondes (60 fps)
+                        this.player.tentacleGrab = true; // Attrapé par les tentacules
+                        
+                        // Position de la pieuvre
+                        this.player.jellyfishX = obstacle.x;
+                        this.player.jellyfishY = obstacle.y;
+                        
+                        // Effet visuel
+                        for (let i = 0; i < 20; i++) {
+                            this.renderer.addParticle(
+                                obstacle.x + (Math.random() - 0.5) * 80,
+                                obstacle.y + (Math.random() - 0.5) * 80,
+                                '💦',
+                                '#FF69B4'
+                            );
+                        }
+                        this.renderer.addParticle(obstacle.x, obstacle.y, '🐙', '#FF1493');
+                        
+                        if (this.audioManager && this.audioManager.initialized) {
+                            this.audioManager.playCollisionSound();
+                        }
+                        
+                        console.log('🐙 Bateau immobilisé par la pieuvre!');
+                    }
+                }
+                else if (obstacle.type === 'rock') {
+                    // Collision avec l'iceberg - COULE LE BATEAU
+                    const dx = obstacle.x - this.player.x;
+                    const dy = obstacle.y - this.player.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 60 && !obstacle.hit && !this.player.invincible) {
+                        obstacle.hit = true;
+                        
+                        // DÉGÂTS MASSIFS -13 vies (référence Titanic)
+                        this.player.lives -= 13;
+                        
+                        // PAUSE DU JEU pour l'animation de naufrage
+                        this.icebergSinking = true;
+                        this.sinkingTimer = 0;
+                        this.sinkingIceberg = {
+                            x: obstacle.x,
+                            y: obstacle.y
+                        };
+                        
+                        // Son de collision
+                        if (this.audioManager && this.audioManager.initialized) {
+                            this.audioManager.playCollisionSound();
+                        }
+                        
+                        console.log('🧊 ICEBERG! Le bateau coule...');
+                    }
+                }
+                else if (obstacle.type === 'siren') {
                     // Charme du joueur (le ralentit)
                     const dx = obstacle.x - this.player.x;
                     const dy = obstacle.y - this.player.y;
@@ -713,6 +1044,45 @@ export class Game {
                     if (distance < obstacle.charmRadius) {
                         this.player.velX *= 0.95;
                         obstacle.singing = true;
+                    }
+                }
+                else if (obstacle.type === 'wave') {
+                    // Collision avec la vague - fait tanguer le bateau
+                    const dx = obstacle.x - this.player.x;
+                    const dy = obstacle.y - this.player.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 60 && !obstacle.hit && !this.player.invincible) {
+                        this.player.lives -= 1; // -1 vie
+                        this.player.invincible = true;
+                        this.player.invincibleTimer = 90;
+                        obstacle.hit = true;
+                        
+                        // Effet de tangage (oscillation)
+                        this.player.tangageTimer = 180; // 3 secondes de tangage
+                        this.player.tangageIntensity = 0.4; // Intensité de l'oscillation
+                        
+                        // Effet visuel
+                        for (let i = 0; i < 15; i++) {
+                            this.renderer.addParticle(
+                                obstacle.x + (Math.random() - 0.5) * 60,
+                                obstacle.y + (Math.random() - 0.5) * 40,
+                                '💦',
+                                '#87CEEB'
+                            );
+                        }
+                        this.renderer.addParticle(obstacle.x, obstacle.y, '🌊', '#4A90A4');
+                        
+                        if (this.audioManager && this.audioManager.initialized) {
+                            this.audioManager.playCollisionSound();
+                        }
+                        
+                        console.log('🌊 Bateau tangué par la vague!');
+                        
+                        if (this.player.lives <= 0) {
+                            this.gameOver();
+                            return;
+                        }
                     }
                 }
                 
@@ -777,6 +1147,10 @@ export class Game {
                 if ((hitBoat || hitSail) && !proverb.collected) {
                     proverb.collected = true;
                     
+                    // Accumuler la sagesse
+                    this.level3Wisdom += proverb.wisdom || 0;
+                    console.log(`📖 Sagesse accumulée: ${this.level3Wisdom}/777`);
+                    
                     if (this.audioManager && this.audioManager.initialized) {
                         this.audioManager.playPocSound();
                     }
@@ -801,8 +1175,8 @@ export class Game {
                     
                     console.log(`📖 Proverbe collecté! Vies: ${this.player.lives}/${this.player.maxLives}`);
                     
-                    // Si Léviathan vaincu et max vies atteint
-                    if (this.player.lives >= this.player.maxLives && this.leviathanDefeated) {
+                    // Vérifier si on a atteint 777 points de sagesse
+                    if (this.level3Wisdom >= 777 && !this.heavenGate.visible) {
                         this.triggerLevel3Victory();
                     }
                 }
@@ -1088,6 +1462,8 @@ export class Game {
     
     startLevel3() {
         console.log('🚤 NIVEAU 3: Navigation et Sagesse commence!');
+        this.currentLevel = 3;
+        localStorage.setItem('xsheep_currentLevel', '3');
         this.level3Active = true;
         this.level2Active = false;
         this.level3Timer = 0; // Timer normal
@@ -1134,7 +1510,7 @@ export class Game {
     }
     
     triggerLevel3Victory() {
-        console.log('🎊 Sagesse complète ! Porte du paradis apparaît!');
+        console.log('🎊 777 points de sagesse atteints ! Porte du paradis apparaît!');
         
         // Faire apparaître la porte du paradis
         if (this.heavenGate) {
@@ -1146,7 +1522,7 @@ export class Game {
         // Message
         if (this.notificationSystem) {
             this.notificationSystem.showNarrative({
-                text: '🚪 La Porte du Paradis s\'ouvre ! Tu as vaincu le Léviathan et atteint la sagesse !',
+                text: '🚪 La Porte du Paradis s\'ouvre ! Tu as atteint 777 points de sagesse !',
                 duration: 4000
             });
         }
@@ -1221,6 +1597,13 @@ export class Game {
         console.log('🎊 Niveau 3 Terminé! Sagesse complète!');
         this.running = false;
         this.level3Active = false;
+        
+        // Sauvegarder le score aventure
+        if (this.mode === 'adventure') {
+            const scoreManager = new ScoreManager();
+            const totalScore = scoreManager.addAdventureScore(this.score);
+            console.log('💾 Score aventure sauvegardé:', this.score, '| Total:', totalScore);
+        }
         
         // Créer une popup de victoire en format horizontal
         const popup = document.createElement('div');
@@ -1330,9 +1713,12 @@ export class Game {
     
     startLevel2() {
         console.log('🔥 NIVEAU 2: Les 7 Péchés Capitaux commence!');
+        this.currentLevel = 2;
         this.level2Active = true;
         this.level2Timer = 0;
         this.level2Survived = 0;
+        this.currentLevel = 2;
+        localStorage.setItem('xsheep_currentLevel', '2');
         
         // Nettoyer les obstacles du niveau 1
         this.obstacleManager.obstacles = [];
@@ -1401,13 +1787,128 @@ export class Game {
         
         document.getElementById('retry-btn').addEventListener('click', () => {
             document.body.removeChild(overlay);
-            window.location.reload();
+            // Redémarrer au niveau actuel
+            const savedLevel = parseInt(localStorage.getItem('xsheep_currentLevel') || '1');
+            this.restart(savedLevel);
         });
         
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.body.removeChild(overlay);
             window.location.href = 'index.html';
         });
+    }
+    
+    restart() {
+        const level = this.currentLevel;
+        console.log(`🔄 Redémarrage au niveau ${level}`);
+        
+        // Réinitialiser les états
+        this.running = false;
+        this.level2Active = false;
+        this.level3Active = false;
+        this.gameOverAnimation = false;
+        this.victoryAnimation = false;
+        this.boatMode = false;
+        
+        // Réinitialiser le joueur
+        this.player.x = 200;
+        this.player.y = this.canvas.height / 2;
+        this.player.velX = 0;
+        this.player.velY = 0;
+        this.player.lives = this.player.maxLives;
+        this.player.fuel = 100;
+        this.player.bonusFuel = 0;
+        this.player.invincible = false;
+        this.player.flying = false;
+        this.player.parachuting = false;
+        this.player.rotation = 0;
+        this.player.rotationSpeed = 0;
+        
+        // Nettoyer obstacles
+        if (this.obstacleManager) {
+            this.obstacleManager.obstacles = [];
+            this.obstacleManager.weapons = [];
+            this.obstacleManager.bossLine = [];
+            this.obstacleManager.projectiles = [];
+        }
+        
+        this.level3Proverbs = [];
+        this.level3Obstacles = [];
+        this.level3Projectiles = [];
+        this.leviathan = null;
+        this.leviathanDefeated = false;
+        
+        // Redémarrer au bon niveau
+        if (level === 1) {
+            this.running = true;
+            this.gameLoop();
+        } else if (level === 2) {
+            this.startLevel2();
+        } else if (level === 3) {
+            this.startLevel3();
+        }
+    }
+    
+    restart(level = 1) {
+        console.log(`🔄 Redémarrage au niveau ${level}`);
+        
+        // Réinitialiser les propriétés du jeu
+        this.running = false;
+        this.level2Active = false;
+        this.level3Active = false;
+        this.gameOverAnimation = false;
+        this.victoryAnimation = false;
+        this.boatMode = false;
+        
+        // Réinitialiser le joueur
+        this.player.x = 200;
+        this.player.y = this.canvas.height / 2;
+        this.player.velX = 0;
+        this.player.velY = 0;
+        this.player.lives = this.player.maxLives;
+        this.player.fuel = 100;
+        this.player.bonusFuel = 0;
+        this.player.invincible = false;
+        this.player.flying = false;
+        this.player.parachuting = false;
+        this.player.rotation = 0;
+        this.player.rotationSpeed = 0;
+        this.player.whirlpoolScale = 1.0;
+        this.player.tangageTimer = 0;
+        this.player.tentacleGrab = false;
+        
+        // Nettoyer les obstacles
+        if (this.obstacleManager) {
+            this.obstacleManager.obstacles = [];
+            this.obstacleManager.weapons = [];
+            this.obstacleManager.bossLine = [];
+            this.obstacleManager.projectiles = [];
+        }
+        
+        this.level3Proverbs = [];
+        this.level3Obstacles = [];
+        this.level3Projectiles = [];
+        this.leviathan = null;
+        this.leviathanDefeated = false;
+        this.level3Wisdom = 0;
+        this.level3FirstProverbSpawned = false;
+        
+        // Cacher la porte du paradis
+        if (this.heavenGate) {
+            this.heavenGate.visible = false;
+        }
+        
+        // Redémarrer au bon niveau
+        if (level === 1) {
+            this.currentLevel = 1;
+            localStorage.setItem('xsheep_currentLevel', '1');
+            this.running = true;
+            this.gameLoop();
+        } else if (level === 2) {
+            this.startLevel2();
+        } else if (level === 3) {
+            this.startLevel3();
+        }
     }
     
     showVictoryScreen() {

@@ -16,11 +16,22 @@ export class Player {
         this.velX = 0;
         this.velY = 0;
         
+        // Rotation (pour animations spéciales)
+        this.rotation = 0;
+        this.rotationSpeed = 0;
+        this.whirlpoolScale = 1.0; // Échelle du bateau (aspiration tourbillon)
+        this.tangageTimer = 0; // Timer pour effet de tangage (vague)
+        this.tangageIntensity = 0; // Intensité du tangage
+        this.tentacleGrab = false; // Attrapé par les tentacules de la pieuvre
+        this.jellyfishX = 0; // Position de la pieuvre
+        this.jellyfishY = 0;
+        
         // États
         this.jumping = false;
         this.flying = false;
         this.parachuting = false; // Mode parachute après le vol
         this.parachuteTimer = 0; // Durée de l'effet parachute
+        this.flyCooldown = 0; // Cooldown avant de pouvoir revoler
         this.frozen = false; // Gelé par le Phantom
         this.frozenTimer = 0; // Durée du gel
         
@@ -99,10 +110,20 @@ export class Player {
             this.bonusFuel = 0;
         }
         
-        // NIVEAU 3: Mode bateau - physique normale pour permettre le vol
+        // NIVEAU 3: Mode bateau - friction différente selon la zone
         if (this.game.boatMode) {
-            // Réduire la friction pour mouvement plus fluide
-            // La physique normale s'applique après pour permettre le vol
+            const waterLevel = 256; // Surface de l'eau (canvas.height * 0.5)
+            const onWater = this.y >= waterLevel;
+            
+            if (onWater) {
+                // Sur l'eau: friction forte (freiné)
+                this.velX *= 0.85;
+                this.velY *= 0.85;
+            } else {
+                // Dans le ciel: friction faible (libre)
+                this.velX *= 0.98;
+                this.velY *= 0.98;
+            }
         }
         
         // Gérer les effets spéciaux
@@ -138,6 +159,25 @@ export class Player {
         // Si gelé, juste tomber et décompter le timer
         if (this.frozen && this.frozenTimer > 0) {
             this.frozenTimer--;
+            
+            // Si attrapé par les tentacules, rester à la position de la pieuvre
+            if (this.tentacleGrab) {
+                this.velX = 0; // Complètement immobile
+                this.velY = 0;
+                // Petit mouvement d'oscillation pour montrer la lutte
+                this.rotation = Math.sin(this.frozenTimer * 0.2) * 0.1;
+                
+                // Libérer à la fin
+                if (this.frozenTimer === 0) {
+                    this.frozen = false;
+                    this.tentacleGrab = false;
+                    this.rotation = 0;
+                    console.log('🐙 Libéré des tentacules!');
+                }
+                return;
+            }
+            
+            // Sinon comportement normal de gel (phantom)
             this.velX = 0; // Immobile horizontalement
             this.velY += GameConfig.PLAYER.GRAVITY * 2; // Tombe plus vite
             this.x += this.velX;
@@ -191,9 +231,9 @@ export class Player {
         
         // Gravité (sauf si en vol)
         if (!this.flying) {
-            // Mode parachute : gravité très réduite et friction aérienne
+            // Mode parachute : gravité réduite mais descente plus rapide
             if (this.parachuting && this.parachuteTimer > 0) {
-                this.velY += GameConfig.PLAYER.GRAVITY * 0.025; // Gravité réduite à 2.5%
+                this.velY += GameConfig.PLAYER.GRAVITY * 0.15; // Gravité réduite à 15% (plus rapide)
                 this.velX *= 0.99; // Friction aérienne légère
                 this.parachuteTimer--;
                 
@@ -205,9 +245,42 @@ export class Player {
             }
         }
         
+        // Décrémenter le cooldown de vol
+        if (this.flyCooldown > 0) {
+            this.flyCooldown--;
+        }
+        
         // Appliquer vélocité
         this.x += this.velX;
         this.y += this.velY;
+        
+        // Appliquer rotation si active
+        if (this.rotationSpeed !== 0) {
+            this.rotation += this.rotationSpeed;
+            // Ralentir progressivement la rotation
+            this.rotationSpeed *= 0.98;
+            // Arrêter complètement si trop faible
+            if (Math.abs(this.rotationSpeed) < 0.001) {
+                this.rotationSpeed = 0;
+                this.rotation = 0; // Réinitialiser la rotation
+            }
+        }
+        
+        // Appliquer effet de tangage (oscillation)
+        if (this.tangageTimer > 0) {
+            this.tangageTimer--;
+            const tangageFrequency = 0.15; // Vitesse de l'oscillation
+            this.rotation = Math.sin(this.tangageTimer * tangageFrequency) * this.tangageIntensity;
+            
+            // Réduire progressivement l'intensité
+            this.tangageIntensity *= 0.99;
+            
+            // Arrêter complètement à la fin
+            if (this.tangageTimer === 0) {
+                this.rotation = 0;
+                this.tangageIntensity = 0;
+            }
+        }
         
         // Mettre à jour la direction du regard selon le mouvement
         if (Math.abs(this.velX) > 0.5) {
@@ -307,6 +380,11 @@ export class Player {
     startFlying() {
         // En mode bateau (niveau 3), peut voler librement
         if (this.game.boatMode || this.game.level3Active) {
+            // Vérifier le cooldown
+            if (this.flyCooldown > 0) {
+                console.log('⏳ Attends 2 secondes avant de revoler!');
+                return false;
+            }
             this.flying = true;
             this.velY = -4; // Vitesse de vol pour le bateau
             return true;
@@ -336,6 +414,11 @@ export class Player {
     
     stopFlying() {
         this.flying = false;
+        
+        // Activer cooldown de 2 secondes (120 frames)
+        if (this.game.boatMode || this.game.level3Active) {
+            this.flyCooldown = 120; // 2 secondes à 60 FPS
+        }
         
         // Arrêter le son de fusée
         if (this.rocketSoundActive && this.game.audioManager) {

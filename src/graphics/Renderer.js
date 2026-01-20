@@ -50,6 +50,16 @@ export class Renderer {
     }
     
     render() {
+        // Appliquer le tremblement d'écran si actif
+        let shakeActive = false;
+        if (this.game.screenShake > 0) {
+            const shakeX = (Math.random() - 0.5) * this.game.screenShakeIntensity;
+            const shakeY = (Math.random() - 0.5) * this.game.screenShakeIntensity;
+            this.ctx.save();
+            this.ctx.translate(shakeX, shakeY);
+            shakeActive = true;
+        }
+        
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         // NIVEAU 3: Fond d'eau nocturne avec étoiles
@@ -191,6 +201,64 @@ export class Renderer {
         // Interface utilisateur unifiée
         this.drawUnifiedUI();
         
+        // Animation naufrage iceberg avec effets BD
+        if (this.game.icebergSinking) {
+            const timer = this.game.sinkingTimer;
+            
+            // Assombrir l'écran progressivement
+            this.ctx.fillStyle = `rgba(0, 30, 60, ${Math.min(timer / 240, 0.5)})`;
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            // Afficher les "TOUIK..." à des intervalles - version compacte
+            this.ctx.save();
+            this.ctx.font = 'bold 36px Arial';
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = 3;
+            
+            // TOUIK 1 (frame 40-120)
+            if (timer >= 40 && timer < 120) {
+                const alpha = timer < 55 ? (timer - 40) / 15 : (timer > 105 ? (120 - timer) / 15 : 1);
+                this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                this.ctx.strokeText('TOUIK', 120, 120);
+                this.ctx.fillText('TOUIK', 120, 120);
+            }
+            
+            // TOUIK 2 (frame 70-150)
+            if (timer >= 70 && timer < 150) {
+                const alpha = timer < 85 ? (timer - 70) / 15 : (timer > 135 ? (150 - timer) / 15 : 1);
+                this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                this.ctx.strokeText('TOUIK', this.canvas.width - 200, 160);
+                this.ctx.fillText('TOUIK', this.canvas.width - 200, 160);
+            }
+            
+            // TOUIK 3 (frame 100-180)
+            if (timer >= 100 && timer < 180) {
+                const alpha = timer < 115 ? (timer - 100) / 15 : (timer > 165 ? (180 - timer) / 15 : 1);
+                this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                this.ctx.strokeText('TOUIK', this.canvas.width / 2 - 60, 280);
+                this.ctx.fillText('TOUIK', this.canvas.width / 2 - 60, 280);
+            }
+            
+            this.ctx.restore();
+            
+            // Lignes de mouvement (manga style) compactes
+            if (timer > 50) {
+                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+                this.ctx.lineWidth = 1.5;
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const x1 = this.game.player.x + Math.cos(angle) * 60;
+                    const y1 = this.game.player.y + Math.sin(angle) * 40;
+                    const x2 = x1 + Math.cos(angle) * 30;
+                    const y2 = y1 + Math.sin(angle) * 15;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x1, y1);
+                    this.ctx.lineTo(x2, y2);
+                    this.ctx.stroke();
+                }
+            }
+        };
+        
         // Porte du Paradis (mode aventure)
         if (this.game.heavenGate) {
             this.game.heavenGate.render(this.ctx);
@@ -210,6 +278,11 @@ export class Renderer {
         if (this.game.mode === 'endless' && this.game.endlessMode) {
             this.game.endlessMode.renderOnomatopoeia(this.ctx);
             this.game.endlessMode.renderBossComment(this.ctx);
+        }
+        
+        // Restaurer le contexte si tremblement était actif
+        if (shakeActive) {
+            this.ctx.restore();
         }
     }
     
@@ -637,79 +710,365 @@ export class Renderer {
     drawSeaObstacle(obstacle) {
         this.ctx.save();
         
-        // Effet de lueur selon le type
+        // Boss requin géant (animation spéciale) - PRIORITÉ ABSOLUE
+        if (obstacle.sharkBoss && obstacle.sharkBoss.active) {
+            const boss = obstacle.sharkBoss;
+            console.log('🦈 RENDU BOSS:', boss.x, boss.y, 'frame:', boss.frame);
+            
+            // Ombre sous-marine massive
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.beginPath();
+            this.ctx.ellipse(boss.x, boss.y + 40, boss.width * 0.7, boss.height * 0.4, 0, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Corps du requin géant
+            const gradient = this.ctx.createLinearGradient(
+                boss.x - boss.width/2, boss.y - boss.height/2,
+                boss.x + boss.width/2, boss.y + boss.height/2
+            );
+            gradient.addColorStop(0, '#2A5A7A');
+            gradient.addColorStop(0.5, '#1E3A5A');
+            gradient.addColorStop(1, '#0D1F3A');
+            
+            this.ctx.fillStyle = gradient;
+            this.ctx.strokeStyle = '#000000';
+            this.ctx.lineWidth = 6;
+            
+            // Tête du requin (grande ellipse)
+            this.ctx.beginPath();
+            this.ctx.ellipse(boss.x, boss.y - boss.height * 0.25, boss.width * 0.45, boss.height * 0.25, 0, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.stroke();
+            
+            // Corps principal
+            this.ctx.beginPath();
+            this.ctx.ellipse(boss.x, boss.y, boss.width * 0.5, boss.height * 0.35, 0, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.stroke();
+            
+            // Queue
+            this.ctx.beginPath();
+            this.ctx.moveTo(boss.x, boss.y + boss.height * 0.25);
+            this.ctx.lineTo(boss.x - boss.width * 0.25, boss.y + boss.height * 0.45);
+            this.ctx.lineTo(boss.x + boss.width * 0.25, boss.y + boss.height * 0.45);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+            
+            // Nageoires latérales
+            this.ctx.beginPath();
+            this.ctx.moveTo(boss.x - boss.width * 0.35, boss.y);
+            this.ctx.lineTo(boss.x - boss.width * 0.55, boss.y - boss.height * 0.12);
+            this.ctx.lineTo(boss.x - boss.width * 0.3, boss.y + boss.height * 0.08);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+            
+            this.ctx.beginPath();
+            this.ctx.moveTo(boss.x + boss.width * 0.35, boss.y);
+            this.ctx.lineTo(boss.x + boss.width * 0.55, boss.y - boss.height * 0.12);
+            this.ctx.lineTo(boss.x + boss.width * 0.3, boss.y + boss.height * 0.08);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+            
+            // Yeux rouges menaçants ÉNORMES
+            this.ctx.fillStyle = '#FF0000';
+            this.ctx.beginPath();
+            this.ctx.arc(boss.x - boss.width * 0.18, boss.y - boss.height * 0.28, 20, 0, Math.PI * 2);
+            this.ctx.arc(boss.x + boss.width * 0.18, boss.y - boss.height * 0.28, 20, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Pupilles noires
+            this.ctx.fillStyle = '#000000';
+            this.ctx.beginPath();
+            this.ctx.arc(boss.x - boss.width * 0.18, boss.y - boss.height * 0.28, 10, 0, Math.PI * 2);
+            this.ctx.arc(boss.x + boss.width * 0.18, boss.y - boss.height * 0.28, 10, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Dents acérées ÉNORMES (bouche ouverte)
+            this.ctx.strokeStyle = '#FFFFFF';
+            this.ctx.lineWidth = 5;
+            this.ctx.lineCap = 'round';
+            for (let i = 0; i < 10; i++) {
+                const x = boss.x - boss.width * 0.25 + i * (boss.width * 0.05);
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, boss.y - boss.height * 0.12);
+                this.ctx.lineTo(x, boss.y - boss.height * 0.02);
+                this.ctx.stroke();
+            }
+            
+            // Trombe d'eau tourbillonnante autour du requin
+            this.ctx.fillStyle = 'rgba(135, 206, 235, 0.5)';
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2 + boss.frame * 0.15;
+                const radius = boss.width * 0.4 + Math.sin(boss.frame * 0.2 + i) * 25;
+                const px = boss.x + Math.cos(angle) * radius;
+                const py = boss.y + Math.sin(angle) * radius;
+                this.ctx.beginPath();
+                this.ctx.arc(px, py, 12, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+            
+            this.ctx.restore();
+            // NE PAS FAIRE DE RETURN - continuer pour dessiner l'aileron aussi
+        }
+        
+        // Vagues - Deux lignes blanches simples
+        if (obstacle.type === 'wave') {
+            const waveWidth = obstacle.width;
+            
+            this.ctx.strokeStyle = '#FFFFFF';
+            this.ctx.lineWidth = 3;
+            this.ctx.lineCap = 'round';
+            
+            // Première ligne ondulée
+            this.ctx.beginPath();
+            this.ctx.moveTo(obstacle.x - waveWidth/2, obstacle.y);
+            this.ctx.quadraticCurveTo(
+                obstacle.x - waveWidth/4, obstacle.y - 8,
+                obstacle.x, obstacle.y
+            );
+            this.ctx.quadraticCurveTo(
+                obstacle.x + waveWidth/4, obstacle.y + 8,
+                obstacle.x + waveWidth/2, obstacle.y
+            );
+            this.ctx.stroke();
+            
+            // Deuxième ligne ondulée (plus petite, en dessous)
+            this.ctx.lineWidth = 2.5;
+            this.ctx.globalAlpha = 0.7;
+            this.ctx.beginPath();
+            this.ctx.moveTo(obstacle.x - waveWidth/3, obstacle.y + 10);
+            this.ctx.quadraticCurveTo(
+                obstacle.x - waveWidth/6, obstacle.y + 4,
+                obstacle.x, obstacle.y + 10
+            );
+            this.ctx.quadraticCurveTo(
+                obstacle.x + waveWidth/6, obstacle.y + 16,
+                obstacle.x + waveWidth/3, obstacle.y + 10
+            );
+            this.ctx.stroke();
+            
+            this.ctx.restore();
+            return;
+        }
+        
+        // Tourbillon - Animation optimisée avec centre sombre
         if (obstacle.type === 'whirlpool') {
-            this.ctx.save();
             this.ctx.translate(obstacle.x, obstacle.y);
             this.ctx.rotate(obstacle.rotation);
             
-            // Tourbillon
-            for (let i = 0; i < 5; i++) {
-                const radius = (i + 1) * 15;
-                const alpha = 0.3 - i * 0.05;
+            // Centre sombre du tourbillon
+            const centerGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, 15);
+            centerGradient.addColorStop(0, 'rgba(0, 20, 40, 0.8)');
+            centerGradient.addColorStop(1, 'rgba(30, 144, 255, 0.3)');
+            this.ctx.fillStyle = centerGradient;
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, 15, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // 3 spirales
+            for (let i = 0; i < 3; i++) {
+                const radius = (i + 1) * 18;
+                const alpha = 0.5 - i * 0.15;
                 this.ctx.strokeStyle = `rgba(30, 144, 255, ${alpha})`;
-                this.ctx.lineWidth = 3;
+                this.ctx.lineWidth = 5 - i;
                 this.ctx.beginPath();
-                this.ctx.arc(0, 0, radius, 0, Math.PI * 1.5);
+                this.ctx.arc(0, 0, radius, 0, Math.PI * 1.7);
                 this.ctx.stroke();
             }
             
             this.ctx.restore();
-            
-            // Icône au centre
-            this.ctx.font = '32px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            this.ctx.fillText(obstacle.icon, obstacle.x, obstacle.y);
-        } else {
-            // Ombre sous l'obstacle
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            this.ctx.fillRect(obstacle.x - 5, obstacle.y + 5, obstacle.width + 10, 10);
-            
-            // Effet de lueur rouge si dangereux
-            if (obstacle.damage > 0) {
-                this.ctx.shadowColor = '#FF0000';
-                this.ctx.shadowBlur = 15;
-            }
-            
-            // Icône de l'obstacle
-            this.ctx.font = `${obstacle.width}px Arial`;
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            
-            if (obstacle.rotation) {
-                this.ctx.save();
-                this.ctx.translate(obstacle.x, obstacle.y);
-                this.ctx.rotate(obstacle.rotation);
-                this.ctx.fillText(obstacle.icon, 0, 0);
-                this.ctx.restore();
-            } else {
-                this.ctx.fillText(obstacle.icon, obstacle.x, obstacle.y);
-            }
-            
-            // Animation spéciale pour la sirène qui chante
-            if (obstacle.type === 'siren' && obstacle.singing) {
-                this.ctx.font = '16px Arial';
-                this.ctx.fillStyle = '#FFD700';
-                this.ctx.fillText('♪', obstacle.x - 20, obstacle.y - 30);
-                this.ctx.fillText('♫', obstacle.x + 20, obstacle.y - 25);
-                this.ctx.fillText('♪', obstacle.x, obstacle.y - 35);
-            }
-            
-            // Tentacules pour méduse
-            if (obstacle.type === 'jellyfish' && obstacle.tentacles) {
-                this.ctx.strokeStyle = 'rgba(255, 20, 147, 0.5)';
-                this.ctx.lineWidth = 2;
-                for (let i = 0; i < 4; i++) {
-                    const x = obstacle.x - 10 + i * 8;
-                    const wave = Math.sin(Date.now() * 0.01 + i) * 5;
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(x, obstacle.y + 20);
-                    this.ctx.lineTo(x + wave, obstacle.y + 40);
-                    this.ctx.stroke();
-                }
-            }
+            return;
         }
+        
+        // Icebergs - Forme géométrique détaillée
+        if (obstacle.type === 'rock') {
+            // Dégradé blanc-bleu glacé
+            const gradient = this.ctx.createRadialGradient(
+                obstacle.x - 8, obstacle.y - 8, 5,
+                obstacle.x, obstacle.y, 28
+            );
+            gradient.addColorStop(0, '#FFFFFF');
+            gradient.addColorStop(0.4, '#E8F8FF');
+            gradient.addColorStop(0.7, '#D0EFFF');
+            gradient.addColorStop(1, '#A8D8E8');
+            
+            this.ctx.fillStyle = gradient;
+            this.ctx.strokeStyle = '#90C8D8';
+            this.ctx.lineWidth = 2.5;
+            
+            // Hexagone irrégulier pour l'iceberg
+            this.ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (Math.PI / 3) * i - Math.PI / 6;
+                const radiusVar = 20 + (i % 2) * 4; // Variation pour irrégularité
+                const x = obstacle.x + Math.cos(angle) * radiusVar;
+                const y = obstacle.y + Math.sin(angle) * radiusVar;
+                if (i === 0) this.ctx.moveTo(x, y);
+                else this.ctx.lineTo(x, y);
+            }
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+            
+            // Fissures glacées
+            this.ctx.strokeStyle = 'rgba(150, 200, 220, 0.6)';
+            this.ctx.lineWidth = 1.5;
+            this.ctx.beginPath();
+            this.ctx.moveTo(obstacle.x - 8, obstacle.y - 5);
+            this.ctx.lineTo(obstacle.x + 5, obstacle.y + 8);
+            this.ctx.moveTo(obstacle.x + 6, obstacle.y - 10);
+            this.ctx.lineTo(obstacle.x - 3, obstacle.y + 6);
+            this.ctx.stroke();
+            
+            // Reflets glacés (2 points brillants)
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            this.ctx.beginPath();
+            this.ctx.arc(obstacle.x - 6, obstacle.y - 8, 4, 0, Math.PI * 2);
+            this.ctx.arc(obstacle.x + 8, obstacle.y - 3, 3, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            this.ctx.restore();
+            return;
+        }
+        
+        // Requins et Sirènes - Aileron détaillé avec trace blanche
+        if (obstacle.type === 'shark' || obstacle.type === 'siren') {
+            const finHeight = 56; // 2x plus grand (28 * 2)
+            const finWidth = 36;  // 2x plus grand (18 * 2)
+            
+            // Lignes de traînée blanches derrière l'aileron (sillage en haut)
+            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+            this.ctx.lineWidth = 2;
+            this.ctx.lineCap = 'round';
+            for (let i = 0; i < 4; i++) {
+                const offset = i * 15;
+                const alpha = 0.6 - i * 0.15;
+                this.ctx.globalAlpha = alpha;
+                this.ctx.beginPath();
+                this.ctx.moveTo(obstacle.x + offset, obstacle.y - 8);
+                this.ctx.lineTo(obstacle.x + offset + 10, obstacle.y - 8);
+                this.ctx.stroke();
+            }
+            
+            // Lignes de traînée à la base (sillage en bas)
+            for (let i = 0; i < 4; i++) {
+                const offset = i * 15;
+                const alpha = 0.6 - i * 0.15;
+                this.ctx.globalAlpha = alpha;
+                this.ctx.beginPath();
+                this.ctx.moveTo(obstacle.x + offset, obstacle.y + 8);
+                this.ctx.lineTo(obstacle.x + offset + 10, obstacle.y + 8);
+                this.ctx.stroke();
+            }
+            this.ctx.globalAlpha = 1;
+            
+            // Dégradé noir-gris
+            const gradient = this.ctx.createLinearGradient(
+                obstacle.x - finWidth/2, obstacle.y - finHeight,
+                obstacle.x + finWidth/2, obstacle.y
+            );
+            gradient.addColorStop(0, '#2a2a2a');
+            gradient.addColorStop(0.5, '#1a1a1a');
+            gradient.addColorStop(1, '#0a0a0a');
+            
+            this.ctx.fillStyle = gradient;
+            this.ctx.strokeStyle = '#000000';
+            this.ctx.lineWidth = 2;
+            
+            // Aileron avec courbe réaliste
+            this.ctx.beginPath();
+            this.ctx.moveTo(obstacle.x, obstacle.y - finHeight); // Sommet
+            // Courbe arrière (gauche) - plus arrondie
+            this.ctx.quadraticCurveTo(
+                obstacle.x - finWidth/2.5, obstacle.y - finHeight * 0.7,
+                obstacle.x - finWidth/2, obstacle.y
+            );
+            // Base
+            this.ctx.lineTo(obstacle.x + finWidth/2, obstacle.y);
+            // Courbe avant (droite) - plus inclinée
+            this.ctx.quadraticCurveTo(
+                obstacle.x + finWidth/3, obstacle.y - finHeight * 0.4,
+                obstacle.x, obstacle.y - finHeight
+            );
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+            
+            // Détail : ligne de découpe
+            this.ctx.strokeStyle = 'rgba(50, 50, 50, 0.5)';
+            this.ctx.lineWidth = 1;
+            this.ctx.beginPath();
+            this.ctx.moveTo(obstacle.x - 2, obstacle.y - finHeight * 0.3);
+            this.ctx.lineTo(obstacle.x - finWidth/3, obstacle.y - 2);
+            this.ctx.stroke();
+            
+            // Notes de musique pour sirène
+            if (obstacle.type === 'siren' && obstacle.singing) {
+                this.ctx.shadowBlur = 0;
+                this.ctx.font = '14px Arial';
+                this.ctx.fillStyle = '#FFD700';
+                this.ctx.fillText('♪', obstacle.x - 15, obstacle.y - 35);
+                this.ctx.fillText('♫', obstacle.x + 15, obstacle.y - 30);
+            }
+            
+            this.ctx.restore();
+            return;
+        }
+        
+        // Méduses - Forme détaillée avec tentacules
+        if (obstacle.type === 'jellyfish') {
+            // Corps de la méduse (dôme)
+            const domeGradient = this.ctx.createRadialGradient(
+                obstacle.x, obstacle.y - 5, 5,
+                obstacle.x, obstacle.y, 20
+            );
+            domeGradient.addColorStop(0, 'rgba(255, 100, 200, 0.8)');
+            domeGradient.addColorStop(0.6, 'rgba(255, 20, 147, 0.6)');
+            domeGradient.addColorStop(1, 'rgba(199, 21, 133, 0.4)');
+            
+            this.ctx.fillStyle = domeGradient;
+            this.ctx.beginPath();
+            this.ctx.arc(obstacle.x, obstacle.y, 18, Math.PI, 0);
+            this.ctx.closePath();
+            this.ctx.fill();
+            
+            // Bordure du dôme
+            this.ctx.strokeStyle = 'rgba(255, 20, 147, 0.8)';
+            this.ctx.lineWidth = 2;
+            this.ctx.stroke();
+            
+            // Tentacules ondulantes (3)
+            this.ctx.strokeStyle = 'rgba(255, 20, 147, 0.6)';
+            this.ctx.lineWidth = 2.5;
+            const time = Date.now() * 0.005;
+            for (let i = 0; i < 3; i++) {
+                const x = obstacle.x - 8 + i * 8;
+                const wave = Math.sin(time + i * 1.2) * 4;
+                const wave2 = Math.cos(time + i * 1.5) * 3;
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, obstacle.y + 15);
+                this.ctx.quadraticCurveTo(x + wave, obstacle.y + 22, x + wave2, obstacle.y + 30);
+                this.ctx.stroke();
+            }
+            
+            this.ctx.restore();
+            return;
+        }
+        
+        // Autres obstacles - Rendu emoji simple
+        this.ctx.font = `${obstacle.width}px Arial`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        
+        if (obstacle.damage > 0) {
+            this.ctx.shadowColor = '#FF0000';
+            this.ctx.shadowBlur = 8;
+        }
+        
+        this.ctx.fillText(obstacle.icon, obstacle.x, obstacle.y);
         
         this.ctx.restore();
     }
@@ -799,8 +1158,18 @@ export class Renderer {
         if (this.game.boatMode) {
             const boatWidth = 80;
             const boatHeight = 30;
-            const waterLevel = 400; // Niveau de l'eau
-            const isFlying = p.y < waterLevel - 20; // Bateau hors de l'eau
+            const waterLevel = 256; // Niveau de l'eau (canvas.height * 0.5)
+            const isFlying = p.y < waterLevel; // Bateau au-dessus de l'eau
+            
+            // Échelle du tourbillon (aspiration)
+            const whirlpoolScale = p.whirlpoolScale !== undefined ? p.whirlpoolScale : 1.0;
+            
+            // Sauvegarder le contexte et appliquer rotation si active
+            this.ctx.save();
+            this.ctx.translate(p.x + boatWidth / 2, p.y + boatHeight / 2);
+            this.ctx.rotate(p.rotation || 0);
+            this.ctx.scale(whirlpoolScale, whirlpoolScale); // Appliquer l'échelle du tourbillon
+            this.ctx.translate(-(p.x + boatWidth / 2), -(p.y + boatHeight / 2));
             
             // Fusées améliorées si le bateau vole
             if (isFlying) {
@@ -1023,7 +1392,53 @@ export class Renderer {
         
         // Effet de glace si frozen
         if (p.frozen) {
-            // Bloc de glace autour du mouton
+            // Si attrapé par les tentacules, dessiner les tentacules
+            if (p.tentacleGrab) {
+                this.ctx.save();
+                this.ctx.strokeStyle = '#FF1493';
+                this.ctx.lineWidth = 4;
+                this.ctx.lineCap = 'round';
+                
+                const time = Date.now() * 0.01;
+                const boatCenterX = p.x + 40;
+                const boatCenterY = p.y + 15;
+                
+                // Dessiner 4 tentacules depuis la pieuvre vers le bateau
+                for (let i = 0; i < 4; i++) {
+                    const wave = Math.sin(time + i * 1.5) * 8;
+                    const wave2 = Math.cos(time + i * 2) * 6;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(p.jellyfishX, p.jellyfishY + 20);
+                    
+                    // Courbe sinueuse
+                    const midX = (p.jellyfishX + boatCenterX) / 2 + wave;
+                    const midY = (p.jellyfishY + boatCenterY) / 2 + wave2;
+                    
+                    this.ctx.quadraticCurveTo(
+                        midX,
+                        midY,
+                        boatCenterX + (Math.random() - 0.5) * 30,
+                        boatCenterY + (Math.random() - 0.5) * 20
+                    );
+                    this.ctx.stroke();
+                    
+                    // Ventouses sur le tentacule
+                    for (let j = 0; j < 3; j++) {
+                        const t = j / 3;
+                        const suctionX = p.jellyfishX + (boatCenterX - p.jellyfishX) * t + wave * (1 - t);
+                        const suctionY = p.jellyfishY + 20 + (boatCenterY - p.jellyfishY - 20) * t + wave2 * (1 - t);
+                        
+                        this.ctx.fillStyle = 'rgba(255, 20, 147, 0.6)';
+                        this.ctx.beginPath();
+                        this.ctx.arc(suctionX, suctionY, 3, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                }
+                
+                this.ctx.restore();
+            } else {
+                // Bloc de glace autour du mouton (phantom)
             const iceGradient = this.ctx.createRadialGradient(
                 p.x + p.width / 2, 
                 p.y + p.height / 2, 
@@ -1044,6 +1459,7 @@ export class Renderer {
             this.ctx.fillText('❄️', p.x - 10, p.y);
             this.ctx.fillText('❄️', p.x + p.width, p.y);
             this.ctx.fillText('❄️', p.x + p.width / 2 - 10, p.y + p.height + 10);
+            }
         }
         
         // Afficher les fusées si riche OU en vol
@@ -1402,6 +1818,27 @@ export class Renderer {
         
         currentX += fuelBarWidth + padding * 2;
         
+        // === SAGESSE (Niveau 3 uniquement) ===
+        if (this.game.level3Active) {
+            // Séparateur
+            this.ctx.fillStyle = '#444';
+            this.ctx.fillRect(currentX, barY + 8, 2, barHeight - 16);
+            currentX += padding * 2;
+            
+            // Icône sagesse
+            this.ctx.font = `${iconSize}px Arial`;
+            this.ctx.fillStyle = '#FFD700';
+            this.ctx.fillText('🦉', currentX, centerY);
+            currentX += iconSize + 4;
+            
+            // Nombre sagesse
+            this.ctx.font = `bold ${fontSize + 2}px monospace`;
+            this.ctx.fillStyle = '#FFD700';
+            this.ctx.textAlign = 'left';
+            this.ctx.fillText(`${this.game.level3Wisdom}/777`, currentX, centerY);
+            currentX += this.ctx.measureText(`${this.game.level3Wisdom}/777`).width + padding * 2;
+        }
+        
         // === SCORE ET XP (Droite) ===
         this.ctx.textAlign = 'right';
         let rightX = this.canvas.width - padding;
@@ -1476,7 +1913,7 @@ export class Renderer {
         
         // Vague
         this.ctx.fillStyle = '#FF4500';
-        this.ctx.fillText(`🔥 Vague ${endless.waveLevel}`, boxX + 8, currentY);
+        this.ctx.fillText(`� Vague ${endless.waveLevel}`, boxX + 8, currentY);
         currentY += lineHeight;
         
         // Multiplicateur

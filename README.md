@@ -1,6 +1,6 @@
-# 🐑 Mouton Courage - L'Espoir en Action
+# 🐑 X-Sheep is back
 
-**Un jeu spirituel qui sauve des vies avec l'espoir**
+**L'Espoir en Action**
 *Par Emmanuel Payet*
 
 ## Installation

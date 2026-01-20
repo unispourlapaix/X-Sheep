@@ -868,12 +868,12 @@ export class EndlessMode {
     }
     
     loadHighScore() {
-        const saved = localStorage.getItem('moutonCourageHighScore');
+        const saved = localStorage.getItem('xsheep_maxScore');
         return saved ? parseInt(saved) : 0;
     }
     
     saveHighScore(score) {
-        localStorage.setItem('moutonCourageHighScore', score.toString());
+        localStorage.setItem('xsheep_maxScore', score.toString());
     }
     
     // Afficher un commentaire ironique du mouton

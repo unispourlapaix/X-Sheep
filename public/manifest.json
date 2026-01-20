@@ -1,8 +1,8 @@
 {
   "id": "com.unispourlapaix.xsheep",
-  "name": "X-Sheep - Mouton Courage",
+  "name": "X-Sheep is back",
   "short_name": "X-Sheep",
-  "description": "Jeu spirituel qui sauve des vies avec l'espoir - Par Emmanuel Payet",
+  "description": "L'Espoir en Action - Par Emmanuel Payet",
   "start_url": "/X-Sheep/",
   "scope": "/X-Sheep/",
   "display": "standalone",

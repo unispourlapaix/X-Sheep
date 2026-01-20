@@ -48,6 +48,22 @@ export class ScoreManager {
         return this.totalXP;
     }
     
+    loadAdventureScore() {
+        const saved = localStorage.getItem('xsheep_adventureScore');
+        return saved ? parseInt(saved) : 0;
+    }
+    
+    saveAdventureScore(score) {
+        localStorage.setItem('xsheep_adventureScore', score.toString());
+    }
+    
+    addAdventureScore(points) {
+        const current = this.loadAdventureScore();
+        const newScore = current + points;
+        this.saveAdventureScore(newScore);
+        return newScore;
+    }
+    
     loadHighScores() {
         const saved = localStorage.getItem('moutonCourageLeaderboard');
         return saved ? JSON.parse(saved) : [];
