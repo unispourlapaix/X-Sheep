@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mouton Courage - L'Espoir en Action</title>
+    <title>X-Sheep is back - L'Espoir en Action</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Jeu spirituel qui sauve des vies avec l'espoir - Par Emmanuel Payet">
+    <meta name="description" content="L'Espoir en Action - Par Emmanuel Payet">
     <meta name="theme-color" content="#4A90E2">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +25,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/X-Sheep/assets/index-Cd1pUCD-.js"></script>
+  <script type="module" crossorigin src="/X-Sheep/assets/index-BIpzEeMa.js"></script>
   <link rel="stylesheet" crossorigin href="/X-Sheep/assets/index-CXWFj09r.css">
 </head>
 <body>
@@ -40,7 +40,7 @@
         </div>
         
         <div class="logo-title">
-            <h1>MOUTON COURAGEUX</h1>
+            <h1>X-Sheep is back</h1>
             <p class="logo-subtitle">L'Espoir en Action</p>
         </div>
         
@@ -55,35 +55,10 @@
             z-index: 10;
         ">
             <div style="
-                font-size: 80px;
+                font-size: 50px;
                 filter: drop-shadow(0 8px 25px rgba(255,215,0,0.6));
                 animation: trophy-pulse 2s ease-in-out infinite;
             ">🏆</div>
-            <div style="
-                font-size: 11px;
-                font-weight: 900;
-                font-family: 'Courier New', monospace;
-                letter-spacing: 1px;
-                color: #000000;
-                text-shadow: none;
-                margin-top: -5px;
-            ">TROPHÉES</div>
-        </div>
-        
-        <!-- Score Max en bas -->
-        <div id="menu-max-score" style="
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            color: #000;
-            font-size: 12px;
-            font-weight: bold;
-            opacity: 0.7;
-        ">
-            🏆 RECORD : <span id="display-max-score">0</span>
         </div>
         
         <div class="mode-selector">
@@ -122,6 +97,17 @@
                         <span class="stat-label">Espoir</span>
                     </div>
                 </div>
+                
+                <div style="
+                    margin-top: 8px;
+                    padding-top: 8px;
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                    font-family: 'Courier New', monospace;
+                    color: #FF00FF;
+                    font-size: 11px;
+                    font-weight: bold;
+                    text-align: center;
+                ">Score: <span id="adventure-total-score">0</span></div>
             </div>
             
             <div class="mode-card" data-mode="endless" onclick="selectMode('endless')">
@@ -159,6 +145,17 @@
                         <span class="stat-label">Record</span>
                     </div>
                 </div>
+                
+                <div style="
+                    margin-top: 8px;
+                    padding-top: 8px;
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                    font-family: 'Courier New', monospace;
+                    color: #FF00FF;
+                    font-size: 11px;
+                    font-weight: bold;
+                    text-align: center;
+                ">Score: <span id="display-max-score">0</span></div>
             </div>
         </div>
     </div>
