@@ -865,7 +865,7 @@ export class EndlessMode {
                         `<p style="color:#999;font-size:22px;margin:10px 0">Record: ${this.highScore.toLocaleString()}</p>`
                     }
                     <br>
-                    <button onclick="location.reload()" 
+                    <button id="endless-replay-btn"
                             style="background:#FF0000;color:white;border:none;
                                    padding:15px 40px;border-radius:10px;font-size:20px;
                                    font-weight:bold;cursor:pointer;
@@ -885,6 +885,15 @@ export class EndlessMode {
             </style>
         `;
         document.body.appendChild(modal);
+        
+        // Ajouter l'événement après insertion dans le DOM
+        document.getElementById('endless-replay-btn').addEventListener('click', () => {
+            // Score déjà sauvegardé dans showGameOver()
+            // Attendre un peu pour s'assurer que localStorage est synchronisé
+            setTimeout(() => {
+                location.reload();
+            }, 50);
+        });
     }
     
     loadHighScore() {

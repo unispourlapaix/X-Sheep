@@ -35,8 +35,20 @@ class App {
             this.trophySystem.show();
         };
         
-        // Afficher le score max au chargement
+        // Afficher le score max au chargement (immédiat + après 100ms pour s'assurer du rafraîchissement)
         this.displayMaxScore();
+        setTimeout(() => {
+            this.displayMaxScore();
+            console.log('🔄 Rafraîchissement additionnel des scores');
+        }, 100);
+        
+        // Rafraîchir aussi quand la page devient visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('👁️ Page visible, rafraîchissement des scores');
+                this.displayMaxScore();
+            }
+        });
         
         console.log('✅ Application prête !');
     }

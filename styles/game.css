@@ -40,6 +40,22 @@
 
 /* Mobile plein écran - portrait et paysage */
 @media (max-width: 1024px), (max-height: 768px) {
+    /* Forcer le plein écran sur mobile */
+    html, body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        /* Cacher les barres d'adresse sur mobile */
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+    
     #game-canvas {
         position: fixed !important;
         top: 0 !important;
@@ -56,5 +72,12 @@
     
     #close-btn {
         display: flex;
+    }
+}
+
+/* Support iOS Safari fullscreen */
+@supports (-webkit-touch-callout: none) {
+    body {
+        height: -webkit-fill-available;
     }
 }

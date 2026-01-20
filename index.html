@@ -214,6 +214,32 @@
                 }
             });
         }
+        
+        // Forcer le plein écran mobile et cacher la barre d'adresse
+        function hideMobileAddressBar() {
+            window.scrollTo(0, 1);
+            setTimeout(() => window.scrollTo(0, 0), 0);
+        }
+        
+        // Au chargement et à chaque changement d'orientation
+        window.addEventListener('load', hideMobileAddressBar);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(hideMobileAddressBar, 100);
+        });
+        
+        // Empêcher le défilement sur mobile en jeu
+        let touchStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: false });
+        
+        document.addEventListener('touchmove', (e) => {
+            const canvas = document.getElementById('game-canvas');
+            if (canvas && canvas.style.display !== 'none') {
+                // Empêcher le scroll uniquement si le jeu est actif
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>

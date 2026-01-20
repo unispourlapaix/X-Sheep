@@ -174,9 +174,56 @@ export class Game {
         this.canvas.style.border = '2px solid #333';
         this.canvas.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
         
+        // Activer le plein écran sur mobile
+        this.setupMobileFullscreen();
+        
         // Cacher le background moléculaire
         const molCanvas = document.getElementById('molecular-canvas');
         if (molCanvas) molCanvas.style.display = 'none';
+    }
+    
+    setupMobileFullscreen() {
+        // Détecter si mobile
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // Fonction pour entrer en plein écran avec support multi-navigateurs
+            const enterFullscreen = () => {
+                const elem = document.documentElement;
+                
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => {
+                        console.log('Fullscreen standard échoué:', err);
+                    });
+                } else if (elem.webkitRequestFullscreen) { // iOS Safari
+                    elem.webkitRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) { // Firefox
+                    elem.mozRequestFullScreen();
+                } else if (elem.msRequestFullscreen) { // IE11
+                    elem.msRequestFullscreen();
+                }
+                
+                // Forcer l'orientation paysage si possible
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => {
+                        console.log('Orientation lock non supporté:', err);
+                    });
+                }
+            };
+            
+            // Tenter d'entrer en plein écran au premier clic/touch
+            const firstInteraction = () => {
+                enterFullscreen();
+                // Retirer les listeners après la première interaction
+                document.removeEventListener('touchstart', firstInteraction);
+                document.removeEventListener('click', firstInteraction);
+            };
+            
+            document.addEventListener('touchstart', firstInteraction, { once: true });
+            document.addEventListener('click', firstInteraction, { once: true });
+            
+            console.log('📱 Mode mobile: Plein écran activé au prochain tap');
+        }
     }
     
     start() {
@@ -1762,13 +1809,11 @@ export class Game {
         document.body.appendChild(popup);
         
         document.getElementById('return-menu').onclick = () => {
-            // Sauvegarder le score aventure avant de recharger
-            if (this.mode === 'adventure') {
-                const scoreManager = new ScoreManager();
-                scoreManager.addAdventureScore(this.score);
-                console.log('💾 Score aventure sauvegardé avant retour menu:', this.score);
-            }
-            location.reload();
+            // Score déjà sauvegardé dans showLevel3Victory()
+            // Attendre un peu pour s'assurer que localStorage est synchronisé
+            setTimeout(() => {
+                location.reload();
+            }, 50);
         };
     }
     
@@ -1883,7 +1928,11 @@ export class Game {
         
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.body.removeChild(overlay);
-            window.location.href = 'index.html';
+            // Score déjà sauvegardé dans saveCurrentScore() au game over
+            // Attendre un peu pour s'assurer que localStorage est synchronisé
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 50);
         });
     }
     
