@@ -58,6 +58,12 @@ export class Game {
         this.score = 0;
         this.obstaclesCleared = 0;
         this.gameSpeed = GameConfig.GAME_SPEED_INITIAL;
+        
+        // Sauvegarde automatique toutes les 2 minutes
+        this.autoSaveInterval = null;
+        this.lastAutoSave = Date.now();
+        this.AUTO_SAVE_DELAY = 120000; // 2 minutes en ms
+        
         this.gameOverAnimation = false; // Animation vers le paradis
         this.gameOverTimer = 0;
         this.gameOverPhase = 'flying'; // 'flying', 'entering', 'rejected', 'done'
@@ -176,6 +182,9 @@ export class Game {
     start() {
         console.log('🚀 Démarrage du jeu...');
         
+        // Démarrer la sauvegarde automatique
+        this.startAutoSave();
+        
         // Si mode endless et intro existe, lancer l'intro d'abord
         if (this.mode === 'endless' && this.introSequence) {
             this.introSequence.start();
@@ -200,6 +209,51 @@ export class Game {
     resume() {
         this.paused = false;
         this.gameLoop();
+    }
+    
+    startAutoSave() {
+        // Sauvegarder automatiquement toutes les 2 minutes
+        this.autoSaveInterval = setInterval(() => {
+            this.autoSaveScore();
+        }, this.AUTO_SAVE_DELAY);
+        console.log('💾 Sauvegarde automatique activée (toutes les 2min)');
+    }
+    
+    stopAutoSave() {
+        if (this.autoSaveInterval) {
+            clearInterval(this.autoSaveInterval);
+            this.autoSaveInterval = null;
+            console.log('⏹️ Sauvegarde automatique arrêtée');
+        }
+    }
+    
+    autoSaveScore() {
+        const now = Date.now();
+        if (now - this.lastAutoSave >= this.AUTO_SAVE_DELAY) {
+            this.saveCurrentScore();
+            this.lastAutoSave = now;
+            console.log('💾 Sauvegarde automatique effectuée');
+        }
+    }
+    
+    saveCurrentScore() {
+        // Sauvegarder selon le mode
+        const scoreManager = new ScoreManager();
+        
+        if (this.mode === 'adventure') {
+            // En aventure, on sauvegarde score + XP
+            const xp = this.obstacleManager ? this.obstacleManager.totalXP : 0;
+            const finalScore = this.score + xp;
+            localStorage.setItem('xsheep_lastAdventureScore', finalScore.toString());
+            console.log('💾 Score aventure sauvegardé:', this.score, '+ XP:', xp, '= Total:', finalScore);
+        } else if (this.mode === 'endless') {
+            // En infini, on sauvegarde si c'est un nouveau record (score uniquement)
+            const currentMax = scoreManager.loadMaxScore();
+            if (this.score > currentMax) {
+                scoreManager.saveMaxScore(this.score);
+                console.log('💾 Nouveau record infini sauvegardé:', this.score);
+            }
+        }
     }
     
     gameLoop() {
@@ -1301,6 +1355,11 @@ export class Game {
     gameOver() {
         console.log('💀 Game Over');
         
+        // Arrêter sauvegarde auto et sauvegarder une dernière fois
+        this.stopAutoSave();
+        this.saveCurrentScore();
+        console.log('💾 Score sauvegardé au game over');
+        
         // Si on est en niveau 2, afficher le choix de la grâce
         if (this.level2Active) {
             this.showGraceChoice();
@@ -1456,6 +1515,9 @@ export class Game {
         
         // Lancer le niveau 3 après un court délai
         setTimeout(() => {
+            // Sauvegarder le score avant de passer au niveau 3
+            this.saveCurrentScore();
+            console.log('💾 Score sauvegardé à la fin du niveau 2');
             this.startLevel3();
         }, 3000);
     }
@@ -1598,12 +1660,21 @@ export class Game {
         this.running = false;
         this.level3Active = false;
         
-        // Sauvegarder le score aventure
+        // Arrêter sauvegarde auto
+        this.stopAutoSave();
+        
+        // Sauvegarder le score aventure final (score + XP)
         if (this.mode === 'adventure') {
             const scoreManager = new ScoreManager();
-            const totalScore = scoreManager.addAdventureScore(this.score);
-            console.log('💾 Score aventure sauvegardé:', this.score, '| Total:', totalScore);
+            const xp = this.obstacleManager ? this.obstacleManager.totalXP : 0;
+            const finalScore = this.score + xp;
+            const totalScore = scoreManager.addAdventureScore(finalScore);
+            console.log('💾 Score aventure final:', this.score, '+ XP:', xp, '=', finalScore, '| Cumul total:', totalScore);
         }
+        
+        // Calculer le score final pour l'affichage
+        const xp = this.obstacleManager ? this.obstacleManager.totalXP : 0;
+        const displayScore = this.score + xp;
         
         // Créer une popup de victoire en format horizontal
         const popup = document.createElement('div');
@@ -1659,8 +1730,9 @@ export class Game {
                     </span>
                 </div>
                 <div style="padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; min-width: 180px;">
-                    <div style="color: #FFD700; font-size: 12px;">SCORE FINAL</div>
-                    <div style="color: white; font-size: 24px; margin-top: 10px;">${this.score}</div>
+                    <div style="color: #FFD700; font-size: 12px;">SCORE TOTAL</div>
+                    <div style="color: #00FF00; font-size: 24px; margin-top: 10px;">${displayScore.toLocaleString('fr-FR')}</div>
+                    <div style="color: #888; font-size: 8px; margin-top: 5px;">(${this.score} + ${xp} XP)</div>
                     <div style="color: white; font-size: 11px; margin-top: 10px;">
                         ❤️ ${this.player.lives}/${this.player.maxLives} vies
                     </div>
@@ -1690,6 +1762,12 @@ export class Game {
         document.body.appendChild(popup);
         
         document.getElementById('return-menu').onclick = () => {
+            // Sauvegarder le score aventure avant de recharger
+            if (this.mode === 'adventure') {
+                const scoreManager = new ScoreManager();
+                scoreManager.addAdventureScore(this.score);
+                console.log('💾 Score aventure sauvegardé avant retour menu:', this.score);
+            }
             location.reload();
         };
     }
@@ -1707,6 +1785,9 @@ export class Game {
         
         // Lancer le niveau 2 après un court délai
         setTimeout(() => {
+            // Sauvegarder le score avant de passer au niveau 2
+            this.saveCurrentScore();
+            console.log('💾 Score sauvegardé à la fin du niveau 1');
             this.startLevel2();
         }, 3000);
     }
@@ -1737,6 +1818,9 @@ export class Game {
     
     showAdventureGameOver() {
         // Écran Game Over mode aventure
+        const xp = this.obstacleManager ? this.obstacleManager.totalXP : 0;
+        const totalScore = this.score + xp;
+        
         const overlay = document.createElement('div');
         overlay.style.cssText = `
             position: fixed;
@@ -1756,8 +1840,13 @@ export class Game {
         
         overlay.innerHTML = `
             <h1 style="font-size: 48px; margin: 20px; color: #ff6b6b;">GAME OVER</h1>
-            <p style="font-size: 24px; margin: 10px;">🔄 VA VIE! et renai ! RETOURNE VIVRE !</p>
-            <p style="font-size: 20px; margin: 10px;">Score: ${this.score}</p>
+            <p style="font-size: 24px; margin: 10px;">🔄 Va vivre! et renais ! RETOURNE VIVRE !</p>
+            <p style="font-size: 28px; margin: 15px; color: #00FF00; font-weight: bold;">
+                Score Total: ${totalScore.toLocaleString('fr-FR')}
+            </p>
+            <p style="font-size: 16px; margin: 5px; color: #888;">
+                (Score: ${this.score.toLocaleString('fr-FR')} + XP: ${xp.toLocaleString('fr-FR')})
+            </p>
             <p style="font-size: 20px; margin: 10px;">Obstacles évités: ${this.obstaclesCleared}</p>
             <button id="retry-btn" style="
                 margin-top: 30px;
@@ -1801,6 +1890,9 @@ export class Game {
     restart() {
         const level = this.currentLevel;
         console.log(`🔄 Redémarrage au niveau ${level}`);
+        
+        // Arrêter sauvegarde auto
+        this.stopAutoSave();
         
         // Réinitialiser les états
         this.running = false;

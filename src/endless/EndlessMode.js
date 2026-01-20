@@ -15,10 +15,13 @@ export class EndlessMode {
         this.game = game;
         this.active = true;
         this.distance = 0;
+        this.previousDistance = 0; // Pour calculer les points de distance incrémentaux
         this.highScore = this.loadHighScore();
         this.multiplier = 1.0;
         this.waveLevel = 1;
         this.comboCount = 0;
+        
+        console.log('♾️ Mode Infini: Score par addition progressive de tous les bonus');
         
         // Rendu visuel des boss
         this.visualBoss = new VisualBoss();
@@ -255,13 +258,18 @@ export class EndlessMode {
         }
         
         // Distance augmente
+        const oldDistance = this.distance;
         this.distance += this.game.gameSpeed * 0.1;
         
-        // Calculer le score
-        this.game.score = Math.floor(
-            (this.distance * GameConfig.ENDLESS.POINTS_PER_METER) +
-            (this.game.obstaclesCleared * GameConfig.ENDLESS.POINTS_PER_OBSTACLE * this.multiplier)
-        );
+        // Additionner les points de distance progressivement
+        const distanceTraveled = this.distance - this.previousDistance;
+        if (distanceTraveled >= 1) {
+            const distancePoints = Math.floor(distanceTraveled * GameConfig.ENDLESS.POINTS_PER_METER);
+            this.game.score += distancePoints;
+            this.previousDistance = Math.floor(this.distance);
+        }
+        
+        // Note: Les points d'obstacles sont ajoutés directement dans les méthodes de collision
         
         // Déplacer le boss
         if (this.isStageBoss) {
@@ -461,8 +469,13 @@ export class EndlessMode {
                     this.game.gameOver();
                 }
             } else if (obs.x < -obs.width) {
+                // Obstacle évité - ajouter les points
                 this.obstacles.splice(i, 1);
                 this.game.obstaclesCleared++;
+                
+                // Ajouter les points avec multiplicateur
+                const points = Math.floor(GameConfig.ENDLESS.POINTS_PER_OBSTACLE * this.multiplier);
+                this.game.score += points;
             }
         }
         
@@ -512,6 +525,10 @@ export class EndlessMode {
                     
                     console.log(`⚔️ Arme changée: ${weaponName} (${fuel.emoji})`);
                 }
+                
+                // Bonus pour collecte de fuel
+                const fuelBonus = 50;
+                this.game.score += fuelBonus;
                 
                 this.fuels.splice(i, 1);
                 // Pas de particule (anti-spam)
@@ -761,6 +778,9 @@ export class EndlessMode {
         if (isNewRecord) {
             this.highScore = this.game.score;
             this.saveHighScore(this.game.score);
+            console.log('💾 Nouveau record Infini sauvegardé:', this.game.score);
+        } else {
+            console.log('📊 Score Infini:', this.game.score, '| Record:', this.highScore);
         }
         
         // Activer l'animation de fusée

@@ -29,6 +29,7 @@ export class ScoreManager {
     
     saveMaxScore(score) {
         localStorage.setItem('xsheep_maxScore', score.toString());
+        console.log('💾 saveMaxScore:', score, '| localStorage:', localStorage.getItem('xsheep_maxScore'));
     }
     
     loadTotalXP() {
@@ -55,11 +56,13 @@ export class ScoreManager {
     
     saveAdventureScore(score) {
         localStorage.setItem('xsheep_adventureScore', score.toString());
+        console.log('💾 saveAdventureScore:', score, '| localStorage:', localStorage.getItem('xsheep_adventureScore'));
     }
     
     addAdventureScore(points) {
         const current = this.loadAdventureScore();
         const newScore = current + points;
+        console.log('🎯 addAdventureScore: +', points, '| Avant:', current, '| Après:', newScore);
         this.saveAdventureScore(newScore);
         return newScore;
     }

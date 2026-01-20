@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Scores localStorage</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #2a2a2a;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            background: #0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0c0;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            background: #1a1a1a;
+            border: 1px solid #0f0;
+            color: #0f0;
+            border-radius: 5px;
+        }
+        .value {
+            color: #ff0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐑 X-Sheep - Test Scores localStorage</h1>
+    
+    <div class="section">
+        <h2>📊 État actuel</h2>
+        <div id="current-state"></div>
+    </div>
+    
+    <div class="section">
+        <h2>🎮 Mode Infini (xsheep_maxScore)</h2>
+        <input type="number" id="endless-input" placeholder="Score" value="12345">
+        <button onclick="setEndlessScore()">Set Score</button>
+        <button onclick="loadEndlessScore()">Load Score</button>
+    </div>
+    
+    <div class="section">
+        <h2>🗺️ Mode Aventure (xsheep_adventureScore)</h2>
+        <input type="number" id="adventure-input" placeholder="Score" value="7777">
+        <button onclick="setAdventureScore()">Set Score</button>
+        <button onclick="loadAdventureScore()">Load Score</button>
+        <button onclick="addAdventurePoints()">Add +777</button>
+    </div>
+    
+    <div class="section">
+        <h2>🧪 Tests de cohérence</h2>
+        <button onclick="testSaveLoad()">Test Save/Load</button>
+        <button onclick="clearAll()">Clear All</button>
+        <button onclick="showAll()">Show All Keys</button>
+    </div>
+    
+    <div class="section">
+        <h2>📝 Console</h2>
+        <div id="console"></div>
+    </div>
+
+    <script>
+        function log(msg) {
+            const console = document.getElementById('console');
+            const time = new Date().toLocaleTimeString();
+            console.innerHTML = `[${time}] ${msg}<br>` + console.innerHTML;
+        }
+        
+        function updateState() {
+            const state = document.getElementById('current-state');
+            const endless = localStorage.getItem('xsheep_maxScore') || '0';
+            const adventure = localStorage.getItem('xsheep_adventureScore') || '0';
+            const level = localStorage.getItem('xsheep_currentLevel') || '1';
+            const xp = localStorage.getItem('xsheep_totalXP') || '0';
+            
+            state.innerHTML = `
+                <div>🎯 Infini (maxScore): <span class="value">${parseInt(endless).toLocaleString('fr-FR')}</span></div>
+                <div>🗺️ Aventure (adventureScore): <span class="value">${parseInt(adventure).toLocaleString('fr-FR')}</span></div>
+                <div>📍 Niveau actuel: <span class="value">${level}</span></div>
+                <div>⭐ Total XP: <span class="value">${parseInt(xp).toLocaleString('fr-FR')}</span></div>
+            `;
+        }
+        
+        function setEndlessScore() {
+            const value = document.getElementById('endless-input').value;
+            localStorage.setItem('xsheep_maxScore', value);
+            log(`✅ Score Infini set: ${value}`);
+            updateState();
+        }
+        
+        function loadEndlessScore() {
+            const value = localStorage.getItem('xsheep_maxScore') || '0';
+            log(`📥 Score Infini loaded: ${value}`);
+            document.getElementById('endless-input').value = value;
+            updateState();
+        }
+        
+        function setAdventureScore() {
+            const value = document.getElementById('adventure-input').value;
+            localStorage.setItem('xsheep_adventureScore', value);
+            log(`✅ Score Aventure set: ${value}`);
+            updateState();
+        }
+        
+        function loadAdventureScore() {
+            const value = localStorage.getItem('xsheep_adventureScore') || '0';
+            log(`📥 Score Aventure loaded: ${value}`);
+            document.getElementById('adventure-input').value = value;
+            updateState();
+        }
+        
+        function addAdventurePoints() {
+            const current = parseInt(localStorage.getItem('xsheep_adventureScore') || '0');
+            const newScore = current + 777;
+            localStorage.setItem('xsheep_adventureScore', newScore.toString());
+            log(`➕ Ajout de 777 points: ${current} → ${newScore}`);
+            updateState();
+        }
+        
+        function testSaveLoad() {
+            log('🧪 Test de sauvegarde/chargement...');
+            
+            // Sauvegarder des valeurs de test
+            const testEndless = 99999;
+            const testAdventure = 77777;
+            
+            localStorage.setItem('xsheep_maxScore', testEndless.toString());
+            localStorage.setItem('xsheep_adventureScore', testAdventure.toString());
+            
+            log(`💾 Sauvegardé: Infini=${testEndless}, Aventure=${testAdventure}`);
+            
+            // Recharger immédiatement
+            const loadedEndless = localStorage.getItem('xsheep_maxScore');
+            const loadedAdventure = localStorage.getItem('xsheep_adventureScore');
+            
+            log(`📥 Rechargé: Infini=${loadedEndless}, Aventure=${loadedAdventure}`);
+            
+            if (loadedEndless === testEndless.toString() && loadedAdventure === testAdventure.toString()) {
+                log('✅ Test RÉUSSI: La cohérence est assurée!');
+            } else {
+                log('❌ Test ÉCHOUÉ: Problème de cohérence!');
+            }
+            
+            updateState();
+        }
+        
+        function clearAll() {
+            if (confirm('Effacer tous les scores?')) {
+                localStorage.removeItem('xsheep_maxScore');
+                localStorage.removeItem('xsheep_adventureScore');
+                localStorage.removeItem('xsheep_currentLevel');
+                localStorage.removeItem('xsheep_totalXP');
+                log('🗑️ Tous les scores effacés');
+                updateState();
+            }
+        }
+        
+        function showAll() {
+            log('📋 Toutes les clés localStorage:');
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('xsheep_')) {
+                    const value = localStorage.getItem(key);
+                    log(`  ${key} = ${value}`);
+                }
+            }
+            updateState();
+        }
+        
+        // Mise à jour automatique toutes les secondes
+        setInterval(updateState, 1000);
+        
+        // Initialisation
+        updateState();
+        log('✨ Page de test prête!');
+    </script>
+</body>
+</html>

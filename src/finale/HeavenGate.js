@@ -135,7 +135,7 @@ export class HeavenGate {
                     "Il est plus facile à un chameau de passer par le trou d'une aiguille qu'à un riche d'entrer dans le royaume de Dieu. 
                     Mais toi, tu as choisi la VRAIE richesse : l'amour, la générosité, l'humilité."</p>
                 </div>
-                <p style="font-size:18px;margin:12px 0"><strong>Score Final : ${Math.floor(this.game.score/10)} âmes touchées 💖</strong></p>
+                <p style="font-size:18px;margin:12px 0"><strong>Score Final : ${this.game.score.toLocaleString('fr-FR')} âmes touchées 💖</strong></p>
                 <p style="font-style:italic;color:#888;font-size:13px;margin:8px 0">- Emmanuel Payet</p>
                 <button onclick="location.reload()" style="background:linear-gradient(45deg,#FFD700,#FFA500);
                         border:none;padding:12px 30px;border-radius:20px;font-size:16px;

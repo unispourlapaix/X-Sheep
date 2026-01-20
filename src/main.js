@@ -24,9 +24,10 @@ class App {
         // Système de trophées global
         this.trophySystem = new TrophySystem();
         
-        // Menu principal
+        // Menu principal avec callback de rafraîchissement
         this.menu = new MenuSystem({
-            onModeSelected: (mode) => this.startGame(mode)
+            onModeSelected: (mode) => this.startGame(mode),
+            onShow: () => this.refreshScores()
         });
         
         // Rendre le système de trophées accessible globalement
@@ -45,6 +46,7 @@ class App {
         const displayElement = document.getElementById('display-max-score');
         if (displayElement) {
             displayElement.textContent = parseInt(maxScore).toLocaleString('fr-FR');
+            console.log('📊 Score Infini affiché:', maxScore);
         }
         
         // Afficher le score aventure
@@ -52,6 +54,7 @@ class App {
         const adventureElement = document.getElementById('adventure-total-score');
         if (adventureElement) {
             adventureElement.textContent = parseInt(adventureScore).toLocaleString('fr-FR');
+            console.log('📊 Score Aventure affiché:', adventureScore);
         }
     }
     
@@ -70,6 +73,12 @@ class App {
         }
         
         this.game.start();
+    }
+    
+    refreshScores() {
+        // Rafraîchir l'affichage des scores
+        this.displayMaxScore();
+        console.log('🔄 Scores rafraîchis');
     }
 }
 

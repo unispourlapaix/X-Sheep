@@ -1843,30 +1843,56 @@ export class Renderer {
         this.ctx.textAlign = 'right';
         let rightX = this.canvas.width - padding;
         
-        // XP
-        const xpValue = this.game.obstacleManager?.totalXP || 0;
-        this.ctx.font = `bold ${fontSize + 2}px monospace`;
-        this.ctx.fillStyle = '#FFD700';
-        this.ctx.fillText(`${xpValue}`, rightX, centerY);
-        rightX -= this.ctx.measureText(`${xpValue}`).width + 4;
-        
-        // Label XP
-        this.ctx.font = `bold ${fontSize}px monospace`;
-        this.ctx.fillStyle = '#888';
-        this.ctx.fillText('XP', rightX, centerY);
-        rightX -= this.ctx.measureText('XP').width + padding * 2;
-        
-        // Séparateur
-        this.ctx.fillStyle = '#444';
-        this.ctx.fillRect(rightX, barY + 8, 2, barHeight - 16);
-        rightX -= padding * 2;
-        
-        // Score
-        this.ctx.font = `bold ${fontSize + 2}px monospace`;
-        this.ctx.fillStyle = '#FFFFFF';
-        const scoreText = this.game.score.toLocaleString('fr-FR');
-        this.ctx.fillText(scoreText, rightX, centerY);
-        rightX -= this.ctx.measureText(scoreText).width + 4;
+        // En mode aventure, afficher le total (Score + XP)
+        if (this.game.mode === 'adventure') {
+            const xpValue = this.game.obstacleManager?.totalXP || 0;
+            const totalScore = this.game.score + xpValue;
+            
+            // Total (Score + XP)
+            this.ctx.font = `bold ${fontSize + 2}px monospace`;
+            this.ctx.fillStyle = '#00FF00'; // Vert pour le total
+            this.ctx.fillText(`${totalScore.toLocaleString('fr-FR')}`, rightX, centerY);
+            rightX -= this.ctx.measureText(`${totalScore.toLocaleString('fr-FR')}`).width + 4;
+            
+            // Label TOTAL
+            this.ctx.font = `bold ${fontSize}px monospace`;
+            this.ctx.fillStyle = '#888';
+            this.ctx.fillText('TOTAL', rightX, centerY);
+            rightX -= this.ctx.measureText('TOTAL').width + padding;
+            
+            // Détails entre parenthèses
+            this.ctx.font = `${fontSize - 2}px monospace`;
+            this.ctx.fillStyle = '#666';
+            const detailText = `(${this.game.score}+${xpValue})`;
+            this.ctx.fillText(detailText, rightX, centerY);
+            rightX -= this.ctx.measureText(detailText).width + padding * 2;
+        } else {
+            // Mode infini : afficher Score et XP séparément
+            // XP
+            const xpValue = this.game.obstacleManager?.totalXP || 0;
+            this.ctx.font = `bold ${fontSize + 2}px monospace`;
+            this.ctx.fillStyle = '#FFD700';
+            this.ctx.fillText(`${xpValue}`, rightX, centerY);
+            rightX -= this.ctx.measureText(`${xpValue}`).width + 4;
+            
+            // Label XP
+            this.ctx.font = `bold ${fontSize}px monospace`;
+            this.ctx.fillStyle = '#888';
+            this.ctx.fillText('XP', rightX, centerY);
+            rightX -= this.ctx.measureText('XP').width + padding * 2;
+            
+            // Séparateur
+            this.ctx.fillStyle = '#444';
+            this.ctx.fillRect(rightX, barY + 8, 2, barHeight - 16);
+            rightX -= padding * 2;
+            
+            // Score
+            this.ctx.font = `bold ${fontSize + 2}px monospace`;
+            this.ctx.fillStyle = '#FFFFFF';
+            const scoreText = this.game.score.toLocaleString('fr-FR');
+            this.ctx.fillText(scoreText, rightX, centerY);
+            rightX -= this.ctx.measureText(scoreText).width + 4;
+        }
         
         // Label Score
         this.ctx.font = `bold ${fontSize}px monospace`;

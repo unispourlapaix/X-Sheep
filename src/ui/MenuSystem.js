@@ -4,6 +4,7 @@ import { SheepAnimator } from '../graphics/SheepAnimator.js';
 export class MenuSystem {
     constructor(options) {
         this.onModeSelected = options.onModeSelected;
+        this.onShow = options.onShow; // Callback quand le menu est affiché
         this.container = document.getElementById('main-menu');
         this.sheepAnimator = new SheepAnimator();
         
@@ -88,6 +89,11 @@ export class MenuSystem {
     show() {
         this.container.style.display = 'flex';
         this.container.style.opacity = '1';
+        
+        // Rafraîchir les scores quand le menu est affiché
+        if (this.onShow) {
+            this.onShow();
+        }
     }
     
     hide() {

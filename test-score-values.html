@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Debug Score Values</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #111;
+            color: #0f0;
+            padding: 20px;
+        }
+        .panel {
+            background: #222;
+            border: 2px solid #0f0;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .value { color: #ff0; font-weight: bold; }
+        .error { color: #f00; }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Score vs XP</h1>
+    
+    <div class="panel">
+        <h2>📊 État actuel localStorage</h2>
+        <div id="storage-state"></div>
+    </div>
+    
+    <div class="panel">
+        <h2>🧮 Calcul du Score</h2>
+        <div>
+            <strong>Formule Mode Infini:</strong><br>
+            Score = (Distance × Points/Mètre) + (Obstacles × Points/Obstacle × Multiplicateur)<br>
+            <span class="error">⚠️ Les XP ne devraient PAS être inclus dans le score !</span>
+        </div>
+    </div>
+    
+    <div class="panel">
+        <h2>🎮 Simuler un jeu</h2>
+        <button onclick="simulateGame()">Simuler Score = 5000, XP = 1200</button>
+        <button onclick="checkInclusion()">Vérifier si XP inclus dans Score</button>
+    </div>
+    
+    <div class="panel">
+        <h2>📝 Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        function log(msg, isError = false) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            const color = isError ? 'color:#f00' : 'color:#0f0';
+            logDiv.innerHTML = `<div style="${color}">[${time}] ${msg}</div>` + logDiv.innerHTML;
+        }
+        
+        function updateState() {
+            const state = document.getElementById('storage-state');
+            const maxScore = localStorage.getItem('xsheep_maxScore') || '0';
+            const adventureScore = localStorage.getItem('xsheep_adventureScore') || '0';
+            const totalXP = localStorage.getItem('xsheep_totalXP') || '0';
+            const lastAdvScore = localStorage.getItem('xsheep_lastAdventureScore') || '0';
+            
+            state.innerHTML = `
+                <div>🎯 Max Score (Infini): <span class="value">${parseInt(maxScore).toLocaleString()}</span></div>
+                <div>🗺️ Adventure Score (Total): <span class="value">${parseInt(adventureScore).toLocaleString()}</span></div>
+                <div>📊 Last Adventure Score: <span class="value">${parseInt(lastAdvScore).toLocaleString()}</span></div>
+                <div>⭐ Total XP: <span class="value">${parseInt(totalXP).toLocaleString()}</span></div>
+                <hr>
+                <div class="error">🔍 Ratio Score/XP = ${(parseInt(maxScore) / Math.max(1, parseInt(totalXP))).toFixed(2)}</div>
+            `;
+        }
+        
+        function simulateGame() {
+            const testScore = 5000;
+            const testXP = 1200;
+            
+            // Ce que le jeu devrait sauvegarder
+            localStorage.setItem('xsheep_maxScore', testScore.toString());
+            localStorage.setItem('xsheep_totalXP', testXP.toString());
+            
+            log(`✅ Simulation: Score=${testScore}, XP=${testXP}`);
+            log(`📦 Sauvegardé séparément: maxScore=${testScore}, totalXP=${testXP}`);
+            
+            updateState();
+            
+            // Vérifier si la valeur sauvegardée est correcte
+            const savedScore = parseInt(localStorage.getItem('xsheep_maxScore'));
+            if (savedScore === testScore) {
+                log('✅ CORRECT: Le score sauvegardé = score du jeu uniquement');
+            } else if (savedScore === testScore + testXP) {
+                log('❌ ERREUR: Le score inclut les XP!', true);
+            } else {
+                log(`⚠️ Valeur inattendue: ${savedScore}`, true);
+            }
+        }
+        
+        function checkInclusion() {
+            const maxScore = parseInt(localStorage.getItem('xsheep_maxScore') || '0');
+            const totalXP = parseInt(localStorage.getItem('xsheep_totalXP') || '0');
+            
+            log('🔍 Analyse de la relation Score/XP...');
+            log(`Score: ${maxScore}, XP: ${totalXP}`);
+            
+            // Si le score est beaucoup plus élevé que les XP, c'est suspect
+            if (maxScore > totalXP && totalXP > 0) {
+                const ratio = maxScore / totalXP;
+                if (ratio >= 0.9 && ratio <= 1.1) {
+                    log('❌ SUSPICION: Score et XP sont très proches (ratio=' + ratio.toFixed(2) + ')', true);
+                    log('❌ Le score pourrait inclure les XP!', true);
+                } else if (ratio > 3) {
+                    log('✅ OK: Score est significativement différent des XP (ratio=' + ratio.toFixed(2) + ')');
+                } else {
+                    log('⚠️ Ratio intermédiaire: ' + ratio.toFixed(2));
+                }
+            } else {
+                log('⚠️ Données insuffisantes pour l\'analyse');
+            }
+        }
+        
+        // Auto-refresh
+        setInterval(updateState, 2000);
+        updateState();
+        log('✨ Outil de debug prêt');
+    </script>
+</body>
+</html>
