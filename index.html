@@ -191,10 +191,80 @@
         
         // Installation prompt
         let deferredPrompt;
+        let installButton = null;
+        
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('💾 beforeinstallprompt déclenché');
             e.preventDefault();
             deferredPrompt = e;
-            console.log('💾 App installable');
+            
+            // Afficher un bouton d'installation
+            showInstallButton();
+        });
+        
+        function showInstallButton() {
+            if (installButton) return; // Déjà créé
+            
+            installButton = document.createElement('button');
+            installButton.innerHTML = '📱 Installer l\'app';
+            installButton.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4A90E2, #357ABD);
+                color: white;
+                border: none;
+                padding: 15px 25px;
+                border-radius: 30px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+                z-index: 10000;
+                transition: all 0.3s;
+                font-family: 'Inter', sans-serif;
+            `;
+            
+            installButton.onmouseover = () => {
+                installButton.style.transform = 'scale(1.05)';
+                installButton.style.boxShadow = '0 6px 20px rgba(74, 144, 226, 0.6)';
+            };
+            
+            installButton.onmouseout = () => {
+                installButton.style.transform = 'scale(1)';
+                installButton.style.boxShadow = '0 4px 15px rgba(74, 144, 226, 0.4)';
+            };
+            
+            installButton.onclick = async () => {
+                if (!deferredPrompt) {
+                    console.log('❌ Pas de prompt disponible');
+                    return;
+                }
+                
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`👤 Choix utilisateur: ${outcome}`);
+                
+                if (outcome === 'accepted') {
+                    console.log('✅ App installée!');
+                }
+                
+                deferredPrompt = null;
+                installButton.remove();
+                installButton = null;
+            };
+            
+            document.body.appendChild(installButton);
+            console.log('✅ Bouton d\'installation affiché');
+        }
+        
+        // Si l'app est déjà installée
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ App installée avec succès');
+            if (installButton) {
+                installButton.remove();
+                installButton = null;
+            }
         });
         
         // Bouton fermeture - retour au menu principal

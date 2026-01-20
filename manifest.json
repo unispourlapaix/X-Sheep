@@ -1,35 +1,59 @@
 {
   "id": "com.unispourlapaix.xsheep",
-  "name": "X-Sheep is back",
+  "name": "X-Sheep is back - L'Espoir en Action",
   "short_name": "X-Sheep",
-  "description": "L'Espoir en Action - Par Emmanuel Payet",
-  "start_url": "/X-Sheep/",
+  "description": "L'Espoir en Action - Jeu spirituel par Emmanuel Payet",
+  "start_url": "/X-Sheep/?source=pwa",
   "scope": "/X-Sheep/",
   "display": "standalone",
   "background_color": "#87CEEB",
   "theme_color": "#4A90E2",
-  "orientation": "landscape-primary",
+  "orientation": "any",
   "categories": ["games", "entertainment"],
   "lang": "fr",
   "dir": "ltr",
   "icons": [
     {
-      "src": "/X-Sheep/icon-192x192.png",
-      "sizes": "192x192",
+      "src": "/X-Sheep/icon-16x16.png",
+      "sizes": "16x16",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/X-Sheep/icon-512x512.png",
-      "sizes": "512x512",
+      "src": "/X-Sheep/icon-32x32.png",
+      "sizes": "32x32",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/X-Sheep/icon-180x180.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/X-Sheep/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/X-Sheep/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/X-Sheep/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/X-Sheep/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
