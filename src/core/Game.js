@@ -288,7 +288,7 @@ export class Game {
         const scoreManager = new ScoreManager();
         
         if (this.mode === 'adventure') {
-            // En aventure, on sauvegarde score + XP
+            // En aventure, on sauvegarde score + XP dans lastAdventureScore
             const xp = this.obstacleManager ? this.obstacleManager.totalXP : 0;
             const finalScore = this.score + xp;
             localStorage.setItem('xsheep_lastAdventureScore', finalScore.toString());
@@ -1374,6 +1374,11 @@ export class Game {
         this.obstaclesCleared++;
         this.score += 100;
         
+        // Ajouter de l'XP pour l'obstacle évité
+        if (this.obstacleManager) {
+            this.obstacleManager.addXP(10); // +10 XP par obstacle
+        }
+        
         console.log(`🎯 Obstacle surmonté: ${obstacle.id || 'sans ID'}`);
         
         // Afficher la bulle narrative BD pour cet obstacle
@@ -1562,6 +1567,12 @@ export class Game {
         
         // Lancer le niveau 3 après un court délai
         setTimeout(() => {
+            // Débloquer le trophée La grâce
+            if (this.trophySystem) {
+                this.trophySystem.unlockTrophy('grace');
+                console.log('✝️ Trophée La grâce débloqué!');
+            }
+            
             // Sauvegarder le score avant de passer au niveau 3
             this.saveCurrentScore();
             console.log('💾 Score sauvegardé à la fin du niveau 2');
@@ -1590,6 +1601,21 @@ export class Game {
             this.notificationSystem.clearAll();
         }
         
+        // Nettoyer les power-ups du niveau 2
+        if (this.powerUpManager) {
+            this.powerUpManager.powerUps = [];
+        }
+        
+        // Nettoyer les réservoirs de carburant
+        if (this.waterTankSystem) {
+            this.waterTankSystem.tanks = [];
+        }
+        
+        // Nettoyer les particules
+        if (this.renderer) {
+            this.renderer.particles = [];
+        }
+        
         // Créer le phare au fond à droite sur un rocher au sommet de l'eau
         this.lighthouse = new Lighthouse(880, 180);
         
@@ -1600,7 +1626,7 @@ export class Game {
         this.player.velX = 0;
         this.player.velY = 0;
         
-        // Nettoyer les obstacles
+        // Nettoyer les obstacles du niveau 2
         this.obstacleManager.obstacles = [];
         this.obstacleManager.weapons = [];
         this.obstacleManager.bossLine = [];
@@ -1710,13 +1736,20 @@ export class Game {
         // Arrêter sauvegarde auto
         this.stopAutoSave();
         
+        // Débloquer le trophée final "Mouton blanc : la grâce"
+        if (this.trophySystem) {
+            this.trophySystem.unlockTrophy('white_sheep');
+            console.log('🐑✨ Trophée final débloqué : Mouton blanc - La Grâce');
+        }
+        
         // Sauvegarder le score aventure final (score + XP)
         if (this.mode === 'adventure') {
+            this.saveCurrentScore();
             const scoreManager = new ScoreManager();
             const xp = this.obstacleManager ? this.obstacleManager.totalXP : 0;
             const finalScore = this.score + xp;
-            const totalScore = scoreManager.addAdventureScore(finalScore);
-            console.log('💾 Score aventure final:', this.score, '+ XP:', xp, '=', finalScore, '| Cumul total:', totalScore);
+            const cumulativeScore = scoreManager.addAdventureScore(finalScore);
+            console.log('💾 Cumul aventure:', finalScore, '| Nouveau total:', cumulativeScore);
         }
         
         // Calculer le score final pour l'affichage
@@ -1830,6 +1863,12 @@ export class Game {
         
         // Lancer le niveau 2 après un court délai
         setTimeout(() => {
+            // Débloquer le trophée Pièce d'or
+            if (this.trophySystem) {
+                this.trophySystem.unlockTrophy('gold_coin');
+                console.log('💰 Trophée Pièce d\'or débloqué!');
+            }
+            
             // Sauvegarder le score avant de passer au niveau 2
             this.saveCurrentScore();
             console.log('💾 Score sauvegardé à la fin du niveau 1');
@@ -1846,11 +1885,31 @@ export class Game {
         this.currentLevel = 2;
         localStorage.setItem('xsheep_currentLevel', '2');
         
-        // Nettoyer les obstacles du niveau 1
+        // Nettoyer TOUS les éléments du niveau 1
         this.obstacleManager.obstacles = [];
         this.obstacleManager.weapons = [];
         this.obstacleManager.bossLine = [];
         this.obstacleManager.projectiles = [];
+        
+        // Nettoyer les power-ups
+        if (this.powerUpManager) {
+            this.powerUpManager.powerUps = [];
+        }
+        
+        // Nettoyer les réservoirs de carburant
+        if (this.waterTankSystem) {
+            this.waterTankSystem.tanks = [];
+        }
+        
+        // Nettoyer les particules
+        if (this.renderer) {
+            this.renderer.particles = [];
+        }
+        
+        // Nettoyer les bulles BD
+        if (this.notificationSystem) {
+            this.notificationSystem.clearAll();
+        }
         
         // Message d'avertissement
         if (this.notificationSystem) {
@@ -1865,6 +1924,12 @@ export class Game {
         // Écran Game Over mode aventure
         const xp = this.obstacleManager ? this.obstacleManager.totalXP : 0;
         const totalScore = this.score + xp;
+        
+        // Sauvegarder le score et mettre à jour le cumul
+        this.saveCurrentScore();
+        const scoreManager = new ScoreManager();
+        const cumulativeScore = scoreManager.addAdventureScore(totalScore);
+        console.log('💾 Cumul aventure:', totalScore, '| Nouveau total:', cumulativeScore);
         
         const overlay = document.createElement('div');
         overlay.style.cssText = `
@@ -1921,9 +1986,8 @@ export class Game {
         
         document.getElementById('retry-btn').addEventListener('click', () => {
             document.body.removeChild(overlay);
-            // Redémarrer au niveau actuel
-            const savedLevel = parseInt(localStorage.getItem('xsheep_currentLevel') || '1');
-            this.restart(savedLevel);
+            // Toujours redémarrer au niveau 1 après un Game Over
+            this.restart(1);
         });
         
         document.getElementById('menu-btn').addEventListener('click', () => {
@@ -2125,7 +2189,25 @@ export class Game {
         
         document.getElementById('continue-btn').addEventListener('click', () => {
             document.body.removeChild(overlay);
-            window.location.reload();
+            
+            // Message sur l'impatience et le temps
+            if (this.notificationSystem) {
+                this.notificationSystem.showNarrative({
+                    text: "Quand on veut tout rapidement et toujours plus vite, on rate souvent l'essentiel du moment présent. Ne sois pas esclave du temps, prends le temps et profite de chaque instant sans stress, sans compter le temps. Tu verras alors que la vie est une grande aventure...",
+                    duration: 8000
+                });
+            }
+            
+            // Débloquer le trophée "Horloge brisée - Maître du temps"
+            if (this.obstacleManager?.trophySystem) {
+                this.obstacleManager.trophySystem.unlockTrophy('impatient');
+                console.log('⏰💔 Trophée Horloge brisée débloqué!');
+            }
+            
+            // Continuer le jeu (transition vers niveau 2)
+            setTimeout(() => {
+                window.location.reload();
+            }, 8000);
         });
         
         document.getElementById('menu-btn-victory').addEventListener('click', () => {

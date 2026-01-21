@@ -140,6 +140,30 @@ export const NarrativeData = {
         hope: "L'amour se partage et se donne sagement"
     },
     
+    // Trophée Horloge brisée - Choix impatient au niveau 1
+    impatient: {
+        text: "⏰💔 HORLOGE BRISÉE - Maître du temps. Quand on veut tout rapidement et toujours plus vite, on rate souvent l'essentiel du moment présent. Ne sois pas esclave du temps, prends le temps et profite de chaque instant sans stress, sans compter le temps. Tu verras alors que la vie est une grande aventure. Le temps est un allié, pas un ennemi. ⏳✨",
+        hope: "Maître du temps"
+    },
+    
+    // Trophée Pièce d'or - Victoire niveau 1
+    gold_coin: {
+        text: "💰 PIÈCE D'OR - L'amour du gain des richesses folles est un piège amer. Ne sois pas esclave des biens : une voiture, une maison ne te définissent pas. Tu es plus précieux que cela. Et la liberté est un trésor immuable. 🗝️✨",
+        hope: "La liberté est un trésor immuable"
+    },
+    
+    // Trophée La grâce - Victoire niveau 2
+    grace: {
+        text: "✝️ LA GRÂCE - Ce n'est pas une formule magique ni une incantation. La grâce se personnifie par une personne : Dieu fait homme et nommé Jésus. On ne trompera pas Dieu par des secrets ou cachotteries. La grâce est à lui seul. Et demander grâce avec repentance est une voie de salut pour tout être imparfait. Nos pires défauts n'auront plus d'importance devant lui avec un cœur disposé à être renouvelé, transformé pour le meilleur. Ne vous découragez pas en pensant être le pire pécheur. Demandez à Dieu de vous montrer qui vous êtes vraiment. 🕊️💔",
+        hope: "La grâce : Dieu fait homme"
+    },
+    
+    // Trophée final - Mouton blanc : le combat spirituel
+    white_sheep: {
+        text: "🐑✨ LA GRÂCE - C'est la vie. Choisir la vie c'est choisir l'amour. Le combat de la vie est parfois très difficile et les combats spirituels encore plus. N'abandonne jamais. Mais ne te trompe pas : même s'il faut toujours protéger et servir le bien, la cruauté, la destruction, la guerre ne sont que l'orgueil de l'homme. Dieu n'est pas raciste, haineux, maître de la guerre et de destruction. Ni même homophobe. La diversité est de Dieu, et nos différences sont la beauté de l'humanité. Apprends la sagesse du respect et porte la paix avec discernement. La liberté des autres est aussi notre future liberté. Veille à ton cœur et respecte les autres comme tu aimerais qu'on te respecte. Rends libre comme tu veux être libre, et ne juge pas comme tu ne veux pas être jugé. Pardonne le plus possible avec sagesse et justice. 🕊️❤️",
+        hope: "Mouton blanc : le combat spirituel (le bon combat)"
+    },
+    
     // Dialogue final
     finalDialogue: {
         ant: "Tant qu'il y a de la vie, il y a de l'espoir...",

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Sheep - Générateur d'image de partage</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0e27, #1a3a52);
+            font-family: 'Press Start 2P', monospace;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        #controls {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: #FFD700;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #FFD700;
+            border-radius: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        #canvas {
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        #preview {
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: #FFD700; text-align: center;">🐑 X-Sheep - Image de Partage</h1>
+    
+    <div id="controls">
+        <div class="input-group">
+            <label>Score Aventure:</label>
+            <input type="number" id="adventureScore" value="0" placeholder="Score aventure">
+        </div>
+        
+        <div class="input-group">
+            <label>Score Infini:</label>
+            <input type="number" id="endlessScore" value="0" placeholder="Meilleur score infini">
+        </div>
+        
+        <div class="input-group">
+            <label>XP Total:</label>
+            <input type="number" id="totalXP" value="0" placeholder="XP accumulés">
+        </div>
+        
+        <div class="input-group">
+            <label>Trophées débloqués:</label>
+            <input type="number" id="trophies" value="0" placeholder="Nombre de trophées">
+        </div>
+        
+        <div style="text-align: center;">
+            <button onclick="loadFromLocalStorage()">📊 Charger mes scores</button>
+            <button onclick="generateImage()">🎨 Générer l'image</button>
+            <button onclick="downloadImage()">💾 Télécharger</button>
+        </div>
+    </div>
+    
+    <canvas id="canvas" width="1080" height="1080"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function loadFromLocalStorage() {
+            document.getElementById('adventureScore').value = localStorage.getItem('xsheep_adventureScore') || '0';
+            document.getElementById('endlessScore').value = localStorage.getItem('xsheep_maxScore') || '0';
+            document.getElementById('totalXP').value = localStorage.getItem('xsheep_totalXP') || '0';
+            
+            // Compter les trophées
+            const trophiesData = localStorage.getItem('mouton_trophies');
+            if (trophiesData) {
+                const parsed = JSON.parse(trophiesData);
+                document.getElementById('trophies').value = parsed.trophies ? parsed.trophies.length : 0;
+            }
+            
+            generateImage();
+        }
+        
+        function drawPixelSheep(x, y, scale = 3) {
+            // Corps du mouton (nuage blanc)
+            ctx.fillStyle = '#FFFFFF';
+            
+            // Nuage principal
+            ctx.fillRect(x + 4*scale, y + 2*scale, 8*scale, 6*scale);
+            ctx.fillRect(x + 2*scale, y + 4*scale, 4*scale, 4*scale);
+            ctx.fillRect(x + 10*scale, y + 4*scale, 4*scale, 4*scale);
+            
+            // Tête (cercle blanc)
+            ctx.fillRect(x + 12*scale, y + 4*scale, 4*scale, 4*scale);
+            ctx.fillRect(x + 14*scale, y + 2*scale, 2*scale, 2*scale);
+            
+            // Yeux
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(x + 13*scale, y + 5*scale, scale, scale);
+            ctx.fillRect(x + 15*scale, y + 5*scale, scale, scale);
+            
+            // Pattes
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(x + 4*scale, y + 8*scale, 2*scale, 4*scale);
+            ctx.fillRect(x + 8*scale, y + 8*scale, 2*scale, 4*scale);
+            
+            // Ailes (plumes angéliques)
+            ctx.fillStyle = '#FFD700';
+            // Aile gauche
+            ctx.fillRect(x + scale, y + 4*scale, 3*scale, scale);
+            ctx.fillRect(x, y + 5*scale, 2*scale, 2*scale);
+            // Aile droite
+            ctx.fillRect(x + 12*scale, y + 3*scale, 3*scale, scale);
+            ctx.fillRect(x + 14*scale, y + 4*scale, 2*scale, 2*scale);
+            
+            // Auréole
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x + 14*scale, y + scale, 4*scale, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+        
+        function generateImage() {
+            const adventureScore = parseInt(document.getElementById('adventureScore').value) || 0;
+            const endlessScore = parseInt(document.getElementById('endlessScore').value) || 0;
+            const totalXP = parseInt(document.getElementById('totalXP').value) || 0;
+            const trophies = parseInt(document.getElementById('trophies').value) || 0;
+            
+            // Fond dégradé
+            const gradient = ctx.createLinearGradient(0, 0, 0, 1080);
+            gradient.addColorStop(0, '#0a0e27');
+            gradient.addColorStop(0.5, '#1a3a52');
+            gradient.addColorStop(1, '#0a0e27');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1080, 1080);
+            
+            // Étoiles en arrière-plan
+            ctx.fillStyle = '#FFD700';
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * 1080;
+                const y = Math.random() * 1080;
+                const size = Math.random() * 3 + 1;
+                ctx.fillRect(x, y, size, size);
+            }
+            
+            // Titre X-SHEEP
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 80px Arial';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(255, 215, 0, 0.8)';
+            ctx.shadowBlur = 20;
+            ctx.fillText('X-SHEEP', 540, 120);
+            ctx.shadowBlur = 0;
+            
+            // Sous-titre
+            ctx.fillStyle = '#87CEEB';
+            ctx.font = '30px Arial';
+            ctx.fillText('Le Mouton du Courage', 540, 170);
+            
+            // Dessiner le mouton géant au centre
+            drawPixelSheep(390, 250, 8);
+            
+            // Cadre des stats
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(100, 600, 880, 400);
+            
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(100, 600, 880, 400);
+            
+            // Stats
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 40px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('📊 MES SCORES', 150, 670);
+            
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '32px Arial';
+            
+            // Score aventure
+            ctx.fillText('🎯 Aventure:', 150, 740);
+            ctx.fillStyle = '#00FF00';
+            ctx.fillText(adventureScore.toLocaleString('fr-FR'), 700, 740);
+            
+            // Score infini
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText('♾️ Infini:', 150, 810);
+            ctx.fillStyle = '#00FF00';
+            ctx.fillText(endlessScore.toLocaleString('fr-FR'), 700, 810);
+            
+            // XP
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText('⭐ XP Total:', 150, 880);
+            ctx.fillStyle = '#FFD700';
+            ctx.fillText(totalXP.toLocaleString('fr-FR'), 700, 880);
+            
+            // Trophées
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText('🏆 Trophées:', 150, 950);
+            ctx.fillStyle = '#FFD700';
+            ctx.fillText(trophies.toString(), 700, 950);
+            
+            // Bas de page
+            ctx.fillStyle = '#87CEEB';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Par Emmanuel Payet', 540, 1040);
+        }
+        
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'xsheep-scores.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Générer au chargement
+        window.addEventListener('load', () => {
+            generateImage();
+        });
+    </script>
+</body>
+</html>

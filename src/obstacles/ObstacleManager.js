@@ -666,14 +666,14 @@ export class ObstacleManager {
         // Ajouter XP directement au total (power-ups, boss)
         this.totalXP += amount;
         
-        // Sauvegarder dans localStorage via ScoreManager si disponible
-        if (this.game && this.game.endlessMode && this.game.endlessMode.scoreManager) {
-            this.game.endlessMode.scoreManager.addXP(amount);
-        }
+        // Sauvegarder dans localStorage (cumulatif pour tous les modes)
+        const currentTotal = parseInt(localStorage.getItem('xsheep_totalXP') || '0');
+        const newTotal = currentTotal + amount;
+        localStorage.setItem('xsheep_totalXP', newTotal.toString());
         
         // Log seulement pour les gros gains (>50 XP)
         if (amount >= 50) {
-            console.log(`🎉 +${amount} XP! Total: ${this.totalXP}`);
+            console.log(`🎉 +${amount} XP! Total session: ${this.totalXP} | Total global: ${newTotal}`);
         }
         
         // PAS de spawn d'armes ici - uniquement via onMessagePopped()

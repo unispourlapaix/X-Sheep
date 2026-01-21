@@ -158,6 +158,113 @@ export class TrophySystem {
         `;
         
         window.closeTrophyMenu = () => this.hide();
+        window.shareTrophy = (obstacleId) => this.shareTrophyImage(obstacleId);
+    }
+    
+    shareTrophyImage(obstacleId) {
+        const message = NarrativeData[obstacleId];
+        const trophy = this.trophies.get(obstacleId);
+        if (!message || !trophy) return;
+        
+        // Créer un canvas temporaire pour générer l'image
+        const canvas = document.createElement('canvas');
+        canvas.width = 1080;
+        canvas.height = 1080;
+        const ctx = canvas.getContext('2d');
+        
+        // Fond dégradé
+        const gradient = ctx.createLinearGradient(0, 0, 0, 1080);
+        gradient.addColorStop(0, '#0a0e27');
+        gradient.addColorStop(0.5, '#1a3a52');
+        gradient.addColorStop(1, '#0a0e27');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1080, 1080);
+        
+        // Étoiles
+        ctx.fillStyle = '#FFD700';
+        for (let i = 0; i < 50; i++) {
+            const x = Math.random() * 1080;
+            const y = Math.random() * 1080;
+            const size = Math.random() * 3 + 1;
+            ctx.fillRect(x, y, size, size);
+        }
+        
+        // Titre X-SHEEP
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 60px Arial';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = 'rgba(255, 215, 0, 0.8)';
+        ctx.shadowBlur = 20;
+        ctx.fillText('X-SHEEP', 540, 100);
+        ctx.shadowBlur = 0;
+        
+        // Emoji trophée
+        ctx.font = '120px Arial';
+        ctx.fillText('🏆', 540, 250);
+        
+        // Titre du trophée
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 36px Arial';
+        ctx.fillText(message.hope, 540, 340);
+        
+        // Label
+        ctx.fillStyle = '#87CEEB';
+        ctx.font = '24px Arial';
+        ctx.fillText(this.getObstacleLabel(obstacleId), 540, 380);
+        
+        // Cadre du message
+        ctx.strokeStyle = '#FFD700';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(80, 420, 920, 500);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(80, 420, 920, 500);
+        
+        // Message
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '24px Arial';
+        ctx.textAlign = 'left';
+        
+        // Découper le texte en lignes
+        const words = message.text.split(' ');
+        let line = '';
+        let y = 480;
+        const maxWidth = 860;
+        const lineHeight = 36;
+        
+        for (let i = 0; i < words.length; i++) {
+            const testLine = line + words[i] + ' ';
+            const metrics = ctx.measureText(testLine);
+            
+            if (metrics.width > maxWidth && i > 0) {
+                ctx.fillText(line, 120, y);
+                line = words[i] + ' ';
+                y += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        ctx.fillText(line, 120, y);
+        
+        // XP
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 32px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`+${trophy.xp} XP`, 540, 980);
+        
+        // Bas de page
+        ctx.fillStyle = '#87CEEB';
+        ctx.font = '20px Arial';
+        ctx.fillText('Par Emmanuel Payet', 540, 1050);
+        
+        // Télécharger l'image
+        canvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `xsheep-trophee-${obstacleId}.png`;
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
+        });
     }
     
     renderTrophies() {
@@ -203,9 +310,22 @@ export class TrophySystem {
                                 ${message.text}
                             </p>
                         </div>
-                        <p style="color:#666;font-size:11px;margin:10px 0 0 0;text-align:right">
-                            Débloqué le ${new Date(trophy.unlockedAt).toLocaleDateString('fr-FR')}
-                        </p>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+                            <p style="color:#666;font-size:11px;margin:0">
+                                Débloqué le ${new Date(trophy.unlockedAt).toLocaleDateString('fr-FR')}
+                            </p>
+                            <button onclick="window.shareTrophy('${obstacleId}')" style="
+                                background:linear-gradient(135deg,#FFD700,#FFA500);
+                                border:none;
+                                padding:8px 15px;
+                                border-radius:8px;
+                                font-size:12px;
+                                font-weight:bold;
+                                color:#333;
+                                cursor:pointer;
+                                box-shadow:0 2px 5px rgba(0,0,0,0.3);
+                            ">📤 Partager</button>
+                        </div>
                     ` : `
                         <p style="color:#666;font-style:italic;margin:10px 0 0 0">
                             Passe cet obstacle pour débloquer le message...
@@ -240,7 +360,11 @@ export class TrophySystem {
             nepotisme: '🤝 Népotisme',
             selection: '👥 Sélection',
             esclavage: '⛓️ Esclavage',
-            surexploitation: '🏭 Surexploitation'
+            surexploitation: '🏭 Surexploitation',
+            white_sheep: '🐑✨ Mouton Blanc - La Grâce',
+            charity: '💝 Charité',
+            gold_coin: '💰 Pièce d\'Or - Liberté',
+            grace: '✝️ La Grâce - Jésus'
         };
         return labels[id] || 'Obstacle';
     }

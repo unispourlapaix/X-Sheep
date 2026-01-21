@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification Scores X-Sheep</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #0f0;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #FFD700;
+            text-shadow: 0 0 20px #FFD700;
+            font-size: 32px;
+        }
+        .panel {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+        .status-ok { color: #00FF00; }
+        .status-warning { color: #FFA500; }
+        .status-error { color: #FF0000; }
+        .value { color: #FFD700; font-weight: bold; font-size: 18px; }
+        button {
+            background: linear-gradient(135deg, #00FF00, #00AA00);
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 8px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+        }
+        .test-btn {
+            background: linear-gradient(135deg, #4A90E2, #357ABD);
+            color: white;
+        }
+        .delete-btn {
+            background: linear-gradient(135deg, #FF4444, #CC0000);
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background: rgba(0, 255, 0, 0.1);
+            color: #FFD700;
+        }
+        .log-entry {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 3px solid #0f0;
+            border-radius: 4px;
+        }
+        .log-time {
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Vérification Scores X-Sheep</h1>
+        
+        <div class="panel">
+            <h2>📊 État actuel localStorage</h2>
+            <table id="scores-table">
+                <thead>
+                    <tr>
+                        <th>Clé</th>
+                        <th>Valeur</th>
+                        <th>Type</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody id="scores-body"></tbody>
+            </table>
+        </div>
+        
+        <div class="panel">
+            <h2>🧪 Tests de sauvegarde</h2>
+            <button class="test-btn" onclick="testAdventureScore()">Tester Score Aventure (5000 + 1200 XP)</button>
+            <button class="test-btn" onclick="testEndlessScore()">Tester Score Infini (15000)</button>
+            <button onclick="simulateGameOver()">Simuler Game Over Aventure</button>
+            <button onclick="simulateVictory()">Simuler Victoire Niveau 3</button>
+            <button class="delete-btn" onclick="clearAll()">🗑️ Effacer tout</button>
+        </div>
+        
+        <div class="panel">
+            <h2>📝 Journal des opérations</h2>
+            <div id="log-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const KEYS = {
+            maxScore: 'xsheep_maxScore',
+            adventureScore: 'xsheep_adventureScore',
+            lastAdventureScore: 'xsheep_lastAdventureScore',
+            currentLevel: 'xsheep_currentLevel',
+            totalXP: 'xsheep_totalXP'
+        };
+        
+        function log(message, type = 'info') {
+            const container = document.getElementById('log-container');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            const time = new Date().toLocaleTimeString();
+            
+            let icon = '📝';
+            let color = '#0f0';
+            if (type === 'success') { icon = '✅'; color = '#00FF00'; }
+            if (type === 'error') { icon = '❌'; color = '#FF0000'; }
+            if (type === 'warning') { icon = '⚠️'; color = '#FFA500'; }
+            
+            entry.innerHTML = `
+                <span class="log-time">[${time}]</span>
+                <span style="color:${color}">${icon} ${message}</span>
+            `;
+            container.insertBefore(entry, container.firstChild);
+            
+            // Limiter à 20 entrées
+            while (container.children.length > 20) {
+                container.removeChild(container.lastChild);
+            }
+        }
+        
+        function refreshScores() {
+            const tbody = document.getElementById('scores-body');
+            tbody.innerHTML = '';
+            
+            for (const [name, key] of Object.entries(KEYS)) {
+                const value = localStorage.getItem(key);
+                const row = document.createElement('tr');
+                
+                let status = '✅';
+                let statusClass = 'status-ok';
+                if (!value || value === '0') {
+                    status = '⚠️ Vide';
+                    statusClass = 'status-warning';
+                }
+                
+                row.innerHTML = `
+                    <td>${key}</td>
+                    <td class="value">${value ? parseInt(value).toLocaleString('fr-FR') : '0'}</td>
+                    <td>${typeof value}</td>
+                    <td class="${statusClass}">${status}</td>
+                `;
+                tbody.appendChild(row);
+            }
+            
+            log('Scores rafraîchis', 'info');
+        }
+        
+        function testAdventureScore() {
+            const score = 5000;
+            const xp = 1200;
+            const finalScore = score + xp;
+            
+            // Simuler la sauvegarde comme dans le jeu
+            localStorage.setItem(KEYS.lastAdventureScore, finalScore.toString());
+            
+            // Ajouter au cumul
+            const currentAdventureScore = parseInt(localStorage.getItem(KEYS.adventureScore) || '0');
+            const newTotal = currentAdventureScore + finalScore;
+            localStorage.setItem(KEYS.adventureScore, newTotal.toString());
+            
+            log(`Score Aventure sauvegardé: ${score} + ${xp} XP = ${finalScore} | Cumul: ${newTotal}`, 'success');
+            refreshScores();
+        }
+        
+        function testEndlessScore() {
+            const score = 15000;
+            const currentMax = parseInt(localStorage.getItem(KEYS.maxScore) || '0');
+            
+            if (score > currentMax) {
+                localStorage.setItem(KEYS.maxScore, score.toString());
+                log(`Nouveau record Infini: ${score} (ancien: ${currentMax})`, 'success');
+            } else {
+                log(`Score Infini ${score} < Record ${currentMax} (pas sauvegardé)`, 'warning');
+            }
+            
+            refreshScores();
+        }
+        
+        function simulateGameOver() {
+            const score = Math.floor(Math.random() * 10000) + 1000;
+            const xp = Math.floor(Math.random() * 5000) + 500;
+            const finalScore = score + xp;
+            
+            localStorage.setItem(KEYS.lastAdventureScore, finalScore.toString());
+            
+            log(`Game Over Aventure: Score ${score} + XP ${xp} = ${finalScore}`, 'info');
+            refreshScores();
+        }
+        
+        function simulateVictory() {
+            const score = 7777;
+            const xp = 3333;
+            const finalScore = score + xp;
+            
+            const currentAdventureScore = parseInt(localStorage.getItem(KEYS.adventureScore) || '0');
+            const newTotal = currentAdventureScore + finalScore;
+            localStorage.setItem(KEYS.adventureScore, newTotal.toString());
+            localStorage.setItem(KEYS.lastAdventureScore, finalScore.toString());
+            
+            log(`Victoire Niveau 3! Score ${score} + XP ${xp} = ${finalScore} | Cumul total: ${newTotal}`, 'success');
+            refreshScores();
+        }
+        
+        function clearAll() {
+            if (!confirm('⚠️ Effacer TOUS les scores ?')) return;
+            
+            for (const key of Object.values(KEYS)) {
+                localStorage.removeItem(key);
+            }
+            
+            log('Tous les scores effacés', 'warning');
+            refreshScores();
+        }
+        
+        // Auto-refresh toutes les 2 secondes
+        setInterval(refreshScores, 2000);
+        
+        // Init
+        refreshScores();
+        log('Outil de vérification démarré', 'success');
+        
+        // Surveiller les changements de localStorage
+        window.addEventListener('storage', (e) => {
+            if (e.key && e.key.startsWith('xsheep_')) {
+                log(`Storage modifié: ${e.key} = ${e.newValue}`, 'info');
+                refreshScores();
+            }
+        });
+    </script>
+</body>
+</html>

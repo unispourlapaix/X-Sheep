@@ -3,6 +3,7 @@ import { GameConfig } from '../config/GameConfig.js';
 import { SheepAnimator } from './SheepAnimator.js';
 import { ParticleSystem } from './ParticleSystem.js';
 import { PixelArtRenderer } from './PixelArtRenderer.js';
+import { VoxelRenderer } from './VoxelRenderer.js';
 import { CloudBackground } from './CloudBackground.js';
 import { WaterBackground } from './WaterBackground.js';
 
@@ -14,8 +15,17 @@ export class Renderer {
         this.sheepAnimator = new SheepAnimator();
         this.particleSystem = new ParticleSystem();
         
+        // Choix du moteur de rendu
+        this.renderMode = localStorage.getItem('xsheep_renderMode') || 'pixel';
+        console.log(`🎨 Moteur de rendu: ${this.renderMode}`);
+        
         // Configure pixel art rendering
         PixelArtRenderer.setupContext(this.ctx);
+        
+        // Créer le renderer voxel si nécessaire
+        if (this.renderMode === 'voxel') {
+            this.voxelRenderer = new VoxelRenderer(this.ctx);
+        }
         
         // Animation frames
         this.cloudOffset = 0;
@@ -105,26 +115,32 @@ export class Renderer {
             // Dessiner les proverbes (viennent de droite)
             this.game.level3Proverbs.forEach(proverb => {
                 if (!proverb.collected) {
-                    this.ctx.save();
-                    
-                    // Effet de lueur
-                    this.ctx.shadowColor = '#4A90A4';
-                    this.ctx.shadowBlur = 15;
-                    
-                    // Icône du proverbe
-                    this.ctx.font = '32px Arial';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.textBaseline = 'middle';
-                    this.ctx.fillText(proverb.icon, proverb.x, proverb.y);
-                    
-                    // Cercle autour
-                    this.ctx.strokeStyle = '#4A90A4';
-                    this.ctx.lineWidth = 2;
-                    this.ctx.beginPath();
-                    this.ctx.arc(proverb.x, proverb.y, 25, 0, Math.PI * 2);
-                    this.ctx.stroke();
-                    
-                    this.ctx.restore();
+                    if (this.renderMode === 'voxel' && this.voxelRenderer) {
+                        // Mode voxel: parchemin pixel art
+                        this.voxelRenderer.drawVoxelProverb(proverb.x, proverb.y, proverb.icon);
+                    } else {
+                        // Mode classique: emoji avec cercle
+                        this.ctx.save();
+                        
+                        // Effet de lueur
+                        this.ctx.shadowColor = '#4A90A4';
+                        this.ctx.shadowBlur = 15;
+                        
+                        // Icône du proverbe
+                        this.ctx.font = '32px Arial';
+                        this.ctx.textAlign = 'center';
+                        this.ctx.textBaseline = 'middle';
+                        this.ctx.fillText(proverb.icon, proverb.x, proverb.y);
+                        
+                        // Cercle autour
+                        this.ctx.strokeStyle = '#4A90A4';
+                        this.ctx.lineWidth = 2;
+                        this.ctx.beginPath();
+                        this.ctx.arc(proverb.x, proverb.y, 25, 0, Math.PI * 2);
+                        this.ctx.stroke();
+                        
+                        this.ctx.restore();
+                    }
                 }
             });
         }
@@ -137,7 +153,15 @@ export class Renderer {
         else if (this.useBackgroundImage && this.backgroundImage.complete) {
             this.drawBackgroundImage();
         } else {
-            this.drawBackgroundCanvas();
+            // Mode Voxel - Fond voxel
+            if (this.renderMode === 'voxel' && this.voxelRenderer) {
+                const scrollX = this.game.obstacleManager ? 
+                    this.game.obstacleManager.timer * 2 : 0;
+                this.voxelRenderer.drawVoxelBackground(scrollX);
+            } else {
+                // Mode Pixel Art classique
+                this.drawBackgroundCanvas();
+            }
         }
         
         // Mode infini simplifié (boss avec obstacles)
@@ -278,6 +302,12 @@ export class Renderer {
         if (this.game.mode === 'endless' && this.game.endlessMode) {
             this.game.endlessMode.renderOnomatopoeia(this.ctx);
             this.game.endlessMode.renderBossComment(this.ctx);
+        }
+        
+        // Bulles BD en pixel art (tous les modes maintenant)
+        if (this.game.notificationSystem) {
+            this.game.notificationSystem.updateCanvasBubbles();
+            this.game.notificationSystem.drawCanvasBubbles(this.ctx, this);
         }
         
         // Restaurer le contexte si tremblement était actif
@@ -557,12 +587,7 @@ export class Renderer {
     }
     
     drawObstacle(obs) {
-        // Dessiner l'effet nuage pour les boss qui apparaissent
-        if (obs.type === 'boss' && obs.cloudEffect > 0) {
-            this.drawCloudEffect(obs);
-        }
-        
-        // Dessiner le cercle de ciblage jaune si le boss est ciblé
+        // Dessiner le cercle de ciblage jaune si le boss est ciblé (avant le rendu)
         if (obs.type === 'boss' && obs.targetIndicator > 0) {
             this.ctx.save();
             const centerX = obs.x + obs.width / 2;
@@ -599,6 +624,18 @@ export class Renderer {
             this.ctx.stroke();
             
             this.ctx.restore();
+        }
+        
+        // Mode Voxel
+        if (this.renderMode === 'voxel' && this.voxelRenderer) {
+            this.voxelRenderer.drawVoxelObstacle(obs);
+            return;
+        }
+        
+        // Mode Pixel Art classique
+        // Dessiner l'effet nuage pour les boss qui apparaissent
+        if (obs.type === 'boss' && obs.cloudEffect > 0) {
+            this.drawCloudEffect(obs);
         }
         
         // Utilise le nouveau système Pixel Art HD
@@ -672,6 +709,14 @@ export class Renderer {
     }
     
     drawExplosion(exp) {
+        // Mode Voxel
+        if (this.renderMode === 'voxel' && this.voxelRenderer) {
+            const progress = 1 - exp.opacity;
+            this.voxelRenderer.drawVoxelExplosion(exp.x, exp.y, exp.radius, progress);
+            return;
+        }
+        
+        // Mode Pixel Art classique
         this.ctx.save();
         
         // Cercle principal de l'explosion
@@ -1074,7 +1119,32 @@ export class Renderer {
     }
     
     drawPowerUp(pu) {
-        // Utilise le nouveau système Pixel Art HD
+        // Mode Voxel - utilise VoxelRenderer pour les power-ups
+        if (this.renderMode === 'voxel' && this.voxelRenderer) {
+            const size = 48; // Taille standard des power-ups en mode voxel
+            this.voxelRenderer.drawVoxelObstacle({
+                x: pu.x - size/2,
+                y: pu.y - size/2,
+                width: size,
+                height: size,
+                icon: pu.icon || '💪'
+            });
+            
+            // Particules dansantes autour
+            const time = Date.now() * 0.01;
+            for (let i = 0; i < 6; i++) {
+                const angle = (i * Math.PI / 3) + time;
+                const px = pu.x + Math.cos(angle) * 30;
+                const py = pu.y + Math.sin(angle) * 30;
+                this.ctx.fillStyle = 'rgba(255,215,0,0.6)';
+                this.ctx.beginPath();
+                this.ctx.arc(px, py, 3, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+            return;
+        }
+        
+        // Mode Pixel Art classique - Utilise le système Pixel Art HD
         PixelArtRenderer.renderPowerUp(this.ctx, pu);
         
         // Particules dansantes autour
@@ -1152,6 +1222,18 @@ export class Renderer {
     drawPlayer() {
         const p = this.game.player;
         
+        // Mode Voxel
+        if (this.renderMode === 'voxel' && this.voxelRenderer) {
+            this.voxelRenderer.drawVoxelSheep(
+                p.x, 
+                p.y, 
+                p.flying, 
+                p.goldCount > 0
+            );
+            return;
+        }
+        
+        // Mode Pixel Art classique
         this.ctx.save();
         
         // NIVEAU 3: Dessiner le mouton dans un bateau
@@ -1476,15 +1558,21 @@ export class Renderer {
             p.hairEffect      // Effet de mèche spéciale (richesse)
         );
         
-        // Afficher l'arme équipée
+        // Afficher l'arme équipée (tous modes)
         if (p.equippedWeapon) {
-            this.ctx.font = '24px Arial';
+            this.ctx.save();
+            this.ctx.font = 'bold 28px Arial';
             this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            // Ombre pour visibilité
+            this.ctx.shadowColor = '#000000';
+            this.ctx.shadowBlur = 4;
             this.ctx.fillText(
                 p.equippedWeapon.icon,
                 p.x + p.width / 2,
-                p.y - 10
+                p.y - 15
             );
+            this.ctx.restore();
         }
         
         // Point d'exclamation au-dessus de la tête
@@ -2197,10 +2285,25 @@ export class Renderer {
     }
     
     drawRejectionBubble(bubble) {
-        this.ctx.save();
-        
         const width = 380;
         const height = 100;
+        
+        // Si mode voxel, utiliser le renderer voxel
+        if (this.renderMode === 'voxel' && this.voxelRenderer) {
+            const x = bubble.x - width / 2;
+            const y = bubble.y;
+            
+            // Dessiner la bulle avec le style voxel
+            this.ctx.save();
+            this.ctx.globalAlpha = bubble.opacity;
+            this.voxelRenderer.drawVoxelBubble(x, y, width, height, 'VA VIE! et renai !\nRETOURNE VIVRE !');
+            this.ctx.restore();
+            return;
+        }
+        
+        // Sinon, utiliser le style normal
+        this.ctx.save();
+        
         const x = bubble.x - width / 2;
         const y = bubble.y;
         const pulse = Math.sin(Date.now() / 200) * 5;

@@ -1,8 +1,8 @@
-// NotificationSystem.js - Système unifié de notifications BD
+// NotificationSystem.js - Système unifié de notifications BD (100% canvas)
 export class NotificationSystem {
     constructor(game) {
         this.game = game;
-        this.activeBubbles = [];
+        this.canvasBubbles = []; // Toutes les bulles sur canvas
         this.narrativeQueue = [];
         this.isShowingNarrative = false;
         this.maxSplashBubbles = 3; // Limiter le nombre de bulles splash simultanées
@@ -13,7 +13,270 @@ export class NotificationSystem {
     }
     
     /**
-     * Affiche une bulle BD style splash
+     * Met à jour les bulles canvas (fade in/out)
+     */
+    updateCanvasBubbles() {
+        for (let i = this.canvasBubbles.length - 1; i >= 0; i--) {
+            const bubble = this.canvasBubbles[i];
+            bubble.age += 16; // ~60fps
+            
+            // Fade in pendant les 300 premières ms
+            if (bubble.age < 300) {
+                bubble.opacity = bubble.age / 300;
+            }
+            // Fade out pendant les 300 dernières ms
+            else if (bubble.age > bubble.duration - 300) {
+                bubble.opacity = (bubble.duration - bubble.age) / 300;
+            } else {
+                bubble.opacity = 1;
+            }
+            
+            // Supprimer si expiré
+            if (bubble.age >= bubble.duration) {
+                if (bubble.onClose) bubble.onClose();
+                this.canvasBubbles.splice(i, 1);
+            }
+        }
+    }
+    
+    /**
+     * Dessine toutes les bulles canvas
+     */
+    drawCanvasBubbles(ctx, renderer) {
+        const isVoxel = renderer?.renderMode === 'voxel';
+        const voxelRenderer = renderer?.voxelRenderer;
+        
+        this.canvasBubbles.forEach(bubble => {
+            ctx.save();
+            ctx.globalAlpha = bubble.opacity;
+            
+            if (bubble.type === 'splash') {
+                if (isVoxel && voxelRenderer) {
+                    // Mode voxel: style Minecraft
+                    voxelRenderer.drawVoxelSpeechBubble(
+                        bubble.x - bubble.width / 2,
+                        bubble.y,
+                        bubble.width,
+                        bubble.height,
+                        bubble.icon,
+                        bubble.text,
+                        bubble.borderColor || '#000000'
+                    );
+                } else {
+                    // Mode normal: style BD classique
+                    this.drawComicBubble(ctx, bubble);
+                }
+            } else if (bubble.type === 'narrative') {
+                if (isVoxel && voxelRenderer) {
+                    voxelRenderer.drawVoxelNarrativeBubble(
+                        bubble.x,
+                        bubble.y,
+                        bubble.text,
+                        bubble.maxWidth
+                    );
+                } else {
+                    this.drawComicNarrative(ctx, bubble);
+                }
+            }
+            
+            ctx.restore();
+        });
+    }
+    
+    /**
+     * Dessine une bulle BD classique style Comic
+     */
+    drawComicBubble(ctx, bubble) {
+        const x = bubble.x;
+        const y = bubble.y;
+        const w = bubble.width;
+        const h = bubble.height;
+        const radius = 20;
+        
+        // Ombre portée
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        this.drawRoundRect(ctx, x - w/2 + 5, y + 5, w, h, radius);
+        ctx.fill();
+        
+        // Fond blanc brillant
+        ctx.fillStyle = '#FFFFFF';
+        this.drawRoundRect(ctx, x - w/2, y, w, h, radius);
+        ctx.fill();
+        
+        // Bordure noire épaisse style BD
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 4;
+        ctx.lineJoin = 'round';
+        this.drawRoundRect(ctx, x - w/2, y, w, h, radius);
+        ctx.stroke();
+        
+        // Bordure intérieure colorée (accent)
+        ctx.strokeStyle = bubble.borderColor || '#FFD700';
+        ctx.lineWidth = 2;
+        this.drawRoundRect(ctx, x - w/2 + 4, y + 4, w - 8, h - 8, radius - 4);
+        ctx.stroke();
+        
+        // Étoiles décoratives style BD (coins)
+        ctx.fillStyle = '#FFD700';
+        const starPositions = [
+            [x - w/2 + 15, y + 10],
+            [x + w/2 - 15, y + 10],
+            [x - w/2 + 15, y + h - 10],
+            [x + w/2 - 15, y + h - 10]
+        ];
+        starPositions.forEach(([sx, sy]) => {
+            this.drawStar(ctx, sx, sy, 4, 5, 2);
+        });
+        
+        // Icône géante au centre-haut
+        if (bubble.icon) {
+            ctx.font = 'bold 42px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillStyle = '#000000';
+            ctx.fillText(bubble.icon, x, y + 15);
+        }
+        
+        // Texte en gras style BD
+        if (bubble.text) {
+            ctx.font = 'bold 16px "Arial Black", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillStyle = '#000000';
+            
+            // Effet de contour pour le texte
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 3;
+            ctx.strokeText(bubble.text.toUpperCase(), x, y + (bubble.icon ? 65 : 15));
+            ctx.fillText(bubble.text.toUpperCase(), x, y + (bubble.icon ? 65 : 15));
+        }
+    }
+    
+    /**
+     * Dessine une bulle narrative compacte style BD
+     */
+    drawComicNarrative(ctx, bubble) {
+        const x = bubble.x;
+        const y = bubble.y;
+        const maxWidth = bubble.maxWidth || 280;
+        const padding = 15;
+        
+        // Découper le texte en lignes
+        ctx.font = 'bold 14px Arial';
+        const words = bubble.text.split(' ');
+        const lines = [];
+        let currentLine = '';
+        
+        for (const word of words) {
+            const testLine = currentLine ? `${currentLine} ${word}` : word;
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth - 2*padding && currentLine) {
+                lines.push(currentLine);
+                currentLine = word;
+            } else {
+                currentLine = testLine;
+            }
+        }
+        if (currentLine) lines.push(currentLine);
+        
+        // Calculer dimensions
+        let textWidth = 0;
+        lines.forEach(line => {
+            const metrics = ctx.measureText(line);
+            textWidth = Math.max(textWidth, metrics.width);
+        });
+        
+        const w = textWidth + 2*padding + 30; // +30 pour icône 💭
+        const h = lines.length * 20 + 2*padding;
+        const radius = 15;
+        
+        // Ombre
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+        this.drawRoundRect(ctx, x + 4, y + 4, w, h, radius);
+        ctx.fill();
+        
+        // Fond blanc
+        ctx.fillStyle = '#FFFEF5'; // Blanc cassé
+        this.drawRoundRect(ctx, x, y, w, h, radius);
+        ctx.fill();
+        
+        // Bordure noire
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3;
+        this.drawRoundRect(ctx, x, y, w, h, radius);
+        ctx.stroke();
+        
+        // Pointe de bulle (triangle vers le bas)
+        const tipX = x + w / 2;
+        const tipY = y + h;
+        ctx.fillStyle = '#FFFEF5';
+        ctx.beginPath();
+        ctx.moveTo(tipX, tipY);
+        ctx.lineTo(tipX - 10, tipY + 15);
+        ctx.lineTo(tipX + 10, tipY + 15);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        
+        // Icône 💭
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = '#666';
+        ctx.fillText('💭', x + 10, y + padding - 2);
+        
+        // Texte
+        ctx.font = 'bold 14px Arial';
+        ctx.fillStyle = '#333';
+        ctx.textAlign = 'left';
+        lines.forEach((line, i) => {
+            ctx.fillText(line, x + 40, y + padding + i * 20);
+        });
+    }
+    
+    /**
+     * Dessine un rectangle arrondi
+     */
+    drawRoundRect(ctx, x, y, w, h, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + w - radius, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+        ctx.lineTo(x + w, y + h - radius);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+        ctx.lineTo(x + radius, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+    }
+    
+    /**
+     * Dessine une étoile (effet BD)
+     */
+    drawStar(ctx, x, y, spikes, outerRadius, innerRadius) {
+        let rot = Math.PI / 2 * 3;
+        let step = Math.PI / spikes;
+        
+        ctx.beginPath();
+        ctx.moveTo(x, y - outerRadius);
+        
+        for (let i = 0; i < spikes; i++) {
+            ctx.lineTo(x + Math.cos(rot) * outerRadius, y + Math.sin(rot) * outerRadius);
+            rot += step;
+            ctx.lineTo(x + Math.cos(rot) * innerRadius, y + Math.sin(rot) * innerRadius);
+            rot += step;
+        }
+        
+        ctx.lineTo(x, y - outerRadius);
+        ctx.closePath();
+        ctx.fill();
+    }
+    
+    /**
+     * Affiche une bulle BD style splash (100% canvas)
      * @param {Object} options - Configuration de la bulle
      * @param {number} options.x - Position X (coordonnées canvas)
      * @param {number} options.y - Position Y (coordonnées canvas)
@@ -24,56 +287,30 @@ export class NotificationSystem {
      * @param {Function} options.onClose - Callback à la fermeture
      */
     showSplash({ x, y, icon, text, color = '#FFD700', duration = 2000, onClose = null }) {
-        // Limiter le nombre de bulles splash
-        const splashBubbles = this.activeBubbles.filter(b => b.classList.contains('splash-bubble'));
+        // Limiter le nombre de bulles
+        const splashBubbles = this.canvasBubbles.filter(b => b.type === 'splash');
         if (splashBubbles.length >= this.maxSplashBubbles) {
-            // Supprimer la plus ancienne
-            splashBubbles[0].remove();
-            const index = this.activeBubbles.indexOf(splashBubbles[0]);
-            if (index > -1) this.activeBubbles.splice(index, 1);
+            const oldest = splashBubbles[0];
+            if (oldest.onClose) oldest.onClose();
+            const index = this.canvasBubbles.indexOf(oldest);
+            if (index > -1) this.canvasBubbles.splice(index, 1);
         }
         
-        // Position au centre-haut du canvas pour les proverbes
-        const canvas = this.game.canvas;
-        const canvasRect = canvas.getBoundingClientRect();
-        const centerX = canvasRect.left + canvasRect.width / 2;
-        const topY = canvasRect.top + 100; // 100px du haut du canvas
-        
-        const bubble = document.createElement('div');
-        bubble.className = 'splash-bubble';
-        bubble.style.cssText = `
-            position: fixed;
-            top: ${topY}px;
-            left: ${centerX}px;
-            transform: translate(-50%, 0) rotate(-2deg);
-            background: white;
-            padding: 12px 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 0 0 4px ${color}, 0 0 0 8px white, 0 8px 20px rgba(0, 0, 0, 0.4);
-            border: 3px solid black;
-            z-index: 2000;
-            font-family: 'Comic Sans MS', 'Arial Black', sans-serif;
-            pointer-events: none;
-            max-width: 500px;
-            word-wrap: break-word;
-        `;
-        
-        bubble.innerHTML = `
-            <div style="font-size:28px;margin-bottom:3px;text-shadow: 2px 2px 0 ${color}">${icon}</div>
-            <div style="font-size:14px;font-weight:900;color:black;letter-spacing:1px;text-transform:uppercase">${text}!</div>
-        `;
-        
-        document.body.appendChild(bubble);
-        this.activeBubbles.push(bubble);
-        
-        // Nettoyage automatique
-        setTimeout(() => {
-            bubble.remove();
-            const index = this.activeBubbles.indexOf(bubble);
-            if (index > -1) this.activeBubbles.splice(index, 1);
-            if (onClose) onClose();
-        }, duration);
+        // Créer bulle canvas (toujours canvas, quel que soit le mode)
+        this.canvasBubbles.push({
+            type: 'splash',
+            x: this.game.canvas.width / 2, // Centre horizontal
+            y: 80, // Haut du canvas
+            width: 350,
+            height: 120,
+            icon: icon,
+            text: text,
+            borderColor: color,
+            age: 0,
+            duration: duration,
+            opacity: 0,
+            onClose: onClose
+        });
     }
     
     /**
@@ -110,87 +347,27 @@ export class NotificationSystem {
         this.isShowingNarrative = true;
         const { text, duration, onClose } = this.narrativeQueue.shift();
         
-        const bubble = document.createElement('div');
-        bubble.className = 'narrative-bubble';
-        
-        bubble.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 25px;
-            max-width: min(300px, calc(100vw - 40px));
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            border: 4px solid #333;
-            z-index: 1000;
-            font-family: 'Comic Sans MS', Arial, sans-serif;
-        `;
-        
-        bubble.innerHTML = `
-            <div style="position:relative">
-                <p style="color:#333;font-size:14px;font-weight:bold;line-height:1.4;margin:0">
-                    💭 ${text}
-                </p>
-                <div style="
-                    position:absolute;
-                    bottom:-20px;
-                    left:50%;
-                    transform:translateX(-50%);
-                    width:0;
-                    height:0;
-                    border-left:15px solid transparent;
-                    border-right:15px solid transparent;
-                    border-top:20px solid white;
-                "></div>
-                <div style="
-                    position:absolute;
-                    bottom:-24px;
-                    left:50%;
-                    transform:translateX(-50%);
-                    width:0;
-                    height:0;
-                    border-left:18px solid transparent;
-                    border-right:18px solid transparent;
-                    border-top:24px solid #333;
-                "></div>
-            </div>
-        `;
-        
-        document.body.appendChild(bubble);
-        this.activeBubbles.push(bubble);
-        
-        // Animation fade-in
-        bubble.style.opacity = '0';
-        setTimeout(() => {
-            bubble.style.transition = 'opacity 0.3s';
-            bubble.style.opacity = '1';
-        }, 10);
-        
-        // Nettoyage automatique avec explosion
-        setTimeout(() => {
-            bubble.style.transition = 'all 0.2s';
-            bubble.style.transform = 'translateX(-50%) scale(1.5)';
-            bubble.style.opacity = '0';
-            
-            setTimeout(() => {
-                bubble.remove();
-                const index = this.activeBubbles.indexOf(bubble);
-                if (index > -1) this.activeBubbles.splice(index, 1);
+        // Toujours utiliser le canvas (quel que soit le mode)
+        this.canvasBubbles.push({
+            type: 'narrative',
+            x: this.game.canvas.width - 320, // Coin droit avec marge
+            y: 20,
+            text: text,
+            maxWidth: 280,
+            age: 0,
+            duration: duration,
+            opacity: 0,
+            onClose: () => {
                 if (onClose) onClose();
-                
-                // Traiter la prochaine bulle dans la file
                 this.processNarrativeQueue();
-            }, 200);
-        }, duration);
+            }
+        });
     }
     
     /**
      * Nettoie toutes les bulles actives
      */
     clearAll() {
-        this.activeBubbles.forEach(bubble => bubble.remove());
-        this.activeBubbles = [];
+        this.canvasBubbles = [];
     }
 }

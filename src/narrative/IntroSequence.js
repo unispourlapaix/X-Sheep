@@ -525,37 +525,56 @@ export class IntroSequence {
         }
         const width = maxLineWidth + padding * 2;
         
-        // Ombre de la bulle
-        ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
-        ctx.shadowBlur = 10;
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
+        // Fond de la bulle - style pixel art plat
+        const bubbleX = x - width / 2;
+        const bubbleY = y - totalHeight - 10;
         
-        // Fond de la bulle (blanc avec légère transparence)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+        // Fond dégradé doux
+        const gradient = ctx.createLinearGradient(bubbleX, bubbleY, bubbleX, bubbleY + totalHeight);
+        gradient.addColorStop(0, '#FFFFFF');
+        gradient.addColorStop(1, '#F0F8FF');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(bubbleX, bubbleY, width, totalHeight);
+        
+        // Bordure épaisse noire
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 4;
+        ctx.strokeRect(bubbleX, bubbleY, width, totalHeight);
         
-        ctx.beginPath();
-        ctx.roundRect(x - width / 2, y - totalHeight - 10, width, totalHeight, 15);
-        ctx.fill();
-        ctx.stroke();
+        // Bordure interne dorée
+        ctx.strokeStyle = '#FFD700';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(bubbleX + 3, bubbleY + 3, width - 6, totalHeight - 6);
         
-        ctx.restore();
+        // Coins décoratifs bleus (pixel art)
+        const s = 4;
+        ctx.fillStyle = '#4169E1';
+        // Coin haut gauche
+        ctx.fillRect(bubbleX + 8, bubbleY + 8, s, s);
+        ctx.fillRect(bubbleX + 8 + s, bubbleY + 8, s, s);
+        ctx.fillRect(bubbleX + 8, bubbleY + 8 + s, s, s);
+        // Coin haut droit
+        ctx.fillRect(bubbleX + width - 8 - 2*s, bubbleY + 8, s, s);
+        ctx.fillRect(bubbleX + width - 8 - s, bubbleY + 8, s, s);
+        ctx.fillRect(bubbleX + width - 8 - 2*s, bubbleY + 8 + s, s, s);
+        // Coin bas gauche
+        ctx.fillRect(bubbleX + 8, bubbleY + totalHeight - 8 - 2*s, s, s);
+        ctx.fillRect(bubbleX + 8 + s, bubbleY + totalHeight - 8 - 2*s, s, s);
+        ctx.fillRect(bubbleX + 8, bubbleY + totalHeight - 8 - s, s, s);
+        // Coin bas droit
+        ctx.fillRect(bubbleX + width - 8 - 2*s, bubbleY + totalHeight - 8 - 2*s, s, s);
+        ctx.fillRect(bubbleX + width - 8 - s, bubbleY + totalHeight - 8 - 2*s, s, s);
+        ctx.fillRect(bubbleX + width - 8 - 2*s, bubbleY + totalHeight - 8 - s, s, s);
         
-        // Pointe de la bulle vers le mouton (plus stylée)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+        // Pointe de la bulle vers le mouton (triangle pixel art)
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(bubbleX + width/2 - 10, bubbleY + totalHeight, 20, 10);
+        ctx.fillRect(bubbleX + width/2 - 5, bubbleY + totalHeight + 10, 10, 5);
+        
+        // Bordure de la pointe
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 4;
-        
-        ctx.beginPath();
-        ctx.moveTo(x - 15, y - 10);
-        ctx.lineTo(x + 5, y - 10);
-        ctx.lineTo(x - 5, y + 10);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        ctx.lineWidth = 2;
+        ctx.strokeRect(bubbleX + width/2 - 10, bubbleY + totalHeight, 20, 10);
         
         // Texte noir dans la bulle
         ctx.fillStyle = '#000000';

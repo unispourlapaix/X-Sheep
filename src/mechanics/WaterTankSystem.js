@@ -74,6 +74,19 @@ export class WaterTankSystem {
             
             ctx.save();
             
+            // Mode voxel - utiliser le VoxelRenderer
+            if (this.game.renderer?.renderMode === 'voxel' && this.game.renderer?.voxelRenderer) {
+                this.game.renderer.voxelRenderer.drawVoxelWaterTank(
+                    tank.x,
+                    y,
+                    tank.width,
+                    tank.height
+                );
+                ctx.restore();
+                return;
+            }
+            
+            // Mode pixel art classique
             // Ombre douce
             ctx.fillStyle = 'rgba(0,0,0,0.2)';
             ctx.beginPath();
