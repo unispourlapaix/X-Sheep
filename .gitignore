@@ -9,7 +9,3 @@ dist/
 *~
 .env
 .env.local
-
-# Fichiers PWA copiés depuis public/ (pour dev uniquement)
-/manifest.json
-/sw.js
