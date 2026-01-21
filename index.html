@@ -26,7 +26,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/X-Sheep/assets/index-XvkrmoH5.js"></script>
+  <script type="module" crossorigin src="/X-Sheep/assets/index-D23UhK1V.js"></script>
   <link rel="stylesheet" crossorigin href="/X-Sheep/assets/index-CXWFj09r.css">
 </head>
 <body>
@@ -60,6 +60,23 @@
                 filter: drop-shadow(0 8px 25px rgba(255,215,0,0.6));
                 animation: trophy-pulse 2s ease-in-out infinite;
             ">🏆</div>
+        </div>
+        
+        <!-- Icône paramètres (rendu graphique) -->
+        <div onclick="toggleRenderSettings()" style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            text-align: center;
+            z-index: 100;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #FFD700;
+        " title="Choisir le style graphique">
+            <div style="font-size: 30px;">🎨</div>
+            <div style="font-size: 10px; color: #FFD700;">Rendu</div>
         </div>
         
         <div class="mode-selector">
@@ -310,6 +327,62 @@
                 e.preventDefault();
             }
         }, { passive: false });
+        
+        // Paramètres de rendu graphique
+        function toggleRenderSettings() {
+            const currentRender = localStorage.getItem('xsheep_renderMode') || 'pixel';
+            const newRender = currentRender === 'pixel' ? 'voxel' : 'pixel';
+            localStorage.setItem('xsheep_renderMode', newRender);
+            
+            // Créer popup de confirmation
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.95);
+                padding: 30px 50px;
+                border-radius: 20px;
+                border: 3px solid #FFD700;
+                z-index: 10000;
+                text-align: center;
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            `;
+            
+            const renderNames = {
+                pixel: '🎮 Pixel Art Classique',
+                voxel: '🧊 Voxel 3D (Blocky)'
+            };
+            
+            popup.innerHTML = `
+                <h2 style="color: #FFD700; margin: 0 0 20px 0; font-size: 24px;">Style Graphique</h2>
+                <p style="color: white; font-size: 18px; margin: 20px 0;">
+                    ${renderNames[newRender]}
+                </p>
+                <p style="color: #87CEEB; font-size: 14px; margin: 15px 0;">
+                    Le changement sera appliqué à la prochaine partie
+                </p>
+                <button onclick="this.parentElement.remove()" style="
+                    background: linear-gradient(135deg, #FFD700, #FFA500);
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #333;
+                    cursor: pointer;
+                    margin-top: 20px;
+                ">OK</button>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.remove();
+            }, 3000);
+        }
     </script>
 </body>
 </html>
+
