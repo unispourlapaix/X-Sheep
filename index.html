@@ -359,8 +359,8 @@
             `;
             
             const renderNames = {
-                pixel: '🎮 Pixel Art Classique',
-                voxel: '🧊 Voxel 3D (Blocky)'
+                pixel: '📺 Mode Normal',
+                voxel: '📟 Mode Bth'
             };
             
             popup.innerHTML = `
@@ -397,8 +397,8 @@
             const label = document.getElementById('render-label');
             
             if (mode === 'voxel') {
-                icon.textContent = '📟'; // TV rétro pour mode voxel
-                label.textContent = 'Blocs';
+                icon.textContent = '📟'; // TV rétro pour mode Bth
+                label.textContent = 'Bth';
             } else {
                 icon.textContent = '📺'; // TV moderne pour mode normal
                 label.textContent = 'Normal';
