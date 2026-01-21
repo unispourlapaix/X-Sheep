@@ -2387,8 +2387,8 @@ export class Game {
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
 
-        ctx.strokeText('IMPATIENCE', this.canvas.width / 2, 130 + bounceOffset);
-        ctx.fillText('IMPATIENCE', this.canvas.width / 2, 130 + bounceOffset);
+        ctx.strokeText('IMPATIENCE !', this.canvas.width / 2, 130 + bounceOffset);
+        ctx.fillText('IMPATIENCE !', this.canvas.width / 2, 130 + bounceOffset);
 
         ctx.shadowBlur = 0;
 
