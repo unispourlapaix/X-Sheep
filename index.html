@@ -68,7 +68,7 @@
         </div>
         
         <!-- Icône paramètres (rendu graphique) -->
-        <div onclick="toggleRenderSettings()" style="
+        <div id="render-toggle-btn" onclick="toggleRenderSettings()" style="
             position: fixed;
             top: 20px;
             right: 20px;
@@ -80,8 +80,8 @@
             border-radius: 10px;
             border: 2px solid #FFD700;
         " title="Choisir le style graphique">
-            <div style="font-size: 30px;">🎨</div>
-            <div style="font-size: 10px; color: #FFD700;">Rendu</div>
+            <div id="render-icon" style="font-size: 30px;">📺</div>
+            <div id="render-label" style="font-size: 10px; color: #FFD700;">Normal</div>
         </div>
         
         <div class="mode-selector">
@@ -339,6 +339,9 @@
             const newRender = currentRender === 'pixel' ? 'voxel' : 'pixel';
             localStorage.setItem('xsheep_renderMode', newRender);
             
+            // Mettre à jour l'icône et le label
+            updateRenderIcon(newRender);
+            
             // Créer popup de confirmation
             const popup = document.createElement('div');
             popup.style.cssText = `
@@ -387,6 +390,26 @@
                 popup.remove();
             }, 3000);
         }
+        
+        // Fonction pour mettre à jour l'icône de rendu
+        function updateRenderIcon(mode) {
+            const icon = document.getElementById('render-icon');
+            const label = document.getElementById('render-label');
+            
+            if (mode === 'voxel') {
+                icon.textContent = '📟'; // TV rétro pour mode voxel
+                label.textContent = 'Blocs';
+            } else {
+                icon.textContent = '📺'; // TV moderne pour mode normal
+                label.textContent = 'Normal';
+            }
+        }
+        
+        // Initialiser l'icône au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentRender = localStorage.getItem('xsheep_renderMode') || 'pixel';
+            updateRenderIcon(currentRender);
+        });
     </script>
 </body>
 </html>
