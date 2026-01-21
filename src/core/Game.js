@@ -2387,8 +2387,8 @@ export class Game {
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
 
-        ctx.strokeText('VICTOIRE TOTALE', this.canvas.width / 2, 130 + bounceOffset);
-        ctx.fillText('VICTOIRE TOTALE', this.canvas.width / 2, 130 + bounceOffset);
+        ctx.strokeText('IMPATIENCE', this.canvas.width / 2, 130 + bounceOffset);
+        ctx.fillText('IMPATIENCE', this.canvas.width / 2, 130 + bounceOffset);
 
         ctx.shadowBlur = 0;
 
@@ -2414,6 +2414,15 @@ export class Game {
         ctx.shadowColor = '#FFD700';
         ctx.fillText('COMBAT VICTORIEUX JUSQU\'AU BOUT', this.canvas.width / 2, 240);
         ctx.fillText('PERSÉVÉRANCE = VICTOIRE', this.canvas.width / 2, 265);
+        
+        // Leçon de vie
+        ctx.shadowBlur = 2;
+        ctx.font = 'bold 14px Arial';
+        ctx.fillStyle = '#87CEEB';
+        ctx.shadowColor = '#87CEEB';
+        ctx.fillText('Même si le combat de la vie est dur,', this.canvas.width / 2, 290);
+        ctx.fillText('il faut persévérer et ne jamais abandonner', this.canvas.width / 2, 308);
+        ctx.fillText('car souvent le meilleur est à venir', this.canvas.width / 2, 326);
 
         // Score futuriste
         ctx.shadowBlur = 5;
@@ -2423,8 +2432,8 @@ export class Game {
         ctx.lineWidth = 2;
         ctx.shadowColor = '#00FF00';
         const scoreText = `SCORE: ${this.victoryScreenData.score.toLocaleString('fr-FR')}`;
-        ctx.strokeText(scoreText, this.canvas.width / 2, 310);
-        ctx.fillText(scoreText, this.canvas.width / 2, 310);
+        ctx.strokeText(scoreText, this.canvas.width / 2, 350);
+        ctx.fillText(scoreText, this.canvas.width / 2, 350);
 
         ctx.font = 'bold 18px Impact, Arial Black, Arial';
         ctx.fillStyle = '#FFF';
