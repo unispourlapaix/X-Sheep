@@ -7,6 +7,9 @@ export class TrophySystem {
         this.totalXP = 0;
         this.loadFromStorage();
         this.createUI();
+
+        // Notifications actives pour rendu canvas
+        this.activeNotifications = [];
     }
     
     loadFromStorage() {
@@ -44,50 +47,135 @@ export class TrophySystem {
     }
     
     showXPNotification(obstacleId, xp) {
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #333;
-            padding: 15px 25px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0 5px 20px rgba(255,215,0,0.5);
-            z-index: 2000;
-            animation: slideInRight 0.5s, fadeOut 0.5s 2.5s;
-        `;
-        
         const message = NarrativeData[obstacleId];
-        notification.innerHTML = `
-            🏆 <strong>Nouveau Trophée !</strong><br>
-            <span style="font-size:14px">${message?.hope || 'Trophée débloqué'}</span><br>
-            <span style="color:#8B4513">+${xp} XP</span>
-        `;
-        
-        document.body.appendChild(notification);
-        
+
+        // Créer une notification pour rendu canvas
+        const notification = {
+            id: Date.now(),
+            obstacleId: obstacleId,
+            xp: xp,
+            hope: message?.hope || 'Trophée débloqué',
+            startTime: Date.now(),
+            duration: 3000, // 3 secondes
+            x: 0, // Sera calculé dans render
+            y: 100,
+            opacity: 1,
+            slideProgress: 0 // 0-1 pour l'animation de slide
+        };
+
+        this.activeNotifications.push(notification);
+
+        // Retirer automatiquement après la durée
         setTimeout(() => {
-            notification.remove();
+            const index = this.activeNotifications.findIndex(n => n.id === notification.id);
+            if (index > -1) {
+                this.activeNotifications.splice(index, 1);
+            }
         }, 3000);
+    }
+
+    updateNotifications() {
+        const now = Date.now();
+
+        for (let i = this.activeNotifications.length - 1; i >= 0; i--) {
+            const notif = this.activeNotifications[i];
+            const elapsed = now - notif.startTime;
+            const progress = elapsed / notif.duration;
+
+            // Animation slide in (première demi-seconde)
+            if (elapsed < 500) {
+                notif.slideProgress = elapsed / 500;
+            } else {
+                notif.slideProgress = 1;
+            }
+
+            // Animation fade out (dernière demi-seconde)
+            if (progress > 0.833) { // 2.5 / 3 = 0.833
+                notif.opacity = 1 - ((progress - 0.833) / 0.167);
+            } else {
+                notif.opacity = 1;
+            }
+        }
+    }
+
+    renderNotifications(ctx, canvasWidth) {
+        this.updateNotifications();
+
+        for (let i = 0; i < this.activeNotifications.length; i++) {
+            const notif = this.activeNotifications[i];
+
+            // Dimensions de la notification
+            const width = 300;
+            const height = 90;
+            const padding = 20;
+
+            // Position avec animation slide in depuis la droite
+            const targetX = canvasWidth - width - padding;
+            notif.x = targetX + (1 - notif.slideProgress) * 400; // Commence 400px hors écran
+            notif.y = 100 + (i * (height + 10)); // Empiler verticalement
+
+            // Sauvegarder le contexte
+            ctx.save();
+            ctx.globalAlpha = notif.opacity;
+
+            // Fond avec gradient
+            const gradient = ctx.createLinearGradient(notif.x, notif.y, notif.x + width, notif.y);
+            gradient.addColorStop(0, '#FFD700');
+            gradient.addColorStop(1, '#FFA500');
+            ctx.fillStyle = gradient;
+
+            // Ombre portée
+            ctx.shadowColor = 'rgba(255, 215, 0, 0.5)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 5;
+
+            // Rectangle arrondi
+            this.roundRect(ctx, notif.x, notif.y, width, height, 15);
+            ctx.fill();
+
+            // Réinitialiser l'ombre
+            ctx.shadowBlur = 0;
+
+            // Bordure
+            ctx.strokeStyle = '#FFA500';
+            ctx.lineWidth = 2;
+            this.roundRect(ctx, notif.x, notif.y, width, height, 15);
+            ctx.stroke();
+
+            // Texte
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('🏆 Nouveau Trophée !', notif.x + 15, notif.y + 25);
+
+            ctx.font = '14px Arial';
+            ctx.fillText(notif.hope, notif.x + 15, notif.y + 50);
+
+            ctx.fillStyle = '#8B4513';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText(`+${notif.xp} XP`, notif.x + 15, notif.y + 72);
+
+            ctx.restore();
+        }
+    }
+
+    roundRect(ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
     }
     
     createUI() {
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideInRight {
-                from { transform: translateX(400px); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-        
+        // Container pour le menu des trophées (reste en HTML)
         this.container = document.createElement('div');
         this.container.id = 'trophy-menu';
         this.container.style.cssText = `
@@ -364,7 +452,8 @@ export class TrophySystem {
             white_sheep: '🐑✨ Mouton Blanc - La Grâce',
             charity: '💝 Charité',
             gold_coin: '💰 Pièce d\'Or - Liberté',
-            grace: '✝️ La Grâce - Jésus'
+            grace: '✝️ La Grâce - Jésus',
+            impatient: '⏰💔 Horloge brisée - Maître du temps'
         };
         return labels[id] || 'Obstacle';
     }

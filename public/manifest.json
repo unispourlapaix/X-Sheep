@@ -72,8 +72,9 @@
       "url": "/X-Sheep/?mode=endless",
       "icons": [
         {
-          "src": "/X-Sheep/icon-192.png",
-          "sizes": "192x192"
+          "src": "/X-Sheep/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     }

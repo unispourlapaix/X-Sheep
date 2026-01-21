@@ -309,7 +309,12 @@ export class Renderer {
             this.game.notificationSystem.updateCanvasBubbles();
             this.game.notificationSystem.drawCanvasBubbles(this.ctx, this);
         }
-        
+
+        // Notifications de trophées (rendu canvas)
+        if (this.game.obstacleManager && this.game.obstacleManager.trophySystem) {
+            this.game.obstacleManager.trophySystem.renderNotifications(this.ctx, this.canvas.width);
+        }
+
         // Restaurer le contexte si tremblement était actif
         if (shakeActive) {
             this.ctx.restore();

@@ -71,6 +71,12 @@ export class Game {
         this.victoryAnimation = false; // Animation de victoire
         this.victoryTimer = 0;
         this.victoryPhase = 'celebration'; // 'celebration', 'entering', 'heaven'
+
+        // Écran de victoire (rendu canvas)
+        this.victoryScreenActive = false;
+        this.victoryScreenData = null;
+        this.victoryButtons = null;
+        this.victoryClickHandler = null;
         
         // Niveau 2 - Les 7 Péchés Capitaux
         this.level2Active = false;
@@ -228,10 +234,13 @@ export class Game {
     
     start() {
         console.log('🚀 Démarrage du jeu...');
-        
+
         // Démarrer la sauvegarde automatique
         this.startAutoSave();
-        
+
+        // Activer les touches de debug
+        this.setupDebugKeys();
+
         // Si mode endless et intro existe, lancer l'intro d'abord
         if (this.mode === 'endless' && this.introSequence) {
             this.introSequence.start();
@@ -241,6 +250,68 @@ export class Game {
             this.running = true;
             this.gameLoop();
         }
+    }
+
+    setupDebugKeys() {
+        // Touches de test pour les écrans de victoire
+        document.addEventListener('keydown', (event) => {
+            // Touche "(" = Victoire impatiente (HeavenGate)
+            if (event.key === '(') {
+                console.log('🧪 TEST: Affichage victoire impatiente');
+                if (this.heavenGate) {
+                    this.heavenGate.victoryScreenActive = true;
+                    this.paused = true;
+
+                    // Définir le bouton si pas déjà fait
+                    if (!this.heavenGate.continueButton) {
+                        this.heavenGate.continueButton = {
+                            x: this.canvas.width / 2 - 100,
+                            y: this.canvas.height / 2 + 180,
+                            width: 200,
+                            height: 40,
+                            text: '⏰ Victoire rapide !'
+                        };
+                    }
+
+                    // Ajouter le listener de clic si pas déjà fait
+                    this.canvas.removeEventListener('click', this.heavenGate.handleClick);
+                    this.canvas.addEventListener('click', this.heavenGate.handleClick);
+                }
+            }
+
+            // Touche ")" = Victoire complète (Game)
+            if (event.key === ')') {
+                console.log('🧪 TEST: Affichage victoire complète');
+                this.victoryScreenActive = true;
+                this.victoryScreenData = {
+                    score: this.score || 12345,
+                    obstaclesCleared: this.obstaclesCleared || 42
+                };
+                this.paused = true;
+
+                // Définir les boutons
+                this.victoryButtons = {
+                    continue: {
+                        x: this.canvas.width / 2 - 100,
+                        y: this.canvas.height - 120,
+                        width: 200,
+                        height: 40,
+                        text: 'Continuer 🌟'
+                    },
+                    menu: {
+                        x: this.canvas.width / 2 - 100,
+                        y: this.canvas.height - 70,
+                        width: 200,
+                        height: 40,
+                        text: 'Menu'
+                    }
+                };
+
+                // Ajouter le listener de clic
+                this.victoryClickHandler = this.handleVictoryClick.bind(this);
+                this.canvas.addEventListener('click', this.victoryClickHandler);
+            }
+        });
     }
     
     // Méthode appelée par IntroSequence quand l'intro est finie
@@ -304,15 +375,28 @@ export class Game {
     }
     
     gameLoop() {
-        if (!this.running && !this.gameOverAnimation && !this.victoryAnimation) return;
-        if (this.paused) return;
-        
+        const heavenVictoryActive = this.heavenGate && this.heavenGate.victoryScreenActive;
+        if (!this.running && !this.gameOverAnimation && !this.victoryAnimation && !this.victoryScreenActive && !heavenVictoryActive) return;
+
+        // Permettre le rendu des écrans de victoire même en pause
+        if (this.paused && !this.victoryScreenActive && !heavenVictoryActive) return;
+
         // Update
-        this.update();
-        
+        if (!this.victoryScreenActive && !heavenVictoryActive) {
+            this.update();
+        }
+
         // Render
         this.renderer.render();
-        
+
+        // Render écrans de victoire par-dessus si actifs (au premier plan)
+        if (this.victoryScreenActive) {
+            this.renderVictoryScreen(this.ctx);
+        }
+        if (heavenVictoryActive) {
+            this.heavenGate.renderVictoryScreen(this.ctx);
+        }
+
         // Boucle suivante
         requestAnimationFrame(() => this.gameLoop());
     }
@@ -2117,103 +2201,281 @@ export class Game {
     }
     
     showVictoryScreen() {
-        // Écran de victoire
-        const overlay = document.createElement('div');
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            color: white;
-            font-family: Arial, sans-serif;
-            animation: fadeIn 1s;
-        `;
-        
-        overlay.innerHTML = `
-            <style>
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                @keyframes bounce {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-20px); }
-                }
-                .victory-title {
-                    animation: bounce 1s infinite;
-                }
-            </style>
-            <div class="victory-title">
-                <h1 style="font-size: 72px; margin: 20px; color: #FFD700; text-shadow: 3px 3px 6px rgba(0,0,0,0.5);">
-                    🎉 VICTOIRE! 🎉
-                </h1>
-            </div>
-            <p style="font-size: 32px; margin: 10px;">✨ Tous les boss éliminés! ✨</p>
-            <p style="font-size: 28px; margin: 10px;">🚪 Bienvenue au Paradis! 🚪</p>
-            <p style="font-size: 24px; margin: 20px;">Score Final: ${this.score}</p>
-            <p style="font-size: 20px; margin: 10px;">Obstacles évités: ${this.obstaclesCleared}</p>
-            <button id="continue-btn" style="
-                margin-top: 40px;
-                padding: 20px 50px;
-                font-size: 28px;
-                background: linear-gradient(45deg, #FFD700, #FFA500);
-                color: #333;
-                border: none;
-                border-radius: 15px;
-                cursor: pointer;
-                font-weight: bold;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                transition: all 0.3s;
-            ">Continuer 🌟</button>
-            <button id="menu-btn-victory" style="
-                margin-top: 20px;
-                padding: 15px 35px;
-                font-size: 22px;
-                background: rgba(255,255,255,0.2);
-                color: white;
-                border: 2px solid white;
-                border-radius: 10px;
-                cursor: pointer;
-                transition: all 0.3s;
-            ">Menu Principal</button>
-        `;
-        
-        document.body.appendChild(overlay);
-        
-        document.getElementById('continue-btn').addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            
-            // Message sur l'impatience et le temps
+        // Activer l'écran de victoire dans le canvas
+        this.victoryScreenActive = true;
+        this.victoryScreenData = {
+            score: this.score,
+            obstaclesCleared: this.obstaclesCleared
+        };
+        this.paused = true;
+
+        // Définir les boutons (compacts)
+        this.victoryButtons = {
+            continue: {
+                x: this.canvas.width / 2 - 100,
+                y: this.canvas.height - 120,
+                width: 200,
+                height: 40,
+                text: 'Continuer 🌟'
+            },
+            menu: {
+                x: this.canvas.width / 2 - 100,
+                y: this.canvas.height - 70,
+                width: 200,
+                height: 40,
+                text: 'Menu'
+            }
+        };
+
+        // Ajouter le listener de clic
+        this.victoryClickHandler = this.handleVictoryClick.bind(this);
+        this.canvas.addEventListener('click', this.victoryClickHandler);
+    }
+
+    handleVictoryClick(event) {
+        if (!this.victoryScreenActive || !this.victoryButtons) return;
+
+        const rect = this.canvas.getBoundingClientRect();
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        const x = (event.clientX - rect.left) * scaleX;
+        const y = (event.clientY - rect.top) * scaleY;
+
+        // Vérifier clic sur "Continuer"
+        const continueBtn = this.victoryButtons.continue;
+        if (x >= continueBtn.x && x <= continueBtn.x + continueBtn.width &&
+            y >= continueBtn.y && y <= continueBtn.y + continueBtn.height) {
+            this.canvas.removeEventListener('click', this.victoryClickHandler);
+            this.victoryScreenActive = false;
+
+            // Message de félicitations
             if (this.notificationSystem) {
                 this.notificationSystem.showNarrative({
-                    text: "Quand on veut tout rapidement et toujours plus vite, on rate souvent l'essentiel du moment présent. Ne sois pas esclave du temps, prends le temps et profite de chaque instant sans stress, sans compter le temps. Tu verras alors que la vie est une grande aventure...",
-                    duration: 8000
+                    text: "Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?",
+                    duration: 5000
                 });
             }
-            
-            // Débloquer le trophée "Horloge brisée - Maître du temps"
-            if (this.obstacleManager?.trophySystem) {
-                this.obstacleManager.trophySystem.unlockTrophy('impatient');
-                console.log('⏰💔 Trophée Horloge brisée débloqué!');
-            }
-            
-            // Continuer le jeu (transition vers niveau 2)
+
+            // Continuer vers niveau 2
             setTimeout(() => {
                 window.location.reload();
-            }, 8000);
-        });
-        
-        document.getElementById('menu-btn-victory').addEventListener('click', () => {
-            document.body.removeChild(overlay);
+            }, 5000);
+            return;
+        }
+
+        // Vérifier clic sur "Menu"
+        const menuBtn = this.victoryButtons.menu;
+        if (x >= menuBtn.x && x <= menuBtn.x + menuBtn.width &&
+            y >= menuBtn.y && y <= menuBtn.y + menuBtn.height) {
+            this.canvas.removeEventListener('click', this.victoryClickHandler);
             window.location.href = 'index.html';
-        });
+        }
+    }
+
+    renderVictoryScreen(ctx) {
+        if (!this.victoryScreenActive) return;
+
+        // Fond avec gradient animé
+        const time = Date.now() * 0.001;
+        const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(0.5, '#764ba2');
+        gradient.addColorStop(1, '#667eea');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Étoiles scintillantes en arrière-plan
+        for (let i = 0; i < 20; i++) {
+            const x = (i * 73 + time * 20) % this.canvas.width;
+            const y = (i * 97) % this.canvas.height;
+            const opacity = 0.3 + Math.sin(time * 2 + i) * 0.3;
+            ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+            ctx.font = '20px Arial';
+            ctx.fillText('⭐', x, y);
+        }
+
+        // Animation mouton poursuivi par 3 boss (haut de l'écran)
+        const chaseY = 60;
+        const chaseSpeed = time * 150;
+        const sheepX = (chaseSpeed % (this.canvas.width + 500)) - 200;
+
+        // Boss 3 (Mort) - le plus loin
+        const boss3X = sheepX - 180;
+        ctx.font = '30px Arial';
+        ctx.fillText('💀', boss3X, chaseY);
+
+        // Boss 2 (Folie) - au milieu
+        const boss2X = sheepX - 120;
+        ctx.font = '28px Arial';
+        ctx.fillText('🌀', boss2X, chaseY - 5);
+
+        // Boss 1 (Colère) - le plus proche
+        const boss1X = sheepX - 70;
+        ctx.font = '32px Arial';
+        ctx.fillText('😡', boss1X, chaseY);
+
+        // Le vrai mouton du jeu (via sheepAnimator)
+        ctx.save();
+        const sheepScale = 0.8;
+        this.renderer.sheepAnimator.draw(
+            ctx,
+            sheepX - 18,  // Ajuster position X pour centrer
+            chaseY - 20,  // Ajuster position Y pour centrer
+            sheepScale,   // Taille réduite
+            0,            // Pas de cheveux
+            'normal',     // État normal
+            false,        // Pas de roulement
+            0             // Pas d'effet cheveux
+        );
+
+        // Effet de vitesse (💨)
+        ctx.font = '24px Arial';
+        ctx.fillText('💨', sheepX - 45, chaseY);
+
+        ctx.restore();
+
+        // Animation retour en bas par la gauche - mouton poursuivi par robot
+        const chaseBottomY = this.canvas.height - 60;
+        const chaseBackSpeed = time * 180;
+        // Le mouton revient de droite vers gauche (sens inverse)
+        const sheepBackX = this.canvas.width + 200 - (chaseBackSpeed % (this.canvas.width + 500));
+
+        // Boss Robot poursuivant (derrière le mouton)
+        const robotX = sheepBackX + 90;
+        ctx.font = '38px Arial';
+        ctx.fillText('🤖', robotX, chaseBottomY);
+
+        // Le vrai mouton du jeu qui revient (via sheepAnimator)
+        ctx.save();
+        // Flip horizontal pour le mouton regardant à gauche
+        ctx.translate(sheepBackX, 0);
+        ctx.scale(-1, 1);
+        ctx.translate(-sheepBackX, 0);
+
+        this.renderer.sheepAnimator.draw(
+            ctx,
+            sheepBackX - 18,  // Ajuster position X pour centrer
+            chaseBottomY - 20, // Ajuster position Y pour centrer
+            0.8,               // Taille réduite
+            0,                 // Pas de cheveux
+            'normal',          // État normal
+            false,             // Pas de roulement
+            0                  // Pas d'effet cheveux
+        );
+
+        // Effet de vitesse inverse (💨 devant le mouton)
+        ctx.scale(-1, 1); // Annuler le flip pour le emoji
+        ctx.fillStyle = '#000';
+        ctx.font = '24px Arial';
+        ctx.fillText('💨', -sheepBackX - 50, chaseBottomY);
+
+        ctx.restore();
+
+        // Animation de titre (bounce)
+        const bounceOffset = Math.sin(time * 3) * 8;
+
+        // Titre futuriste avec effet néon réduit
+        ctx.fillStyle = '#00FFFF';
+        ctx.strokeStyle = '#FF00FF';
+        ctx.lineWidth = 3;
+        ctx.font = 'bold 52px Impact, Arial Black, Arial';
+        ctx.textAlign = 'center';
+
+        // Effet d'ombre néon léger
+        ctx.shadowColor = '#00FFFF';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+
+        ctx.strokeText('VICTOIRE TOTALE', this.canvas.width / 2, 130 + bounceOffset);
+        ctx.fillText('VICTOIRE TOTALE', this.canvas.width / 2, 130 + bounceOffset);
+
+        ctx.shadowBlur = 0;
+
+        // Sous-titres futuristes
+        ctx.fillStyle = '#FFD700';
+        ctx.strokeStyle = '#FF8C00';
+        ctx.lineWidth = 2;
+        ctx.font = 'bold 24px Impact, Arial Black, Arial';
+        ctx.shadowColor = '#FFD700';
+        ctx.shadowBlur = 5;
+        ctx.strokeText('⚔️ BOSS ANNIHILÉS ⚔️', this.canvas.width / 2, 175);
+        ctx.fillText('⚔️ BOSS ANNIHILÉS ⚔️', this.canvas.width / 2, 175);
+
+        ctx.fillStyle = '#FFF';
+        ctx.font = 'bold 20px Impact, Arial Black, Arial';
+        ctx.shadowBlur = 4;
+        ctx.fillText('👑 LÉGENDE CONFIRMÉE 👑', this.canvas.width / 2, 205);
+
+        // Message de persévérance futuriste
+        ctx.shadowBlur = 3;
+        ctx.font = 'bold 18px Impact, Arial Black, Arial';
+        ctx.fillStyle = '#FFD700';
+        ctx.shadowColor = '#FFD700';
+        ctx.fillText('COMBAT VICTORIEUX JUSQU\'AU BOUT', this.canvas.width / 2, 240);
+        ctx.fillText('PERSÉVÉRANCE = VICTOIRE', this.canvas.width / 2, 265);
+
+        // Score futuriste
+        ctx.shadowBlur = 5;
+        ctx.font = 'bold 22px Impact, Arial Black, Arial';
+        ctx.fillStyle = '#00FF00';
+        ctx.strokeStyle = '#008800';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#00FF00';
+        const scoreText = `SCORE: ${this.victoryScreenData.score.toLocaleString('fr-FR')}`;
+        ctx.strokeText(scoreText, this.canvas.width / 2, 310);
+        ctx.fillText(scoreText, this.canvas.width / 2, 310);
+
+        ctx.font = 'bold 18px Impact, Arial Black, Arial';
+        ctx.fillStyle = '#FFF';
+        ctx.shadowBlur = 3;
+        ctx.shadowColor = '#FFF';
+        ctx.fillText(`OBSTACLES DÉTRUITS: ${this.victoryScreenData.obstaclesCleared}`, this.canvas.width / 2, 340);
+
+        // Bouton "Continuer" futuriste avec effet néon réduit
+        const continueBtn = this.victoryButtons.continue;
+        const pulseBtn = 1 + Math.sin(time * 4) * 0.1;
+
+        // Effet glow léger autour du bouton
+        ctx.shadowColor = '#00FFFF';
+        ctx.shadowBlur = 8 * pulseBtn;
+
+        const gradientBtn = ctx.createLinearGradient(continueBtn.x, continueBtn.y, continueBtn.x + continueBtn.width, continueBtn.y);
+        gradientBtn.addColorStop(0, '#00FFFF');
+        gradientBtn.addColorStop(0.5, '#0088FF');
+        gradientBtn.addColorStop(1, '#00FFFF');
+        ctx.fillStyle = gradientBtn;
+        ctx.fillRect(continueBtn.x, continueBtn.y, continueBtn.width, continueBtn.height);
+
+        ctx.strokeStyle = '#00FFFF';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(continueBtn.x, continueBtn.y, continueBtn.width, continueBtn.height);
+
+        ctx.fillStyle = '#000';
+        ctx.shadowBlur = 0;
+        ctx.font = 'bold 22px Impact, Arial Black, Arial';
+        ctx.fillText('CONTINUER', continueBtn.x + continueBtn.width / 2, continueBtn.y + continueBtn.height / 2 + 8);
+
+        // Bouton "Menu" futuriste
+        const menuBtn = this.victoryButtons.menu;
+        ctx.shadowColor = '#FF00FF';
+        ctx.shadowBlur = 5;
+
+        ctx.fillStyle = 'rgba(255, 0, 255, 0.3)';
+        ctx.fillRect(menuBtn.x, menuBtn.y, menuBtn.width, menuBtn.height);
+
+        ctx.strokeStyle = '#FF00FF';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(menuBtn.x, menuBtn.y, menuBtn.width, menuBtn.height);
+
+        ctx.fillStyle = '#FFF';
+        ctx.shadowBlur = 3;
+        ctx.shadowColor = '#FFF';
+        ctx.font = 'bold 18px Impact, Arial Black, Arial';
+        ctx.fillText('MENU', menuBtn.x + menuBtn.width / 2, menuBtn.y + menuBtn.height / 2 + 7);
+
+        // Réinitialiser les effets
+        ctx.shadowBlur = 0;
     }
     
     restartEndlessMode() {
