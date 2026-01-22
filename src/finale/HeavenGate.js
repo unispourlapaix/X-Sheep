@@ -169,10 +169,19 @@ export class HeavenGate {
         // Vérifier si le clic est sur le bouton
         if (x >= this.continueButton.x && x <= this.continueButton.x + this.continueButton.width &&
             y >= this.continueButton.y && y <= this.continueButton.y + this.continueButton.height) {
+            // Son toc sur le bouton continuer
+            if (this.game.audioManager && this.game.audioManager.initialized) {
+                this.game.audioManager.playTokeSound();
+            }
+            // Nettoyer tous les overlays avant reload
+            const overlays = document.querySelectorAll('[style*="position: fixed"], [style*="position:fixed"]');
+            overlays.forEach(el => el.style.display = 'none');
             // Retirer le listener
             canvas.removeEventListener('click', this.handleClick);
             // Recharger la page
-            location.reload();
+            setTimeout(() => {
+                location.reload();
+            }, 50);
         }
     }
 
@@ -333,12 +342,21 @@ export class HeavenGate {
                 <p style="margin:8px 0;font-size:15px"><strong>Or collecté : ${this.game.player.goldCollected} 💰 (Trop !)</strong></p>
                 <p style="margin:8px 0;font-size:15px"><strong>Taille : ${(this.game.player.size * 100).toFixed(0)}% (Trop gros !)</strong></p>
                 <p style="font-style:italic;color:#888;font-size:13px;margin:8px 0">- Emmanuel Payet</p>
-                <button onclick="location.reload()" style="background:linear-gradient(45deg,#FFD700,#FFA500);
+                <button id="heaven-retry-btn" style="background:linear-gradient(45deg,#FFD700,#FFA500);
                         border:none;padding:12px 30px;border-radius:20px;font-size:16px;
                         font-weight:bold;cursor:pointer;margin-top:10px">🔄 Recommencer Plus Humble</button>
             </div>
         `;
         document.body.appendChild(modal);
+        
+        // Ajouter le son toc au bouton
+        document.getElementById('heaven-retry-btn').addEventListener('click', () => {
+            if (this.game.audioManager && this.game.audioManager.initialized) {
+                this.game.audioManager.playTokeSound();
+            }
+            document.querySelectorAll('[style*=\'position: fixed\']').forEach(el => el.style.display = 'none');
+            setTimeout(() => location.reload(), 50);
+        });
     }
     
     render(ctx) {

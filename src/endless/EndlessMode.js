@@ -515,6 +515,11 @@ export class EndlessMode {
                     this.game.laserSystem.currentWeaponIndex = weaponIndex;
                     const weaponName = this.game.laserSystem.getCurrentWeapon().name;
                     
+                    // Son métallique d'arme anti-boss
+                    if (this.game.audioManager && this.game.audioManager.initialized) {
+                        this.game.audioManager.playWeaponSound();
+                    }
+                    
                     // Afficher l'arme obtenue
                     this.game.renderer.addParticle(
                         GameConfig.CANVAS_WIDTH / 2,
@@ -539,6 +544,10 @@ export class EndlessMode {
     }
     
     render(ctx) {
+        // Détecter le mode de rendu (voxel ou normal)
+        const isVoxel = this.game.renderer && this.game.renderer.renderMode === 'voxel';
+        const voxelRenderer = isVoxel ? this.game.renderer.voxelRenderer : null;
+        
         // Animation de fusée Game Over
         if (this.gameOverAnimation && this.explosionPhase === 0) {
             ctx.save();
@@ -618,41 +627,108 @@ export class EndlessMode {
             ctx.fillText(`${this.currentBoss.health}/${this.currentBoss.maxHealth}`, bossX, barY + barHeight / 2);
         }
         
-        // Dessiner le boss avec géométrie animée
-        if (this.currentBoss.id === 'dragon') {
-            // Dragon de feu rouge avec ailes et flammes
-            // Mode 'boss' (enroulé) pendant la phase coiling si c'est un stage boss
-            let mode = 'traverse';
-            if (this.isStageBoss && this.stageBossPhase === 'coiling') {
-                mode = 'boss';
+        // Dessiner le boss avec géométrie animée ou voxel
+        if (isVoxel && voxelRenderer) {
+            // Mode voxel : utiliser VoxelRenderer avec animations fun
+            const baseBossSize = this.isStageBoss ? this.currentBoss.size * 2 : this.currentBoss.size * 1.5;
+            const voxelBossSize = Math.max(100, baseBossSize);
+            
+            // Animations boss
+            const time = Date.now() / 1000;
+            const pulse = 1 + Math.sin(time * 3) * 0.1; // Pulsation
+            const floatY = Math.sin(time * 2) * 5; // Flottement vertical
+            const shake = this.isStageBoss ? Math.sin(time * 10) * 2 : 0; // Tremblement pour boss de palier
+            
+            ctx.save();
+            
+            // Aura colorée autour du boss
+            ctx.shadowColor = this.currentBoss.color;
+            ctx.shadowBlur = 30 + Math.sin(time * 4) * 15;
+            
+            // Particules orbitales pour boss de palier
+            if (this.isStageBoss) {
+                for (let i = 0; i < 8; i++) {
+                    const angle = time * 2 + (i * Math.PI * 2 / 8);
+                    const orbitRadius = voxelBossSize * 0.7;
+                    const px = this.currentBoss.x + Math.cos(angle) * orbitRadius;
+                    const py = this.currentBoss.y + Math.sin(angle) * orbitRadius + floatY;
+                    
+                    ctx.fillStyle = this.currentBoss.color;
+                    ctx.globalAlpha = 0.6 + Math.sin(time * 5 + i) * 0.3;
+                    ctx.beginPath();
+                    ctx.arc(px, py, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
             }
-            this.dragonBoss.render(ctx, this.currentBoss, mode);
-        } else if (this.currentBoss.id === 'serpent') {
-            // Serpent venimeux avec écailles
-            // Mode 'boss' (enroulé) pendant la phase coiling, 'traverse' pendant arriving et advancing
-            let mode = 'traverse';
-            if (this.isStageBoss && this.stageBossPhase === 'coiling') {
-                mode = 'boss';
+            
+            // Flip horizontal pour que le boss regarde vers la gauche (vers le joueur)
+            ctx.translate(this.currentBoss.x + shake, this.currentBoss.y + floatY);
+            ctx.scale(-1, 1); // Retourner horizontalement
+            
+            // Dessiner le boss avec animations (position relative au centre après flip)
+            const animSize = voxelBossSize * pulse;
+            voxelRenderer.drawCachedIcon(
+                ctx, 
+                this.currentBoss.emoji, 
+                -animSize/2,  // Position relative car on a translaté au centre
+                -animSize/2, 
+                animSize, 
+                animSize
+            );
+            
+            // Effet d'énergie pour boss en colère (low HP)
+            if (this.currentBoss.health < this.currentBoss.maxHealth * 0.3) {
+                ctx.strokeStyle = '#FF0000';
+                ctx.lineWidth = 3;
+                ctx.globalAlpha = 0.5 + Math.sin(time * 8) * 0.3;
+                ctx.strokeRect(
+                    this.currentBoss.x - animSize/2,
+                    this.currentBoss.y - animSize/2,
+                    animSize,
+                    animSize
+                );
+                ctx.globalAlpha = 1;
             }
-            this.serpentBoss.render(ctx, this.currentBoss, mode);
-        } else if (this.currentBoss.id === 'whale') {
-            // Baleine radioactive Fukushima (WhaleBoss)
-            this.whaleBoss.render(ctx, this.currentBoss);
-        } else if (this.currentBoss.id === 'robot') {
-            // Robot électrique bipède (RobotBoss)
-            this.robotBoss.render(ctx, this.currentBoss);
-        } else if (this.currentBoss.id === 'ufo') {
-            // OVNI avec lasers (UfoBoss)
-            this.ufoBoss.render(ctx, this.currentBoss);
-        } else if (this.currentBoss.id === 'pacman') {
-            // Kraken avec fusée (KrakenBoss)
-            this.krakenBoss.render(ctx, this.currentBoss);
-        } else if (this.currentBoss.id === 'shark') {
-            // Requin cybernétique (SharkBoss)
-            this.sharkBoss.render(ctx, this.currentBoss);
+            
+            ctx.restore();
         } else {
-            // Utiliser VisualBoss pour les autres boss
-            this.visualBoss.render(ctx, this.currentBoss);
+            // Mode normal : utiliser les classes de rendu géométrique
+            if (this.currentBoss.id === 'dragon') {
+                // Dragon de feu rouge avec ailes et flammes
+                // Mode 'boss' (enroulé) pendant la phase coiling si c'est un stage boss
+                let mode = 'traverse';
+                if (this.isStageBoss && this.stageBossPhase === 'coiling') {
+                    mode = 'boss';
+                }
+                this.dragonBoss.render(ctx, this.currentBoss, mode);
+            } else if (this.currentBoss.id === 'serpent') {
+                // Serpent venimeux avec écailles
+                // Mode 'boss' (enroulé) pendant la phase coiling, 'traverse' pendant arriving et advancing
+                let mode = 'traverse';
+                if (this.isStageBoss && this.stageBossPhase === 'coiling') {
+                    mode = 'boss';
+                }
+                this.serpentBoss.render(ctx, this.currentBoss, mode);
+            } else if (this.currentBoss.id === 'whale') {
+                // Baleine radioactive Fukushima (WhaleBoss)
+                this.whaleBoss.render(ctx, this.currentBoss);
+            } else if (this.currentBoss.id === 'robot') {
+                // Robot électrique bipède (RobotBoss)
+                this.robotBoss.render(ctx, this.currentBoss);
+            } else if (this.currentBoss.id === 'ufo') {
+                // OVNI avec lasers (UfoBoss)
+                this.ufoBoss.render(ctx, this.currentBoss);
+            } else if (this.currentBoss.id === 'pacman') {
+                // Kraken avec fusée (KrakenBoss)
+                this.krakenBoss.render(ctx, this.currentBoss);
+            } else if (this.currentBoss.id === 'shark') {
+                // Requin cybernétique (SharkBoss)
+                this.sharkBoss.render(ctx, this.currentBoss);
+            } else {
+                // Utiliser VisualBoss pour les autres boss
+                this.visualBoss.render(ctx, this.currentBoss);
+            }
         }
         
         // Nom du boss en dessous
@@ -743,32 +819,136 @@ export class EndlessMode {
         
         // Dessiner les obstacles thématiques
         for (const obs of this.obstacles) {
-            ctx.save();
-            ctx.font = '60px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            // Effet glow avec la couleur du boss
-            ctx.shadowColor = this.currentBoss.color;
-            ctx.shadowBlur = 15;
-            
-            ctx.fillText(obs.emoji, obs.x, obs.y);
-            ctx.restore();
+            if (isVoxel && voxelRenderer) {
+                // Mode voxel avec animations
+                const size = 45;
+                const time = Date.now() / 1000;
+                const index = this.obstacles.indexOf(obs);
+                
+                ctx.save();
+                
+                // Rotation ou oscillation selon le type
+                const rotation = time * 2 + index;
+                const oscillate = Math.sin(time * 3 + index) * 3;
+                
+                // Effet glow pulsant
+                ctx.shadowColor = this.currentBoss.color;
+                ctx.shadowBlur = 15 + Math.sin(time * 4 + index) * 10;
+                
+                // Trail effect (traînée)
+                ctx.globalAlpha = 0.3;
+                for (let i = 1; i <= 2; i++) {
+                    voxelRenderer.drawCachedIcon(
+                        ctx, 
+                        obs.emoji, 
+                        obs.x - size/2 + i * 8, 
+                        obs.y - size/2 + oscillate, 
+                        size * 0.8, 
+                        size * 0.8
+                    );
+                }
+                
+                // Obstacle principal
+                ctx.globalAlpha = 1;
+                ctx.shadowBlur = 20 + Math.sin(time * 4 + index) * 10;
+                voxelRenderer.drawCachedIcon(
+                    ctx, 
+                    obs.emoji, 
+                    obs.x - size/2, 
+                    obs.y - size/2 + oscillate, 
+                    size, 
+                    size
+                );
+                
+                ctx.restore();
+            } else {
+                // Mode normal
+                ctx.save();
+                ctx.font = '60px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // Effet glow avec la couleur du boss
+                ctx.shadowColor = this.currentBoss.color;
+                ctx.shadowBlur = 15;
+                
+                ctx.fillText(obs.emoji, obs.x, obs.y);
+                ctx.restore();
+            }
         }
         
         // Dessiner le fuel thématique
         for (const fuel of this.fuels) {
-            ctx.save();
-            ctx.font = '40px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            // Effet brillant
-            ctx.shadowColor = '#FFD700';
-            ctx.shadowBlur = 20;
-            
-            ctx.fillText(fuel.emoji, fuel.x, fuel.y);
-            ctx.restore();
+            if (isVoxel && voxelRenderer) {
+                // Mode voxel avec animations brillantes
+                const size = 35;
+                const time = Date.now() / 1000;
+                const index = this.fuels.indexOf(fuel);
+                
+                ctx.save();
+                
+                // Rotation et bounce
+                const bounce = Math.abs(Math.sin(time * 4 + index)) * 8;
+                const scale = 1 + Math.sin(time * 5 + index) * 0.15;
+                
+                // Étoiles scintillantes autour du fuel
+                for (let i = 0; i < 4; i++) {
+                    const angle = time * 3 + index + (i * Math.PI / 2);
+                    const radius = 20 + Math.sin(time * 6 + i) * 5;
+                    const sx = fuel.x + Math.cos(angle) * radius;
+                    const sy = fuel.y + Math.sin(angle) * radius - bounce;
+                    
+                    ctx.fillStyle = '#FFD700';
+                    ctx.globalAlpha = 0.6 + Math.sin(time * 8 + i) * 0.4;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Mini étoile
+                    ctx.fillRect(sx - 1, sy - 3, 2, 6);
+                    ctx.fillRect(sx - 3, sy - 1, 6, 2);
+                }
+                
+                // Glow doré intense
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 25 + Math.sin(time * 6 + index) * 15;
+                
+                // Cercles de lumière expansifs
+                ctx.globalAlpha = 0.3;
+                const waveRadius = 15 + ((time * 8 + index) % 1) * 20;
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(fuel.x, fuel.y - bounce, waveRadius, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Dessiner le fuel principal
+                ctx.globalAlpha = 1;
+                const animSize = size * scale;
+                voxelRenderer.drawCachedIcon(
+                    ctx, 
+                    fuel.emoji, 
+                    fuel.x - animSize/2, 
+                    fuel.y - animSize/2 - bounce, 
+                    animSize, 
+                    animSize
+                );
+                
+                ctx.restore();
+            } else {
+                // Mode normal
+                ctx.save();
+                ctx.font = '40px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // Effet brillant
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 20;
+                
+                ctx.fillText(fuel.emoji, fuel.x, fuel.y);
+                ctx.restore();
+            }
         }
     }
     
@@ -888,6 +1068,9 @@ export class EndlessMode {
         
         // Ajouter l'événement après insertion dans le DOM
         document.getElementById('endless-replay-btn').addEventListener('click', () => {
+            // Nettoyer tous les overlays avant reload
+            const overlays = document.querySelectorAll('[style*="position: fixed"], [style*="position:fixed"]');
+            overlays.forEach(el => el.style.display = 'none');
             // Score déjà sauvegardé dans showGameOver()
             // Attendre un peu pour s'assurer que localStorage est synchronisé
             setTimeout(() => {

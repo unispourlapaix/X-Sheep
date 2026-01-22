@@ -96,12 +96,12 @@ export class SeaObstacles {
         const y = 200 + Math.random() * 200; // Zone eau
         const rand = Math.random();
 
-        // Plus de vagues et méduses (inoffensives), moins de requins
-        if (rand < 0.4) return this.createWave(x, y);
-        if (rand < 0.6) return this.createJellyfish(x, y);
-        if (rand < 0.75) return this.createWhirlpool(x, y);
-        if (rand < 0.85) return this.createSiren(x, y);
-        if (rand < 0.95) return this.createRock(x, y);
+        // Plus de vagues et méduses (inoffensives), moins de tourbillons
+        if (rand < 0.45) return this.createWave(x, y);
+        if (rand < 0.70) return this.createJellyfish(x, y);
+        if (rand < 0.80) return this.createWhirlpool(x, y); // Réduit de 0.75 à 0.80 (moins de tourbillons)
+        if (rand < 0.88) return this.createSiren(x, y);
+        if (rand < 0.96) return this.createRock(x, y);
         return this.createShark(x, y);
     }
 }

@@ -53,8 +53,8 @@ export class Player {
         this.isRich = false; // Active l'animation fusée
         
         // Système de vies
-        this.maxLives = 25;
-        this.lives = 25;
+        this.maxLives = 10;
+        this.lives = 10;
         
         // Arme équipée
         this.equippedWeapon = null; // {id, icon, kills: []}
@@ -116,13 +116,18 @@ export class Player {
             const onWater = this.y >= waterLevel;
             
             if (onWater) {
-                // Sur l'eau: friction forte (freiné)
-                this.velX *= 0.85;
-                this.velY *= 0.85;
+                // Sur l'eau: friction moyenne (pour navigation)
+                this.velX *= 0.90;
+                this.velY *= 0.70; // Moins de friction verticale pour descendre vite
+                
+                // Régénération rapide sur l'eau
+                if (!this.flying) {
+                    this.fuel = Math.min(this.maxFuel, this.fuel + 1.5);
+                }
             } else {
                 // Dans le ciel: friction faible (libre)
                 this.velX *= 0.98;
-                this.velY *= 0.98;
+                this.velY *= 0.95; // Légère friction verticale
             }
         }
         
@@ -241,7 +246,9 @@ export class Player {
                     this.parachuting = false;
                 }
             } else {
-                this.velY += GameConfig.PLAYER.GRAVITY;
+                // Gravité plus forte en mode bateau pour retomber plus vite
+                const gravityMultiplier = this.game.boatMode ? 1.8 : 1.0;
+                this.velY += GameConfig.PLAYER.GRAVITY * gravityMultiplier;
             }
         }
         

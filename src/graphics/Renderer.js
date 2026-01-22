@@ -1229,12 +1229,23 @@ export class Renderer {
         
         // Mode Voxel
         if (this.renderMode === 'voxel' && this.voxelRenderer) {
-            this.voxelRenderer.drawVoxelSheep(
-                p.x, 
-                p.y, 
-                p.flying, 
-                p.goldCount > 0
-            );
+            // NIVEAU 3: Dessiner le bateau avec mouton en mode voxel
+            if (this.game.boatMode) {
+                this.voxelRenderer.drawVoxelBoat(
+                    p.x,
+                    p.y,
+                    p.flying,
+                    p.rotation || 0,
+                    p.whirlpoolScale !== undefined ? p.whirlpoolScale : 1.0
+                );
+            } else {
+                this.voxelRenderer.drawVoxelSheep(
+                    p.x, 
+                    p.y, 
+                    p.flying, 
+                    p.goldCount > 0
+                );
+            }
             return;
         }
         

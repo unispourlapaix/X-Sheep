@@ -4,6 +4,7 @@ import { MenuSystem } from './ui/MenuSystem.js';
 import { Game } from './core/Game.js';
 import { MolecularBackground } from './ui/MolecularBackground.js';
 import { TrophySystem } from './narrative/TrophySystem.js';
+import { AudioManager } from './audio/AudioManager.js';
 
 class App {
     constructor() {
@@ -11,6 +12,7 @@ class App {
         this.game = null;
         this.molecularBg = null;
         this.trophySystem = null;
+        this.audioManager = null;
         
         this.init();
     }
@@ -24,16 +26,42 @@ class App {
         // Système de trophées global
         this.trophySystem = new TrophySystem();
         
+        // Gestionnaire audio - initialiser dès le départ pour le menu
+        this.audioManager = new AudioManager();
+        // Initialiser au clic pour respecter les règles du navigateur
+        document.addEventListener('click', () => {
+            if (!this.audioManager.initialized) {
+                this.audioManager.init();
+            }
+        }, { once: true });
+        
         // Menu principal avec callback de rafraîchissement
         this.menu = new MenuSystem({
             onModeSelected: (mode) => this.startGame(mode),
-            onShow: () => this.refreshScores()
+            onShow: () => this.refreshScores(),
+            audioManager: this.audioManager
         });
         
         // Rendre le système de trophées accessible globalement
         window.openTrophyMenu = () => {
+            // Son "toke" à l'ouverture de l'overlay
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
             this.trophySystem.show();
         };
+        
+        // Son "TOOKS" sur la signature Emmanuel Payet
+        setTimeout(() => {
+            const authorLink = document.querySelector('.author-signature');
+            if (authorLink) {
+                authorLink.addEventListener('mouseenter', () => {
+                    if (this.audioManager && this.audioManager.initialized) {
+                        this.audioManager.playTooksSound();
+                    }
+                });
+            }
+        }, 100);
         
         // Afficher le score max au chargement (immédiat + après 100ms pour s'assurer du rafraîchissement)
         this.displayMaxScore();
@@ -76,12 +104,12 @@ class App {
         // Cacher le menu
         this.menu.hide();
         
-        // Initialiser le jeu avec le système de trophées partagé
-        this.game = new Game(mode, this.trophySystem);
+        // Initialiser le jeu avec le système de trophées partagé ET l'audioManager existant
+        this.game = new Game(mode, this.trophySystem, this.audioManager);
         
-        // Réactiver l'audio au cas où (interaction utilisateur)
-        if (this.game.audioManager) {
-            this.game.audioManager.init();
+        // S'assurer que l'audio est initialisé
+        if (this.audioManager && !this.audioManager.initialized) {
+            this.audioManager.init();
         }
         
         this.game.start();
@@ -98,3 +126,4 @@ class App {
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new App();
 });
+

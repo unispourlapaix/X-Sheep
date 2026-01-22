@@ -23,7 +23,7 @@ import { Lighthouse } from '../graphics/Lighthouse.js';
 import { SeaObstacles, Leviathan } from '../obstacles/SeaObstacles.js';
 
 export class Game {
-    constructor(mode, trophySystem = null) {
+    constructor(mode, trophySystem = null, audioManager = null) {
         this.mode = mode; // 'adventure' ou 'endless'
         this.canvas = null;
         this.ctx = null;
@@ -34,7 +34,7 @@ export class Game {
         this.currentLevel = parseInt(localStorage.getItem('xsheep_currentLevel') || '1');
         
         // Systèmes
-        this.audioManager = audioManager;
+        this.audioManager = audioManager || new AudioManager();
         this.player = null;
         this.obstacleManager = null;
         this.powerUpManager = null;
@@ -171,12 +171,17 @@ export class Game {
         this.canvas.height = GameConfig.CANVAS_HEIGHT;
         this.ctx = this.canvas.getContext('2d');
         
-        // Centrer le canvas au milieu de l'écran
+        // Centrer le canvas au milieu de l'écran avec scaling adaptatif
         this.canvas.style.display = 'block';
         this.canvas.style.position = 'absolute';
         this.canvas.style.top = '50%';
         this.canvas.style.left = '50%';
         this.canvas.style.transform = 'translate(-50%, -50%)';
+        this.canvas.style.maxWidth = '100vw';
+        this.canvas.style.maxHeight = '100vh';
+        this.canvas.style.width = 'auto';
+        this.canvas.style.height = 'auto';
+        this.canvas.style.objectFit = 'contain';
         this.canvas.style.border = '2px solid #333';
         this.canvas.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
         
@@ -194,39 +199,75 @@ export class Game {
         
         if (isMobile) {
             // Fonction pour entrer en plein écran avec support multi-navigateurs
-            const enterFullscreen = () => {
+            const enterFullscreen = async () => {
                 const elem = document.documentElement;
                 
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen().catch(err => {
-                        console.log('Fullscreen standard échoué:', err);
-                    });
-                } else if (elem.webkitRequestFullscreen) { // iOS Safari
-                    elem.webkitRequestFullscreen();
-                } else if (elem.mozRequestFullScreen) { // Firefox
-                    elem.mozRequestFullScreen();
-                } else if (elem.msRequestFullscreen) { // IE11
-                    elem.msRequestFullscreen();
-                }
-                
-                // Forcer l'orientation paysage si possible
-                if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock('landscape').catch(err => {
-                        console.log('Orientation lock non supporté:', err);
-                    });
+                try {
+                    if (elem.requestFullscreen) {
+                        await elem.requestFullscreen();
+                    } else if (elem.webkitRequestFullscreen) { // iOS Safari
+                        elem.webkitRequestFullscreen();
+                    } else if (elem.mozRequestFullScreen) { // Firefox
+                        elem.mozRequestFullScreen();
+                    } else if (elem.msRequestFullscreen) { // IE11
+                        elem.msRequestFullscreen();
+                    }
+                    
+                    // Attendre un peu que le plein écran s'active
+                    setTimeout(() => {
+                        // Forcer l'orientation paysage APRES l'entrée en plein écran
+                        if (screen.orientation && screen.orientation.lock) {
+                            screen.orientation.lock('landscape').catch(err => {
+                                console.log('Orientation lock non supporté:', err);
+                            });
+                        }
+                    }, 100);
+                    
+                } catch (err) {
+                    console.log('Fullscreen échoué:', err);
                 }
             };
+            
+            // Gérer les changements d'orientation
+            const handleOrientationChange = () => {
+                // Vérifier l'orientation actuelle
+                const isLandscape = window.innerWidth > window.innerHeight;
+                
+                if (!isLandscape && document.fullscreenElement) {
+                    // En portrait mais en plein écran -> suggérer rotation
+                    console.log('⚠️ Orientation portrait détectée - Tournez votre appareil');
+                }
+                
+                console.log(`📱 Orientation: ${isLandscape ? 'Paysage' : 'Portrait'} (${window.innerWidth}x${window.innerHeight})`);
+            };
+            
+            // Écouter les changements d'orientation
+            if (screen.orientation) {
+                screen.orientation.addEventListener('change', handleOrientationChange);
+            }
+            window.addEventListener('orientationchange', handleOrientationChange);
+            window.addEventListener('resize', handleOrientationChange);
+            
+            // Gérer les changements de plein écran
+            document.addEventListener('fullscreenchange', () => {
+                if (document.fullscreenElement) {
+                    console.log('✅ Plein écran activé');
+                    handleOrientationChange();
+                } else {
+                    console.log('❌ Plein écran quitté');
+                }
+            });
             
             // Tenter d'entrer en plein écran au premier clic/touch
             const firstInteraction = () => {
                 enterFullscreen();
-                // Retirer les listeners après la première interaction
-                document.removeEventListener('touchstart', firstInteraction);
-                document.removeEventListener('click', firstInteraction);
             };
             
             document.addEventListener('touchstart', firstInteraction, { once: true });
             document.addEventListener('click', firstInteraction, { once: true });
+            
+            // Vérifier l'orientation initiale
+            handleOrientationChange();
             
             console.log('📱 Mode mobile: Plein écran activé au prochain tap');
         }
@@ -234,6 +275,11 @@ export class Game {
     
     start() {
         console.log('🚀 Démarrage du jeu...');
+
+        // Démarrer la musique de fond au niveau 1
+        if (this.audioManager && this.audioManager.initialized) {
+            this.audioManager.startBackgroundMusic();
+        }
 
         // Démarrer la sauvegarde automatique
         this.startAutoSave();
@@ -797,6 +843,11 @@ export class Game {
                 this.leviathan = new Leviathan(this.canvas.width, this.canvas.height);
                 this.leviathan.isActive = true;
                 
+                // Son de rugissement du Léviathan
+                if (this.audioManager && this.audioManager.initialized) {
+                    this.audioManager.playLeviathanRoarSound();
+                }
+                
                 if (this.notificationSystem) {
                     this.notificationSystem.showNarrative({
                         text: '🐉 LE LÉVIATHAN APPARAÎT ! Esquive ses attaques !',
@@ -813,6 +864,10 @@ export class Game {
                 const projectile = this.leviathan.update(this.player);
                 if (projectile) {
                     this.level3Projectiles.push(projectile);
+                    // Son de vague pour le projectile
+                    if (this.audioManager && this.audioManager.initialized) {
+                        this.audioManager.playWaveSound();
+                    }
                 }
                 
                 // Collision avec le Léviathan
@@ -951,6 +1006,8 @@ export class Game {
                         if (!obstacle.trapTimer) {
                             obstacle.trapTimer = 0;
                             this.player.whirlpoolScale = 1.0; // Taille normale
+                            // Son de tourbillon au début de l'aspiration
+                            this.audioManager.playWhirlpoolSound();
                         }
                         
                         // Si proche du centre, commencer à réduire la taille
@@ -1040,6 +1097,9 @@ export class Game {
                             
                             console.log('🦈 BOSS REQUIN DÉCLENCHÉ! Position:', this.player.x, this.player.y);
                             
+                            // Son d'attaque du requin
+                            this.audioManager.playSharkAttackSound();
+                            
                             // PAUSE DRAMATIQUE de 2 secondes
                             this.sharkBossPause = 120; // 2 secondes (60 frames/s)
                             this.screenShake = 60; // 1 seconde de tremblement
@@ -1112,6 +1172,8 @@ export class Game {
                                 
                                 if (this.audioManager && this.audioManager.initialized) {
                                     this.audioManager.playCollisionSound();
+                                    // Son de splash pour la capture
+                                    this.audioManager.playSplashSound();
                                 }
                                 
                                 console.log('🦈 BATEAU CAPTURÉ! Le requin l\'emporte vers le haut...');
@@ -1187,6 +1249,8 @@ export class Game {
                         
                         if (this.audioManager && this.audioManager.initialized) {
                             this.audioManager.playCollisionSound();
+                            // Son de splash pour les tentacules
+                            this.audioManager.playSplashSound();
                         }
                         
                         console.log('🐙 Bateau immobilisé par la pieuvre!');
@@ -1215,6 +1279,8 @@ export class Game {
                         // Son de collision
                         if (this.audioManager && this.audioManager.initialized) {
                             this.audioManager.playCollisionSound();
+                            // Son de splash pour l'impact avec l'iceberg
+                            this.audioManager.playSplashSound();
                         }
                         
                         console.log('🧊 ICEBERG! Le bateau coule...');
@@ -1594,6 +1660,10 @@ export class Game {
         continueBtn.onmouseover = () => continueBtn.style.background = '#45a049';
         continueBtn.onmouseout = () => continueBtn.style.background = '#4CAF50';
         continueBtn.onclick = () => {
+            // Son toc sur le bouton continuer
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
             document.body.removeChild(overlay);
             this.restartLevel2();
         };
@@ -1614,6 +1684,10 @@ export class Game {
         graceBtn.onmouseover = () => graceBtn.style.background = '#FFA500';
         graceBtn.onmouseout = () => graceBtn.style.background = '#FFD700';
         graceBtn.onclick = () => {
+            // Son toc sur le bouton grâce
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
             document.body.removeChild(overlay);
             this.acceptGrace();
         };
@@ -1666,6 +1740,12 @@ export class Game {
     
     startLevel3() {
         console.log('🚤 NIVEAU 3: Navigation et Sagesse commence!');
+        
+        // Démarrer la musique au niveau 3
+        if (this.audioManager && this.audioManager.initialized) {
+            this.audioManager.startBackgroundMusic();
+        }
+        
         this.currentLevel = 3;
         localStorage.setItem('xsheep_currentLevel', '3');
         this.level3Active = true;
@@ -1698,6 +1778,9 @@ export class Game {
         // Nettoyer les particules
         if (this.renderer) {
             this.renderer.particles = [];
+            if (this.renderer.particleSystem) {
+                this.renderer.particleSystem.particles = [];
+            }
         }
         
         // Créer le phare au fond à droite sur un rocher au sommet de l'eau
@@ -1926,6 +2009,9 @@ export class Game {
         document.body.appendChild(popup);
         
         document.getElementById('return-menu').onclick = () => {
+            // Nettoyer tous les overlays avant reload
+            const overlays = document.querySelectorAll('[style*="position: fixed"], [style*="position:fixed"]');
+            overlays.forEach(el => el.style.display = 'none');
             // Score déjà sauvegardé dans showLevel3Victory()
             // Attendre un peu pour s'assurer que localStorage est synchronisé
             setTimeout(() => {
@@ -1962,6 +2048,12 @@ export class Game {
     
     startLevel2() {
         console.log('🔥 NIVEAU 2: Les 7 Péchés Capitaux commence!');
+        
+        // Démarrer la musique au niveau 2
+        if (this.audioManager && this.audioManager.initialized) {
+            this.audioManager.startBackgroundMusic();
+        }
+        
         this.currentLevel = 2;
         this.level2Active = true;
         this.level2Timer = 0;
@@ -1988,6 +2080,9 @@ export class Game {
         // Nettoyer les particules
         if (this.renderer) {
             this.renderer.particles = [];
+            if (this.renderer.particleSystem) {
+                this.renderer.particleSystem.particles = [];
+            }
         }
         
         // Nettoyer les bulles BD
@@ -2069,12 +2164,23 @@ export class Game {
         document.body.appendChild(overlay);
         
         document.getElementById('retry-btn').addEventListener('click', () => {
+            // Son toc sur le bouton réessayer
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
             document.body.removeChild(overlay);
             // Toujours redémarrer au niveau 1 après un Game Over
             this.restart(1);
         });
         
         document.getElementById('menu-btn').addEventListener('click', () => {
+            // Son toc sur le bouton menu
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
+            // Nettoyer tous les overlays avant reload
+            const overlays = document.querySelectorAll('[style*="position: fixed"], [style*="position:fixed"]');
+            overlays.forEach(el => el.style.display = 'none');
             document.body.removeChild(overlay);
             // Score déjà sauvegardé dans saveCurrentScore() au game over
             // Attendre un peu pour s'assurer que localStorage est synchronisé
@@ -2245,6 +2351,10 @@ export class Game {
         const continueBtn = this.victoryButtons.continue;
         if (x >= continueBtn.x && x <= continueBtn.x + continueBtn.width &&
             y >= continueBtn.y && y <= continueBtn.y + continueBtn.height) {
+            // Son toc sur le bouton continuer
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
             this.canvas.removeEventListener('click', this.victoryClickHandler);
             this.victoryScreenActive = false;
 
@@ -2267,6 +2377,10 @@ export class Game {
         const menuBtn = this.victoryButtons.menu;
         if (x >= menuBtn.x && x <= menuBtn.x + menuBtn.width &&
             y >= menuBtn.y && y <= menuBtn.y + menuBtn.height) {
+            // Son toc sur le bouton menu
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
             this.canvas.removeEventListener('click', this.victoryClickHandler);
             window.location.href = 'index.html';
         }

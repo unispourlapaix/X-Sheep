@@ -26,19 +26,33 @@ export class KeyboardControls {
         
         if (!this.game.running || this.game.paused) return;
         
+        // CHEAT: Touche "1" pour afficher la victoire niveau 1 (impatience)
+        if (e.key === '1') {
+            console.log('🎮 CHEAT: Victoire niveau 1 (impatience)');
+            this.game.showVictoryScreen();
+            return;
+        }
+        
+        // CHEAT: Touche "2" pour passer directement au niveau 2
+        if (e.key === '2') {
+            console.log('🎮 CHEAT: Passage au niveau 2');
+            this.game.level2Active = false;
+            this.game.level3Active = false;
+            this.game.startLevel2();
+            return;
+        }
+        
+        // CHEAT: Touche "3" pour afficher la victoire niveau 3 (tous les boss détruits)
+        if (e.key === '3') {
+            console.log('🎮 CHEAT: Victoire niveau 3 (tous les boss détruits)');
+            this.game.showLevel3Victory();
+            return;
+        }
+        
         // CHEAT: Touche "/" pour tester la victoire et passer au niveau 2
         if (e.key === '/') {
             console.log('🎮 CHEAT: Passage au niveau 2');
             this.game.victory();
-            return;
-        }
-        
-        // CHEAT: Touche "2" pour aller directement au niveau 2
-        if (e.key === '2') {
-            console.log('🎮 CHEAT: Démarrage direct niveau 2');
-            this.game.level2Active = false;
-            this.game.level3Active = false;
-            this.game.startLevel2();
             return;
         }
         

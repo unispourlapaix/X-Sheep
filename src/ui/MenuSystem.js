@@ -5,11 +5,29 @@ export class MenuSystem {
     constructor(options) {
         this.onModeSelected = options.onModeSelected;
         this.onShow = options.onShow; // Callback quand le menu est affiché
+        this.audioManager = options.audioManager; // Ajout du gestionnaire audio
         this.container = document.getElementById('main-menu');
         this.sheepAnimator = new SheepAnimator();
         
         this.setupSheepAnimations();
         this.setupEventListeners();
+        this.startBubbleAmbience(); // Démarrer l'ambiance de bulles
+    }
+    
+    startBubbleAmbience() {
+        // Jouer des pops de bulles aléatoirement pour l'ambiance
+        const playRandomBubble = () => {
+            if (this.audioManager && this.audioManager.initialized && 
+                this.container.style.opacity === '1') {
+                this.audioManager.playBubblePopSound();
+            }
+            // Prochaine bulle entre 2 et 8 secondes
+            const nextDelay = 2000 + Math.random() * 6000;
+            setTimeout(playRandomBubble, nextDelay);
+        };
+        
+        // Première bulle après 1-3 secondes
+        setTimeout(playRandomBubble, 1000 + Math.random() * 2000);
     }
     
     setupSheepAnimations() {
@@ -67,27 +85,52 @@ export class MenuSystem {
     setupEventListeners() {
         // Les événements sont gérés par les attributs onclick dans le HTML
         window.selectMode = (mode) => {
+            // Son toke de sélection
+            if (this.audioManager && this.audioManager.initialized) {
+                this.audioManager.playTokeSound();
+            }
             this.selectMode(mode);
         };
+        
+        // Ajouter les sons de hover sur les boutons
+        const adventureBtn = document.getElementById('btn-adventure');
+        const endlessBtn = document.getElementById('btn-endless');
+        
+        if (adventureBtn) {
+            adventureBtn.addEventListener('mouseenter', () => {
+                if (this.audioManager && this.audioManager.initialized) {
+                    this.audioManager.playChiouaSound();
+                }
+            });
+        }
+        
+        if (endlessBtn) {
+            endlessBtn.addEventListener('mouseenter', () => {
+                if (this.audioManager && this.audioManager.initialized) {
+                    this.audioManager.playChiouaSound();
+                }
+            });
+        }
     }
     
     selectMode(mode) {
         console.log(`Mode sélectionné: ${mode}`);
         
-        // Animation de transition
-        this.container.style.transition = 'opacity 0.5s';
-        this.container.style.opacity = '0';
+        // Cacher immédiatement pour éviter les clignotements
+        this.container.style.transition = 'none';
+        this.hide();
         
-        setTimeout(() => {
-            this.hide();
-            if (this.onModeSelected) {
-                this.onModeSelected(mode);
-            }
-        }, 500);
+        // Lancer le jeu directement
+        if (this.onModeSelected) {
+            this.onModeSelected(mode);
+        }
     }
     
     show() {
+        this.container.style.transition = 'opacity 0.3s';
         this.container.style.display = 'flex';
+        // Force reflow pour que la transition fonctionne
+        this.container.offsetHeight;
         this.container.style.opacity = '1';
         
         // Rafraîchir les scores quand le menu est affiché
@@ -97,6 +140,7 @@ export class MenuSystem {
     }
     
     hide() {
+        this.container.style.opacity = '0';
         this.container.style.display = 'none';
     }
 }

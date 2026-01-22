@@ -11,6 +11,47 @@ export class VoxelRenderer {
         this.sheepCache = new Map(); // Cache pour les moutons
         this.bubbleCache = new Map(); // Cache pour les bulles
         this.obstacleCache = new Map(); // Cache pour les obstacles
+        this.iconSizeCache = new Map(); // Cache pour les icônes avec tailles personnalisées
+    }
+    
+    // Dessiner une icône avec cache (optimisé pour performance)
+    drawCachedIcon(ctx, emoji, x, y, width, height) {
+        // Clé de cache basée sur l'emoji et la taille
+        const cacheKey = `${emoji}_${width}_${height}`;
+        
+        // Vérifier si l'icône est déjà en cache
+        if (!this.iconSizeCache.has(cacheKey)) {
+            // Créer un canvas pour cette icône
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const iconCtx = canvas.getContext('2d');
+            
+            // S'assurer que le canvas est transparent
+            iconCtx.clearRect(0, 0, width, height);
+            
+            // Calculer le blockSize en fonction de la taille demandée
+            const savedBlockSize = this.blockSize;
+            this.blockSize = Math.max(1, Math.floor(width / 6)); // 6 blocks de large standard
+            
+            // Dessiner l'icône sur le canvas (centré)
+            this.drawObstacleIcon(iconCtx, emoji, 0, 0);
+            
+            // Restaurer blockSize
+            this.blockSize = savedBlockSize;
+            
+            this.iconSizeCache.set(cacheKey, canvas);
+        }
+        
+        // Dessiner l'icône depuis le cache
+        const cachedIcon = this.iconSizeCache.get(cacheKey);
+        ctx.drawImage(cachedIcon, x, y);
+    }
+    
+    // Dessiner une icône d'obstacle (nouvelle méthode pour les emojis)
+    drawObstacleIcon(ctx, emoji, x, y) {
+        // Rediriger vers drawObstacleShape qui contient tous les cas
+        this.drawObstacleShape(ctx, x, y, emoji, null);
     }
     
     // Dessiner un cube isométrique (vue 3D simplifiée)
@@ -190,6 +231,92 @@ export class VoxelRenderer {
         this.ctx.drawImage(cachedObstacle, x, y, size * 6, size * 6);
     }
     
+    /**
+     * Dessiner un bateau en mode voxel (niveau 3)
+     */
+    drawVoxelBoat(x, y, flying, rotation, whirlpoolScale) {
+        const s = this.sheepBlockSize;
+        
+        this.ctx.save();
+        
+        // Appliquer rotation et scale pour tourbillon
+        const boatWidth = 16 * s;
+        const boatHeight = 6 * s;
+        this.ctx.translate(x + boatWidth / 2, y + boatHeight / 2);
+        this.ctx.rotate(rotation);
+        this.ctx.scale(whirlpoolScale, whirlpoolScale);
+        this.ctx.translate(-(x + boatWidth / 2), -(y + boatHeight / 2));
+        
+        // Coque du bateau (marron, style LEGO)
+        this.ctx.fillStyle = '#8B4513';
+        // Fond de coque
+        this.ctx.fillRect(x, y + 4*s, 16*s, 2*s);
+        // Côtés relevés
+        this.ctx.fillRect(x - s, y + 3*s, s, 3*s);
+        this.ctx.fillRect(x + 16*s, y + 3*s, s, 3*s);
+        // Proue (avant pointu)
+        this.ctx.fillRect(x - 2*s, y + 4*s, 2*s, s);
+        
+        // Intérieur coque (ombre)
+        this.ctx.fillStyle = '#654321';
+        this.ctx.fillRect(x + s, y + 4*s, 14*s, s);
+        
+        // Mât (épais, style bloc)
+        this.ctx.fillStyle = '#8B4513';
+        this.ctx.fillRect(x + 7*s, y - 4*s, 2*s, 8*s);
+        
+        // Voile (blanche, rectangulaire)
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.fillRect(x + 9*s, y - 2*s, 6*s, 5*s);
+        // Ombre voile
+        this.ctx.fillStyle = '#E8E8E8';
+        this.ctx.fillRect(x + 9*s, y + 2*s, 6*s, s);
+        
+        // Bordure voile
+        this.ctx.strokeStyle = '#CCCCCC';
+        this.ctx.lineWidth = s * 0.3;
+        this.ctx.strokeRect(x + 9*s, y - 2*s, 6*s, 5*s);
+        
+        // Mouton dans le bateau (petit, style voxel)
+        const sheepX = x + 2*s;
+        const sheepY = y + s;
+        const sheepScale = 0.75;
+        
+        // Corps mouton blanc simplifié
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.fillRect(sheepX, sheepY, 4*s*sheepScale, 3*s*sheepScale);
+        // Tête
+        this.ctx.fillRect(sheepX + 3*s*sheepScale, sheepY, 2*s*sheepScale, 2*s*sheepScale);
+        // Yeux
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(sheepX + 3.5*s*sheepScale, sheepY + 0.5*s*sheepScale, s*0.5*sheepScale, s*0.5*sheepScale);
+        
+        // Fusées si le bateau vole
+        if (flying) {
+            const time = Date.now() * 0.01;
+            
+            // Fusée gauche
+            this.ctx.fillStyle = '#666666';
+            this.ctx.fillRect(x + 2*s, y + 6*s, s, 2*s);
+            // Flamme
+            this.ctx.fillStyle = '#FF6600';
+            this.ctx.fillRect(x + 2*s, y + 8*s + Math.sin(time) * s, s, 2*s);
+            this.ctx.fillStyle = '#FFD700';
+            this.ctx.fillRect(x + 2*s, y + 10*s + Math.sin(time) * s, s, s);
+            
+            // Fusée droite
+            this.ctx.fillStyle = '#666666';
+            this.ctx.fillRect(x + 13*s, y + 6*s, s, 2*s);
+            // Flamme
+            this.ctx.fillStyle = '#FF6600';
+            this.ctx.fillRect(x + 13*s, y + 8*s + Math.sin(time + 1) * s, s, 2*s);
+            this.ctx.fillStyle = '#FFD700';
+            this.ctx.fillRect(x + 13*s, y + 10*s + Math.sin(time + 1) * s, s, s);
+        }
+        
+        this.ctx.restore();
+    }
+    
     // Dessiner la forme de l'obstacle sur un canvas (pour le cache)
     drawObstacleShape(ctx, x, y, icon, color) {
         const s = this.blockSize; // Taille de bloc
@@ -345,6 +472,43 @@ export class VoxelRenderer {
                 ctx.fillRect(x + 2.8*s, y + 2.5*s, 0.7*s, 0.7*s);
                 // Mâchoire
                 ctx.fillRect(x + 2*s, y + 3.5*s, 2.5*s, 0.7*s);
+                break;
+                
+            case '☠️': // Skull and crossbones - Tête de mort avec os croisés
+                // Crâne blanc
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(x + 1.5*s, y + 0.5*s, 3*s, 2.5*s);
+                // Yeux noirs
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(x + 2*s, y + 1*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 3.3*s, y + 1*s, 0.7*s, 0.7*s);
+                // Nez triangulaire
+                ctx.fillRect(x + 2.7*s, y + 1.8*s, 0.6*s, 0.6*s);
+                // Dents
+                ctx.fillRect(x + 2*s, y + 2.7*s, 0.5*s, 0.3*s);
+                ctx.fillRect(x + 2.7*s, y + 2.7*s, 0.5*s, 0.3*s);
+                ctx.fillRect(x + 3.5*s, y + 2.7*s, 0.5*s, 0.3*s);
+                // Os croisés (blancs)
+                ctx.fillStyle = '#EEEEEE';
+                // Os diagonal gauche-droite
+                ctx.fillRect(x + 1*s, y + 3.5*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 1.5*s, y + 4*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 2*s, y + 4.5*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 2.5*s, y + 4*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 3*s, y + 4.5*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 3.5*s, y + 4*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 4*s, y + 3.5*s, 0.7*s, 0.7*s);
+                // Os diagonal droite-gauche
+                ctx.fillRect(x + 4*s, y + 4.5*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 3.5*s, y + 4*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 3*s, y + 3.5*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 2.5*s, y + 4*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 2*s, y + 3.5*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 1.5*s, y + 4*s, 0.7*s, 0.7*s);
+                ctx.fillRect(x + 1*s, y + 4.5*s, 0.7*s, 0.7*s);
+                // Ombres pour effet 3D
+                ctx.fillStyle = '#CCCCCC';
+                ctx.fillRect(x + 2*s, y + 2.3*s, 2*s, 0.4*s);
                 break;
                 
             case '🎗️': // Reminder ribbon - Ruban
@@ -507,25 +671,25 @@ export class VoxelRenderer {
                 ctx.fillRect(x + 2.8*s, y + 2.3*s, 0.4*s, 0.4*s);
                 break;
                 
-            case '🐟': // Fish - Poisson (carburant niveau 1)
+            case '🐟': // Fish - Poisson (carburant niveau 1) - INVERSÉ
                 // Corps orange vif avec écailles
                 ctx.fillStyle = '#FF8C00';
                 ctx.fillRect(x + 1.5*s, y + 2*s, 3*s, 2*s);
-                // Tête arrondie
-                ctx.fillRect(x + 4*s, y + 2.5*s, 0.8*s, s);
-                // Queue en éventail
-                ctx.fillRect(x + 0.5*s, y + 1.5*s, s, 3*s);
-                ctx.fillRect(x + s, y + 2*s, 0.5*s, 2*s);
+                // Tête arrondie (à gauche maintenant)
+                ctx.fillRect(x + 0.7*s, y + 2.5*s, 0.8*s, s);
+                // Queue en éventail (à droite maintenant)
+                ctx.fillRect(x + 4.5*s, y + 1.5*s, s, 3*s);
+                ctx.fillRect(x + 4*s, y + 2*s, 0.5*s, 2*s);
                 // Nageoires dorsale et ventrale
                 ctx.fillStyle = '#FFA500';
                 ctx.fillRect(x + 2.5*s, y + 1.5*s, s, 0.5*s);
                 ctx.fillRect(x + 2.5*s, y + 4*s, s, 0.5*s);
-                // Oeil noir brillant
+                // Oeil noir brillant (à gauche)
                 ctx.fillStyle = '#000000';
-                ctx.fillRect(x + 4*s, y + 2.7*s, 0.4*s, 0.4*s);
+                ctx.fillRect(x + 1.1*s, y + 2.7*s, 0.4*s, 0.4*s);
                 // Reflet blanc dans l'oeil
                 ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(x + 4.1*s, y + 2.8*s, 0.2*s, 0.2*s);
+                ctx.fillRect(x + 1.2*s, y + 2.8*s, 0.2*s, 0.2*s);
                 // Écailles détaillées
                 ctx.fillStyle = '#FFD700';
                 ctx.fillRect(x + 2*s, y + 2.5*s, 0.3*s, 0.3*s);
@@ -637,35 +801,35 @@ export class VoxelRenderer {
                 ctx.fillRect(x + 2.8*s, y + 2.8*s, 0.4*s, 0.4*s);
                 break;
                 
-            case '🐠': // Tropical Fish - Poisson tropical (carburant niveau 6)
+            case '🐠': // Tropical Fish - Poisson tropical (carburant niveau 6) - INVERSÉ
                 // Poisson exotique multicolore
                 ctx.fillStyle = '#FF69B4';
                 // Corps rose vif
                 ctx.fillRect(x + 1.5*s, y + 2*s, 3*s, 2*s);
-                ctx.fillRect(x + 4*s, y + 2.5*s, 0.8*s, s);
+                ctx.fillRect(x + 0.7*s, y + 2.5*s, 0.8*s, s);
                 // Rayures bleues et jaunes
                 ctx.fillStyle = '#1E90FF';
                 ctx.fillRect(x + 2*s, y + 2*s, 0.4*s, 2*s);
                 ctx.fillRect(x + 3.2*s, y + 2*s, 0.4*s, 2*s);
                 ctx.fillStyle = '#FFD700';
                 ctx.fillRect(x + 2.6*s, y + 2*s, 0.4*s, 2*s);
-                // Queue en éventail multicolore
+                // Queue en éventail multicolore (à droite maintenant)
                 ctx.fillStyle = '#FF69B4';
-                ctx.fillRect(x + 0.5*s, y + 1.5*s, s, 3*s);
+                ctx.fillRect(x + 4.5*s, y + 1.5*s, s, 3*s);
                 ctx.fillStyle = '#1E90FF';
-                ctx.fillRect(x + 0.8*s, y + 2*s, 0.7*s, 0.5*s);
-                ctx.fillRect(x + 0.8*s, y + 3.5*s, 0.7*s, 0.5*s);
+                ctx.fillRect(x + 3.8*s, y + 2*s, 0.7*s, 0.5*s);
+                ctx.fillRect(x + 3.8*s, y + 3.5*s, 0.7*s, 0.5*s);
                 ctx.fillStyle = '#FFD700';
-                ctx.fillRect(x + 0.8*s, y + 2.7*s, 0.7*s, 0.6*s);
+                ctx.fillRect(x + 3.8*s, y + 2.7*s, 0.7*s, 0.6*s);
                 // Nageoires dorsale et ventrale colorées
                 ctx.fillStyle = '#FF1493';
                 ctx.fillRect(x + 2.5*s, y + 1.2*s, s, 0.5*s);
                 ctx.fillRect(x + 2.5*s, y + 4.3*s, s, 0.5*s);
-                // Oeil noir avec reflet
+                // Oeil noir avec reflet (à gauche)
                 ctx.fillStyle = '#000000';
-                ctx.fillRect(x + 4*s, y + 2.7*s, 0.4*s, 0.4*s);
+                ctx.fillRect(x + 1.1*s, y + 2.7*s, 0.4*s, 0.4*s);
                 ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(x + 4.1*s, y + 2.8*s, 0.2*s, 0.2*s);
+                ctx.fillRect(x + 1.2*s, y + 2.8*s, 0.2*s, 0.2*s);
                 break;
                 
             case '🔋': // Battery - Batterie (carburant niveau 7)
@@ -1048,6 +1212,35 @@ export class VoxelRenderer {
                 ctx.fillStyle = '#000000';
                 ctx.fillRect(x + 1.3*s, y + 3*s, 0.5*s, s);
                 ctx.fillRect(x + 4.2*s, y + 3*s, 0.5*s, s);
+                break;
+                
+            case '🐍': // Serpent BOSS (mode infini)
+                // Corps vert serpent long
+                ctx.fillStyle = '#228B22';
+                // Tête triangulaire
+                ctx.fillRect(x + 3*s, y + 2*s, 2*s, 1.5*s);
+                ctx.fillRect(x + 4*s, y + 2.3*s, s, s);
+                // Corps ondulé
+                ctx.fillRect(x + 1.5*s, y + 2.3*s, 2*s, s);
+                ctx.fillRect(x + 0.5*s, y + 2.5*s, 1.5*s, 0.8*s);
+                // Écailles plus claires
+                ctx.fillStyle = '#32CD32';
+                ctx.fillRect(x + s, y + 2.6*s, 0.4*s, 0.4*s);
+                ctx.fillRect(x + 2*s, y + 2.4*s, 0.4*s, 0.4*s);
+                ctx.fillRect(x + 3.3*s, y + 2.2*s, 0.4*s, 0.4*s);
+                // Yeux rouges venimeux
+                ctx.fillStyle = '#FF0000';
+                ctx.fillRect(x + 4.2*s, y + 2.5*s, 0.3*s, 0.3*s);
+                // Langue fourchue
+                ctx.fillStyle = '#DC143C';
+                ctx.fillRect(x + 5*s, y + 2.6*s, 0.5*s, 0.2*s);
+                ctx.fillRect(x + 5.2*s, y + 2.4*s, 0.2*s, 0.3*s);
+                ctx.fillRect(x + 5.2*s, y + 2.8*s, 0.2*s, 0.3*s);
+                // Motifs de serpent
+                ctx.fillStyle = '#1a4d1a';
+                ctx.fillRect(x + 1.7*s, y + 2.4*s, 0.5*s, 0.5*s);
+                ctx.fillRect(x + 2.8*s, y + 2.5*s, 0.5*s, 0.5*s);
+                ctx.fillRect(x + 3.8*s, y + 2.4*s, 0.5*s, 0.5*s);
                 break;
                 
             // ========== OBSTACLES MIDDLE ==========
@@ -1749,48 +1942,61 @@ export class VoxelRenderer {
                 ctx.fillRect(x + 2.8*s, y + 4.8*s, 0.5*s, 0.8*s);
                 break;
                 
-            case '🕊️': // Liberté (colombe) - Colombe blanche simple en vol
-                // Corps blanc central
+            case '🕊️': // Liberté (colombe) - Colombe blanche vue de face avec ailes animées
+                // Animation des ailes (battement simple)
+                const wingTime = Date.now() / 200; // Animation rapide
+                const wingFlap = Math.sin(wingTime) * 0.5 + 0.5; // 0 à 1
+                const wingAngle = wingFlap * 1.5; // Angle de battement
+                
+                // Corps blanc central (vue de face)
                 ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(x + 2.2*s, y + 2.5*s, 1.8*s, 1.5*s);
+                ctx.fillRect(x + 2.5*s, y + 2*s, s, 2*s);
                 
-                // Tête ronde blanche
-                ctx.fillRect(x + 2.5*s, y + 1.5*s, 1.2*s, 1.2*s);
+                // Tête ronde (plus grosse vue de face)
+                ctx.fillRect(x + 2.2*s, y + 1*s, 1.6*s, 1.5*s);
                 
-                // Bec jaune court
-                ctx.fillStyle = '#FFD700';
-                ctx.fillRect(x + 3.7*s, y + 2*s, 0.5*s, 0.3*s);
-                
-                // Œil noir (petit)
+                // Yeux noirs (deux yeux visibles de face)
                 ctx.fillStyle = '#000000';
-                ctx.fillRect(x + 3.2*s, y + 1.9*s, 0.3*s, 0.3*s);
+                ctx.fillRect(x + 2.5*s, y + 1.5*s, 0.4*s, 0.4*s);
+                ctx.fillRect(x + 3.1*s, y + 1.5*s, 0.4*s, 0.4*s);
                 
-                // AILE GAUCHE (simple et large)
+                // Bec jaune petit (vue de face, centré)
+                ctx.fillStyle = '#FFA500';
+                ctx.fillRect(x + 2.8*s, y + 2.2*s, 0.4*s, 0.3*s);
+                
+                // AILE GAUCHE (animée, déployée vers le haut)
                 ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(x + 0.5*s, y + 2.2*s, 2.2*s, 1.8*s);
-                // Bout de l'aile (3 plumes simples)
-                ctx.fillRect(x + 0.2*s, y + 2.5*s, 0.4*s, 1.2*s);
-                ctx.fillRect(x + 0.7*s, y + 2.3*s, 0.4*s, 1.4*s);
-                ctx.fillRect(x + 1.2*s, y + 2.4*s, 0.4*s, 1.3*s);
-                // Ombre légère
+                const leftWingY = y + 2*s - wingAngle * s;
+                const leftWingHeight = 1.5*s + wingAngle * 0.5*s;
+                // Base de l'aile
+                ctx.fillRect(x + 1*s, leftWingY, 1.5*s, leftWingHeight);
+                // Plumes du bout (3 plumes)
+                ctx.fillRect(x + 0.5*s, leftWingY + 0.2*s, 0.4*s, leftWingHeight * 0.6);
+                ctx.fillRect(x + 0.8*s, leftWingY, 0.4*s, leftWingHeight * 0.7);
+                ctx.fillRect(x + 1.2*s, leftWingY + 0.1*s, 0.4*s, leftWingHeight * 0.65);
+                // Ombre légère pour le volume
                 ctx.fillStyle = '#F0F0F0';
-                ctx.fillRect(x + 1.5*s, y + 3*s, 1*s, 0.8*s);
+                ctx.fillRect(x + 1.5*s, leftWingY + leftWingHeight * 0.4, 0.8*s, leftWingHeight * 0.4);
                 
-                // AILE DROITE (simple et large)
+                // AILE DROITE (animée, déployée vers le haut)
                 ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(x + 3.8*s, y + 2.2*s, 2.2*s, 1.8*s);
-                // Bout de l'aile (3 plumes simples)
-                ctx.fillRect(x + 5.6*s, y + 2.5*s, 0.4*s, 1.2*s);
-                ctx.fillRect(x + 5.1*s, y + 2.3*s, 0.4*s, 1.4*s);
-                ctx.fillRect(x + 4.6*s, y + 2.4*s, 0.4*s, 1.3*s);
-                // Ombre légère
+                const rightWingY = y + 2*s - wingAngle * s;
+                const rightWingHeight = 1.5*s + wingAngle * 0.5*s;
+                // Base de l'aile
+                ctx.fillRect(x + 3.5*s, rightWingY, 1.5*s, rightWingHeight);
+                // Plumes du bout (3 plumes)
+                ctx.fillRect(x + 5.1*s, rightWingY + 0.2*s, 0.4*s, rightWingHeight * 0.6);
+                ctx.fillRect(x + 4.8*s, rightWingY, 0.4*s, rightWingHeight * 0.7);
+                ctx.fillRect(x + 4.4*s, rightWingY + 0.1*s, 0.4*s, rightWingHeight * 0.65);
+                // Ombre légère pour le volume
                 ctx.fillStyle = '#F0F0F0';
-                ctx.fillRect(x + 3.8*s, y + 3*s, 1*s, 0.8*s);
+                ctx.fillRect(x + 3.7*s, rightWingY + rightWingHeight * 0.4, 0.8*s, rightWingHeight * 0.4);
                 
-                // Queue blanche simple (3 plumes en éventail)
+                // Queue blanche simple (vue de dessous)
                 ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(x + 2.3*s, y + 4*s, 0.4*s, 0.8*s);
-                ctx.fillRect(x + 2.8*s, y + 4.2*s, 0.4*s, 0.7*s);
+                ctx.fillRect(x + 2.3*s, y + 4*s, 0.4*s, 0.7*s);
+                ctx.fillRect(x + 2.8*s, y + 4.1*s, 0.4*s, 0.6*s);
+                ctx.fillRect(x + 3.3*s, y + 4*s, 0.4*s, 0.7*s);
                 ctx.fillRect(x + 3.3*s, y + 4*s, 0.4*s, 0.8*s);
                 
                 // Petites pattes orange
@@ -2303,10 +2509,10 @@ export class VoxelRenderer {
                 break;
         }
         
-        // Ajouter un contour noir pour tous les obstacles
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(x, y, 6*s, 6*s);
+        // Contour noir désactivé pour un rendu plus propre
+        // ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        // ctx.lineWidth = 1;
+        // ctx.strokeRect(x, y, 6*s, 6*s);
     }
     
     // Particule voxel (carré simple avec ombre)
