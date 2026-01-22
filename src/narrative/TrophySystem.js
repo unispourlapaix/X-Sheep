@@ -260,88 +260,155 @@ export class TrophySystem {
         canvas.height = 1080;
         const ctx = canvas.getContext('2d');
         
-        // Fond dégradé
+        // Fond dégradé style pixel art
         const gradient = ctx.createLinearGradient(0, 0, 0, 1080);
-        gradient.addColorStop(0, '#0a0e27');
-        gradient.addColorStop(0.5, '#1a3a52');
-        gradient.addColorStop(1, '#0a0e27');
+        gradient.addColorStop(0, '#1a1a2e');
+        gradient.addColorStop(0.5, '#16213e');
+        gradient.addColorStop(1, '#0f3460');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, 1080, 1080);
         
-        // Étoiles
-        ctx.fillStyle = '#FFD700';
-        for (let i = 0; i < 50; i++) {
-            const x = Math.random() * 1080;
-            const y = Math.random() * 1080;
-            const size = Math.random() * 3 + 1;
-            ctx.fillRect(x, y, size, size);
+        // Grille pixel art en fond
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        const gridSize = 40;
+        for (let x = 0; x < 1080; x += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, 1080);
+            ctx.stroke();
+        }
+        for (let y = 0; y < 1080; y += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(1080, y);
+            ctx.stroke();
         }
         
-        // Titre X-SHEEP
-        ctx.fillStyle = '#FFD700';
-        ctx.font = 'bold 60px Arial';
+        // Étoiles pixel art style neige (+ blancs)
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 24px "Courier New", monospace';
         ctx.textAlign = 'center';
-        ctx.shadowColor = 'rgba(255, 215, 0, 0.8)';
-        ctx.shadowBlur = 20;
+        for (let i = 0; i < 40; i++) {
+            const x = Math.floor(Math.random() * 27) * gridSize + gridSize/2;
+            const y = Math.floor(Math.random() * 27) * gridSize + gridSize/2;
+            ctx.fillText('+', x, y);
+        }
+        
+        // Titre X-SHEEP avec effet pixelisé
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 70px "Courier New", monospace';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = '#FFD700';
+        ctx.shadowBlur = 30;
         ctx.fillText('X-SHEEP', 540, 100);
         ctx.shadowBlur = 0;
         
-        // Emoji trophée
-        ctx.font = '120px Arial';
-        ctx.fillText('🏆', 540, 250);
+        // Scène: Mouton poursuivi par un boss
+        const sceneY = 180;
+        const blockSize = 8;
+        
+        // Boss aléatoire
+        const bosses = ['🦁', '🐺', '🐉', '👿', '💀', '🦈'];
+        const randomBoss = bosses[Math.floor(Math.random() * bosses.length)];
+        
+        // Dessiner le boss en pixel art (à gauche)
+        ctx.font = '100px Arial';
+        ctx.fillText(randomBoss, 200, sceneY + 100);
+        
+        // Flèche de poursuite
+        ctx.fillStyle = '#FF6B6B';
+        for (let i = 0; i < 3; i++) {
+            const x = 320 + i * 40;
+            ctx.fillRect(x, sceneY + 60, 30, blockSize * 2);
+            ctx.fillRect(x + 30, sceneY + 52, blockSize * 2, blockSize * 4);
+        }
+        
+        // Dessiner le mouton en pixel art (à droite, qui fuit)
+        ctx.fillText('🐑', 540, sceneY + 100);
+        
+        // Effet de mouvement (lignes de vitesse)
+        ctx.fillStyle = 'rgba(135, 206, 235, 0.5)';
+        for (let i = 0; i < 5; i++) {
+            const x = 650 + i * 30;
+            const length = 40 - i * 6;
+            ctx.fillRect(x, sceneY + 50 + i * 10, length, blockSize);
+        }
+        
+        // Emoji trophée avec cadre pixel art
+        ctx.font = '100px Arial';
+        ctx.fillText('🏆', 540, 420);
+        
+        // Cadre pixelisé autour du trophée
+        ctx.strokeStyle = '#FFD700';
+        ctx.lineWidth = 6;
+        const frameSize = 140;
+        ctx.strokeRect(540 - frameSize/2, 340, frameSize, frameSize);
+        ctx.strokeRect(540 - frameSize/2 - 8, 332, frameSize + 16, frameSize + 16);
         
         // Titre du trophée
         ctx.fillStyle = '#FFD700';
-        ctx.font = 'bold 36px Arial';
-        ctx.fillText(message.hope, 540, 340);
+        ctx.font = 'bold 40px "Courier New", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(message.hope, 540, 540);
         
-        // Label
+        // Label avec fond pixel
+        ctx.fillStyle = 'rgba(255, 215, 0, 0.2)';
+        ctx.fillRect(340, 555, 400, 40);
         ctx.fillStyle = '#87CEEB';
-        ctx.font = '24px Arial';
-        ctx.fillText(this.getObstacleLabel(obstacleId), 540, 380);
+        ctx.font = 'bold 24px "Courier New", monospace';
+        ctx.fillText(this.getObstacleLabel(obstacleId), 540, 582);
         
-        // Cadre du message
+        // Cadre du message style pixel art
         ctx.strokeStyle = '#FFD700';
-        ctx.lineWidth = 4;
-        ctx.strokeRect(80, 420, 920, 500);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(80, 420, 920, 500);
+        ctx.lineWidth = 6;
+        const msgX = 80, msgY = 630, msgW = 920, msgH = 300;
         
-        // Message
+        // Bordure externe
+        ctx.strokeRect(msgX, msgY, msgW, msgH);
+        // Bordure interne
+        ctx.strokeRect(msgX + 10, msgY + 10, msgW - 20, msgH - 20);
+        // Fond
+        ctx.fillStyle = 'rgba(10, 14, 39, 0.9)';
+        ctx.fillRect(msgX + 10, msgY + 10, msgW - 20, msgH - 20);
+        
+        // Message avec police monospace
         ctx.fillStyle = '#FFFFFF';
-        ctx.font = '24px Arial';
+        ctx.font = '22px "Courier New", monospace';
         ctx.textAlign = 'left';
         
         // Découper le texte en lignes
         const words = message.text.split(' ');
         let line = '';
-        let y = 480;
-        const maxWidth = 860;
-        const lineHeight = 36;
+        let y = msgY + 55;
+        const maxWidth = msgW - 80;
+        const lineHeight = 32;
         
         for (let i = 0; i < words.length; i++) {
             const testLine = line + words[i] + ' ';
             const metrics = ctx.measureText(testLine);
             
             if (metrics.width > maxWidth && i > 0) {
-                ctx.fillText(line, 120, y);
+                ctx.fillText(line, msgX + 40, y);
                 line = words[i] + ' ';
                 y += lineHeight;
             } else {
                 line = testLine;
             }
         }
-        ctx.fillText(line, 120, y);
+        ctx.fillText(line, msgX + 40, y);
         
-        // XP
+        // XP avec cadre pixel
+        ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+        ctx.fillRect(420, 960, 240, 50);
         ctx.fillStyle = '#FFD700';
-        ctx.font = 'bold 32px Arial';
+        ctx.font = 'bold 36px "Courier New", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(`+${trophy.xp} XP`, 540, 980);
+        ctx.fillText(`+${trophy.xp} XP`, 540, 995);
         
         // Bas de page
         ctx.fillStyle = '#87CEEB';
-        ctx.font = '20px Arial';
+        ctx.font = '20px "Courier New", monospace';
         ctx.fillText('Par Emmanuel Payet', 540, 1050);
         
         // Télécharger l'image
@@ -438,7 +505,7 @@ export class TrophySystem {
             addiction: '📦 Addiction',
             death: '💀 Mort',
             cancer: '🎗️ Cancer',
-            nuclear: '☢️ Nucléaire',
+            nuclear: '☢️ Reaction antiNucléaire',
             meteor: '☄️ Météorite',
             procrastination: '⏰ Procrastination',
             anger: '😡 Colère',
