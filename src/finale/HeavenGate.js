@@ -202,7 +202,7 @@ export class HeavenGate {
         ctx.fillStyle = '#FFD700';
         ctx.font = 'bold 22px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('⏰💔 VICTOIRE IMPATIENTE ! ⏰💔', canvas.width / 2, boxY + 32);
+        ctx.fillText('⏰💔 IMPATIENCE ! ⏰💔', canvas.width / 2, boxY + 32);
 
         // Émoji - plus petit
         ctx.font = '36px Arial';
