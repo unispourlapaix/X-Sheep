@@ -31,7 +31,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/X-Sheep/assets/index-De6Kh2o-.js"></script>
+  <script type="module" crossorigin src="/X-Sheep/assets/index-De-Q1JcY.js"></script>
   <link rel="stylesheet" crossorigin href="/X-Sheep/assets/index-CXWFj09r.css">
 </head>
 <body>
@@ -289,6 +289,13 @@
             }
         });
         
+        // Fonction globale pour jouer le son chipe (overlay)
+        window.playChipeSound = function() {
+            if (window.app && window.app.audioManager && window.app.audioManager.initialized) {
+                window.app.audioManager.playChipeSound();
+            }
+        };
+        
         // Bouton fermeture - retour au menu principal
         const closeBtn = document.getElementById('close-btn');
         if (closeBtn) {
@@ -335,6 +342,11 @@
         
         // Paramètres de rendu graphique
         function toggleRenderSettings() {
+            // Petit morceau musical 8bit pour le réglage graphique
+            if (window.app && window.app.audioManager && window.app.audioManager.initialized) {
+                window.app.audioManager.play8BitGraphicsJingle();
+            }
+            
             const currentRender = localStorage.getItem('xsheep_renderMode') || 'pixel';
             const newRender = currentRender === 'pixel' ? 'voxel' : 'pixel';
             localStorage.setItem('xsheep_renderMode', newRender);
