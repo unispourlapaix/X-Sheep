@@ -33,6 +33,15 @@ export class KeyboardControls {
             return;
         }
         
+        // CHEAT: Touche "2" pour aller directement au niveau 2
+        if (e.key === '2') {
+            console.log('🎮 CHEAT: Démarrage direct niveau 2');
+            this.game.level2Active = false;
+            this.game.level3Active = false;
+            this.game.startLevel2();
+            return;
+        }
+        
         // CHEAT: Touche ":" pour passer directement au niveau 3
         if (e.key === ':') {
             console.log('🎮 CHEAT: Passage au niveau 3');

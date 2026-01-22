@@ -865,6 +865,70 @@ export class VoxelRenderer {
                 ctx.fillRect(x + 4*s, y + 2.8*s, 0.4*s, 0.4*s);
                 break;
                 
+            case '🦑': // Pieuvre/Calmar (obstacle du requin)
+                // Corps rose-violet
+                ctx.fillStyle = '#DB7093';
+                ctx.fillRect(x + 2*s, y + 1.5*s, 2*s, 1.5*s);
+                // Tête arrondie
+                ctx.fillRect(x + 2.3*s, y + s, 1.4*s, 0.7*s);
+                // Yeux noirs
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(x + 2.5*s, y + 1.7*s, 0.4*s, 0.4*s);
+                ctx.fillRect(x + 3.1*s, y + 1.7*s, 0.4*s, 0.4*s);
+                // Tentacules (8 tentacules)
+                ctx.fillStyle = '#C71585';
+                // Tentacules avant (4)
+                ctx.fillRect(x + 2*s, y + 3*s, 0.4*s, 1.5*s);
+                ctx.fillRect(x + 2.5*s, y + 3*s, 0.4*s, 1.8*s);
+                ctx.fillRect(x + 3*s, y + 3*s, 0.4*s, 1.8*s);
+                ctx.fillRect(x + 3.5*s, y + 3*s, 0.4*s, 1.5*s);
+                // Tentacules arrière (4 plus courts)
+                ctx.fillStyle = '#8B4789';
+                ctx.fillRect(x + 1.6*s, y + 3*s, 0.3*s, s);
+                ctx.fillRect(x + 2.2*s, y + 3.2*s, 0.3*s, 1.2*s);
+                ctx.fillRect(x + 3.3*s, y + 3.2*s, 0.3*s, 1.2*s);
+                ctx.fillRect(x + 4*s, y + 3*s, 0.3*s, s);
+                // Ventouses blanches
+                ctx.fillStyle = '#F8F8FF';
+                ctx.fillRect(x + 2.1*s, y + 3.5*s, 0.2*s, 0.2*s);
+                ctx.fillRect(x + 2.6*s, y + 3.8*s, 0.2*s, 0.2*s);
+                ctx.fillRect(x + 3.1*s, y + 3.8*s, 0.2*s, 0.2*s);
+                ctx.fillRect(x + 3.6*s, y + 3.5*s, 0.2*s, 0.2*s);
+                break;
+                
+            case '⚙️': // Engrenage (obstacle du robot)
+                // Corps gris métallique
+                ctx.fillStyle = '#708090';
+                // Centre circulaire
+                ctx.fillRect(x + 2*s, y + 2*s, 2*s, 2*s);
+                ctx.fillRect(x + 2.5*s, y + 1.5*s, s, s);
+                ctx.fillRect(x + 2.5*s, y + 4*s, s, s);
+                ctx.fillRect(x + 1.5*s, y + 2.5*s, s, s);
+                ctx.fillRect(x + 4*s, y + 2.5*s, s, s);
+                // Dents de l'engrenage (8 dents)
+                ctx.fillStyle = '#556B2F';
+                // Dent haut
+                ctx.fillRect(x + 2.5*s, y + 0.5*s, s, s);
+                // Dent bas
+                ctx.fillRect(x + 2.5*s, y + 4.5*s, s, s);
+                // Dent gauche
+                ctx.fillRect(x + 0.5*s, y + 2.5*s, s, s);
+                // Dent droite
+                ctx.fillRect(x + 4.5*s, y + 2.5*s, s, s);
+                // Dents diagonales
+                ctx.fillRect(x + 1.2*s, y + 1.2*s, 0.8*s, 0.8*s);
+                ctx.fillRect(x + 4*s, y + 1.2*s, 0.8*s, 0.8*s);
+                ctx.fillRect(x + 1.2*s, y + 4*s, 0.8*s, 0.8*s);
+                ctx.fillRect(x + 4*s, y + 4*s, 0.8*s, 0.8*s);
+                // Trou central
+                ctx.fillStyle = '#2F4F4F';
+                ctx.fillRect(x + 2.7*s, y + 2.7*s, 0.6*s, 0.6*s);
+                // Reflets métalliques
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fillRect(x + 2.3*s, y + 2.3*s, 0.4*s, 0.4*s);
+                ctx.fillRect(x + 3.5*s, y + 3.5*s, 0.3*s, 0.3*s);
+                break;
+                
             // ========== AUTRES BOSS ==========
             case '🐋': // Baleine BOSS
                 // Corps bleu massif
