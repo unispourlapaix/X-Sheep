@@ -263,3 +263,214 @@ body {
 .author-signature:active {
     transform: scale(0.95);
 }
+/* ============================================
+   RESPONSIVE MOBILE VERTICAL
+   ============================================ */
+
+@media screen and (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .menu-container {
+        width: 95vw;
+        height: auto;
+        min-height: 100vh;
+        padding: 20px 10px;
+        transform: translate(-50%, 0);
+        top: 0;
+        left: 50%;
+        border-radius: 0;
+        overflow-y: auto;
+    }
+
+    .menu-header {
+        position: static;
+        margin-bottom: 15px;
+        font-size: 9px;
+    }
+
+    .logo-title {
+        margin-bottom: 40px;
+        margin-top: 10px;
+    }
+
+    .logo-title h1 {
+        font-size: 28px;
+        letter-spacing: 3px;
+    }
+
+    .logo-subtitle {
+        font-size: 11px;
+    }
+
+    /* Trophée central repositionné */
+    .trophy-center-icon {
+        position: relative !important;
+        transform: none !important;
+        top: auto !important;
+        left: auto !important;
+        margin: 20px auto !important;
+        display: block !important;
+        width: fit-content;
+    }
+
+    .trophy-center-icon > div:first-child {
+        font-size: 40px;
+    }
+
+    /* Bouton paramètres graphiques */
+    #render-toggle-btn {
+        top: 10px !important;
+        right: 10px !important;
+        padding: 8px !important;
+        font-size: 0.85em;
+    }
+
+    #render-icon {
+        font-size: 24px !important;
+    }
+
+    #render-label {
+        font-size: 9px !important;
+    }
+
+    /* Mode selector en colonne */
+    .mode-selector {
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        align-items: center;
+    }
+
+    .mode-card {
+        width: 90%;
+        max-width: 320px;
+        height: auto;
+        padding: 15px;
+    }
+
+    .mode-card:hover {
+        transform: scale(1.02);
+    }
+
+    .mode-title {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .mode-nucleus {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 10px;
+    }
+
+    .nucleus-core {
+        font-size: 35px;
+    }
+
+    .mode-description {
+        font-size: 10px;
+        margin-bottom: 10px;
+    }
+
+    .mode-stats {
+        padding-top: 10px;
+    }
+
+    .stat-value {
+        font-size: 16px;
+    }
+
+    .stat-label {
+        font-size: 8px;
+    }
+
+    /* Orbites plus petites */
+    .orbit-1 {
+        width: 110%;
+        height: 110%;
+    }
+
+    .orbit-2 {
+        width: 130%;
+        height: 130%;
+    }
+
+    .orbit-3 {
+        width: 150%;
+        height: 150%;
+    }
+
+    .electron {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* Ultra petit mobile (< 360px) */
+@media screen and (max-width: 360px) {
+    .logo-title h1 {
+        font-size: 24px;
+        letter-spacing: 2px;
+    }
+
+    .logo-subtitle {
+        font-size: 10px;
+    }
+
+    .mode-card {
+        width: 95%;
+        padding: 12px;
+    }
+
+    .mode-nucleus {
+        width: 60px;
+        height: 60px;
+    }
+
+    .nucleus-core {
+        font-size: 30px;
+    }
+
+    .trophy-center-icon > div:first-child {
+        font-size: 35px;
+    }
+}
+
+/* Landscape mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .menu-container {
+        height: auto;
+        min-height: auto;
+        padding: 10px;
+    }
+
+    .logo-title {
+        margin-bottom: 15px;
+        margin-top: 5px;
+    }
+
+    .logo-title h1 {
+        font-size: 22px;
+    }
+
+    .trophy-center-icon {
+        margin: 10px auto !important;
+    }
+
+    .trophy-center-icon > div:first-child {
+        font-size: 30px;
+    }
+
+    .mode-selector {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .mode-card {
+        width: 45%;
+        max-width: 280px;
+    }
+}
