@@ -52,7 +52,16 @@ export class AudioManager {
      * Démarrer la musique de fond en autoplay
      */
     startBackgroundMusic() {
-        if (this.backgroundMusic) return; // Déjà en cours
+        // Si la musique existe déjà et n'est pas en pause, la reprendre
+        if (this.backgroundMusic) {
+            if (this.backgroundMusic.paused) {
+                this.backgroundMusic.play().catch(err => {
+                    console.log('⚠️ Erreur reprise musique:', err.message);
+                });
+                console.log('🎵 Musique reprise');
+            }
+            return; // Déjà en cours
+        }
         
         this.backgroundMusic = new Audio();
         this.backgroundMusic.volume = this.musicVolume;

@@ -278,7 +278,10 @@ export class Game {
 
         // Démarrer la musique de fond au niveau 1
         if (this.audioManager && this.audioManager.initialized) {
+            console.log('🎵 Tentative de démarrage de la musique niveau 1');
             this.audioManager.startBackgroundMusic();
+        } else {
+            console.warn('⚠️ AudioManager non initialisé au démarrage du niveau 1');
         }
 
         // Démarrer la sauvegarde automatique
@@ -1743,7 +1746,10 @@ export class Game {
         
         // Démarrer la musique au niveau 3
         if (this.audioManager && this.audioManager.initialized) {
+            console.log('🎵 Tentative de démarrage de la musique niveau 3');
             this.audioManager.startBackgroundMusic();
+        } else {
+            console.warn('⚠️ AudioManager non initialisé au démarrage du niveau 3');
         }
         
         this.currentLevel = 3;
@@ -2051,7 +2057,10 @@ export class Game {
         
         // Démarrer la musique au niveau 2
         if (this.audioManager && this.audioManager.initialized) {
+            console.log('🎵 Tentative de démarrage de la musique niveau 2');
             this.audioManager.startBackgroundMusic();
+        } else {
+            console.warn('⚠️ AudioManager non initialisé au démarrage du niveau 2');
         }
         
         this.currentLevel = 2;
