@@ -474,3 +474,40 @@ body {
         max-width: 280px;
     }
 }
+
+/* ============================================
+   SUPPORT RTL (Right-to-Left)
+   Pour l'arabe et l'hébreu
+   ============================================ */
+
+[dir="rtl"] .menu-container {
+    direction: rtl;
+}
+
+[dir="rtl"] .menu-header {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .mode-card {
+    text-align: right;
+}
+
+[dir="rtl"] .mode-description {
+    text-align: right;
+}
+
+[dir="rtl"] #render-toggle-btn {
+    right: auto;
+    left: 20px;
+}
+
+[dir="rtl"] #lang-selector-btn {
+    right: auto;
+    left: 20px;
+}
+
+[dir="rtl"] #lang-selector-panel {
+    right: auto;
+    left: 20px;
+}

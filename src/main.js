@@ -5,6 +5,8 @@ import { Game } from './core/Game.js';
 import { MolecularBackground } from './ui/MolecularBackground.js';
 import { TrophySystem } from './narrative/TrophySystem.js';
 import { AudioManager } from './audio/AudioManager.js';
+import { i18n } from './i18n/I18nManager.js';
+import { LanguageSelector } from './i18n/LanguageSelector.js';
 
 class App {
     constructor() {
@@ -13,12 +15,24 @@ class App {
         this.molecularBg = null;
         this.trophySystem = null;
         this.audioManager = null;
+        this.languageSelector = null;
+        this.i18n = i18n;
         
         this.init();
     }
     
-    init() {
+    async init() {
         console.log('🐑 Mouton Courage - Initialisation...');
+        
+        // Initialiser le système i18n
+        await i18n.init();
+        console.log(`🌍 Langue active: ${i18n.currentLang}`);
+        
+        // Créer le sélecteur de langue
+        this.languageSelector = new LanguageSelector();
+        
+        // Appliquer les traductions au HTML
+        this.applyTranslations();
         
         // Background moléculaire
         this.molecularBg = new MolecularBackground();
@@ -79,6 +93,60 @@ class App {
         });
         
         console.log('✅ Application prête !');
+    }
+    
+    applyTranslations() {
+        // Mettre à jour les textes du menu avec les traductions
+        const t = (key) => i18n.t(key);
+        
+        // Titre et sous-titre
+        const subtitle = document.querySelector('.logo-subtitle');
+        if (subtitle) subtitle.textContent = t('menu.subtitle');
+        
+        // Header
+        const menuHeader = document.querySelector('.menu-header');
+        if (menuHeader) {
+            const authorLink = menuHeader.querySelector('.author-signature');
+            if (authorLink) {
+                menuHeader.innerHTML = `${t('menu.createdBy')} <a href="https://www.emmanuelpayet.art/" target="_blank" rel="noopener noreferrer" class="author-signature">${t('menu.author')}</a>`;
+            }
+        }
+        
+        // Mode Aventure
+        const adventureTitle = document.querySelector('[data-mode="adventure"] .mode-title');
+        if (adventureTitle) adventureTitle.textContent = t('menu.modes.adventure.title');
+        
+        const adventureDesc = document.querySelector('[data-mode="adventure"] .mode-description');
+        if (adventureDesc) {
+            const desc = t('menu.modes.adventure.description');
+            adventureDesc.innerHTML = desc.join('<br>');
+        }
+        
+        const adventureStats = document.querySelectorAll('[data-mode="adventure"] .stat-label');
+        if (adventureStats.length >= 3) {
+            adventureStats[0].textContent = t('menu.modes.adventure.stats.chapters');
+            adventureStats[1].textContent = t('menu.modes.adventure.stats.minutes');
+            adventureStats[2].textContent = t('menu.modes.adventure.stats.hope');
+        }
+        
+        // Mode Infini
+        const endlessTitle = document.querySelector('[data-mode="endless"] .mode-title');
+        if (endlessTitle) endlessTitle.textContent = t('menu.modes.endless.title');
+        
+        const endlessDesc = document.querySelector('[data-mode="endless"] .mode-description');
+        if (endlessDesc) {
+            const desc = t('menu.modes.endless.description');
+            endlessDesc.innerHTML = desc.join('<br>');
+        }
+        
+        const endlessStats = document.querySelectorAll('[data-mode="endless"] .stat-label');
+        if (endlessStats.length >= 3) {
+            endlessStats[0].textContent = t('menu.modes.endless.stats.waves');
+            endlessStats[1].textContent = t('menu.modes.endless.stats.duration');
+            endlessStats[2].textContent = t('menu.modes.endless.stats.record');
+        }
+        
+        console.log('📝 Traductions appliquées au menu');
     }
     
     displayMaxScore() {
