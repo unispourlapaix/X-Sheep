@@ -6,6 +6,7 @@ import { PixelArtRenderer } from './PixelArtRenderer.js';
 import { VoxelRenderer } from './VoxelRenderer.js';
 import { CloudBackground } from './CloudBackground.js';
 import { WaterBackground } from './WaterBackground.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class Renderer {
     constructor(game) {
@@ -1961,8 +1962,9 @@ export class Renderer {
             // Label TOTAL
             this.ctx.font = `bold ${fontSize}px monospace`;
             this.ctx.fillStyle = '#888';
-            this.ctx.fillText('TOTAL', rightX, centerY);
-            rightX -= this.ctx.measureText('TOTAL').width + padding;
+            const totalLabel = i18n.t('game.ui.total');
+            this.ctx.fillText(totalLabel, rightX, centerY);
+            rightX -= this.ctx.measureText(totalLabel).width + padding;
             
             // Détails entre parenthèses
             this.ctx.font = `${fontSize - 2}px monospace`;
@@ -1982,8 +1984,9 @@ export class Renderer {
             // Label XP
             this.ctx.font = `bold ${fontSize}px monospace`;
             this.ctx.fillStyle = '#888';
-            this.ctx.fillText('XP', rightX, centerY);
-            rightX -= this.ctx.measureText('XP').width + padding * 2;
+            const xpLabel = i18n.t('game.ui.xp');
+            this.ctx.fillText(xpLabel, rightX, centerY);
+            rightX -= this.ctx.measureText(xpLabel).width + padding * 2;
             
             // Séparateur
             this.ctx.fillStyle = '#444';
@@ -2312,7 +2315,8 @@ export class Renderer {
             // Dessiner la bulle avec le style voxel
             this.ctx.save();
             this.ctx.globalAlpha = bubble.opacity;
-            this.voxelRenderer.drawVoxelBubble(x, y, width, height, 'VA VIE! et renai !\nRETOURNE VIVRE !');
+            const rebirthText = this.game.i18n?.t('endless.gameOver.rebirth') || 'endless.gameOver.rebirth';
+            this.voxelRenderer.drawVoxelBubble(x, y, width, height, rebirthText);
             this.ctx.restore();
             return;
         }
@@ -2389,7 +2393,7 @@ export class Renderer {
         this.ctx.font = 'bold 20px "Arial Black", Arial';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
-        this.ctx.fillText('VA VIE! et renai !', bubble.x, y + 30);
+        this.ctx.fillText(i18n.t('game.messages.quickVictoryLine1'), bubble.x, y + 30);
         
         // Texte principal - ligne 2 (plus grosse)
         this.ctx.font = 'bold 24px "Arial Black", Arial';
@@ -2398,7 +2402,7 @@ export class Renderer {
         textGradient.addColorStop(0.5, `rgba(255, 255, 255, ${bubble.opacity})`);
         textGradient.addColorStop(1, `rgba(255, 255, 0, ${bubble.opacity})`);
         this.ctx.fillStyle = textGradient;
-        this.ctx.fillText('RETOURNE VIVRE !', bubble.x, y + 65);
+        this.ctx.fillText(i18n.t('game.messages.quickVictoryLine2'), bubble.x, y + 65);
         
         this.ctx.restore();
     }

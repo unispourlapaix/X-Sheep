@@ -1,7 +1,11 @@
 // SevenSins.js - Les 7 Péchés Capitaux (niveau 2)
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class SevenSins {
+    static getTranslatedText(id) {
+        return i18n.translations?.obstacles?.sins?.[id] || '';
+    }
     static definitions = [
         {
             id: 'pride',
@@ -78,6 +82,7 @@ export class SevenSins {
         
         return {
             ...def,
+            text: this.getTranslatedText(def.id) || def.text,
             x: GameConfig.CANVAS_WIDTH,
             y: Math.max(minY, Math.min(maxY, y)),
             type: 'sin',

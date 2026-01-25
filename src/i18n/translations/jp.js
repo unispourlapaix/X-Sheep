@@ -1,278 +1,593 @@
-// Traductions françaises (langue par défaut)
+// 日本語 - Japanese translations
 export default {
     meta: {
-        language: 'Français',
-        code: 'fr',
-        flag: '🇫🇷'
+        language: '日本語',
+        code: 'jp',
+        flag: '🇯🇵'
     },
     
     menu: {
         title: 'X-Sheep is back',
-        subtitle: "L'Espoir en Action",
-        createdBy: 'Créé avec 💖 par',
-        author: 'Emmanuel Payet',
+        subtitle: '行動の中の希望',
+        createdBy: '💖を込めて制作',
+        author: 'エマニュエル・パイエ',
         
         modes: {
             adventure: {
-                title: 'AVENTURE',
+                title: 'アドベンチャー',
                 description: [
-                    'Traverse les épreuves de la vie.',
-                    'Messages narratifs profonds.',
-                    'Atteins la Porte du Paradis.'
+                    '人生の試練を乗り越えよう',
+                    '深い物語のメッセージ',
+                    '天国の門を目指せ'
                 ],
                 stats: {
-                    chapters: 'Chapitres',
-                    minutes: 'Minutes',
-                    hope: 'Espoir'
+                    chapters: '章',
+                    minutes: '分',
+                    hope: '希望'
                 }
             },
             endless: {
-                title: 'INFINI',
+                title: 'エンドレス',
                 description: [
-                    'Survie sans fin.',
-                    'Score et combos maximaux.',
-                    'Bats tous les records !'
+                    '無限のサバイバル',
+                    '最高得点とコンボ',
+                    '全記録を破れ！'
                 ],
                 stats: {
-                    waves: 'Vagues',
-                    duration: 'Durée',
-                    record: 'Record'
+                    waves: '波',
+                    duration: '継続時間',
+                    record: '記録'
                 }
             }
         },
         
-        score: 'Score',
-        graphics: {
-            title: 'Choisir le style graphique',
-            normal: 'Normal',
-            pixelArt: 'Pixel Art'
+        score: 'スコア',
+        
+        controls: {
+            graphics: {
+                title: 'グラフィックスタイルを選択',
+                normal: '通常',
+                bth: 'Bth',
+                label: {
+                    normal: '通常',
+                    bth: 'Bth'
+                },
+                popup: {
+                    title: 'グラフィックスタイル',
+                    modeNormal: '📺 通常モード',
+                    modeBth: '📟 Bthモード',
+                    willApply: '変更は次のゲームで適用されます',
+                    ok: 'OK'
+                }
+            },
+            language: {
+                title: '言語を変更',
+                change: 'Change language / 言語を変更',
+                panelTitle: '🌍 Language / 言語',
+                ltrSection: 'LTR言語',
+                rtlSection: 'RTL言語 (العربية / עברית)'
+            }
         }
     },
     
     game: {
         levels: {
-            level1: 'NIVEAU 1: Les Épreuves de la Vie',
-            level2: 'NIVEAU 2: Les 7 Péchés Capitaux',
-            level3: 'NIVEAU 3: Navigation et Sagesse'
+            level1: 'レベル1：人生の試練',
+            level2: 'レベル2：七つの大罪',
+            level3: 'レベル3：航海と知恵',
+            level2Title: 'レベル2：七つの大罪',
+            level2Description: '不可能なサバイバル... できる限り長く生き延びよう！',
+            level3Title: 'レベル3：知恵の探求',
+            level3Description: '夜の海を航海し、知恵を集め、海の危険を避けよう！'
         },
         
         buttons: {
-            retry: 'Réessayer',
-            menu: 'Menu Principal',
-            continue: 'Continuer',
-            close: 'Fermer',
-            trophies: 'Voir tous les messages (Trophées)'
+            retry: 'リトライ',
+            menu: 'メインメニュー',
+            continue: '続ける 🌟',
+            close: '閉じる',
+            trophies: '全メッセージを見る（トロフィー）'
         },
         
         gameOver: {
-            title: 'GAME OVER',
-            reachedLevel: 'Niveau atteint',
-            score: 'Score',
-            obstaclesAvoided: 'Obstacles évités'
+            title: 'ゲームオーバー',
+            rebirth: '🔄 生きろ！そして生まれ変われ！生き返れ！',
+            totalScore: '合計スコア',
+            score: 'スコア',
+            xp: 'XP',
+            obstaclesAvoided: '回避した障害',
+            retry: 'リトライ',
+            mainMenu: 'メインメニュー',
+            returnMenu: 'メニューに戻る'
         },
         
         victory: {
-            title: 'VICTOIRE!',
-            levelCompleted: 'Niveau terminé!',
-            congratulations: 'Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?'
+            title: '勝利！',
+            levelCompleted: 'レベルクリア！',
+            congratulations: 'おめでとう！あなたは粘り強く、全ての障害を乗り越えました。忍耐と決意が成功の鍵です。次のレベルに進む準備はできていますか？',
+            impatience: '焦り！',
+            bossesDestroyed: '⚔️ ボス撃破 ⚔️',
+            legendConfirmed: '👑 伝説確定 👑',
+            victoriousCombat: '最後まで勝利の戦い',
+            perseverance: '忍耐 = 勝利',
+            lifeLesson1: '人生の戦いは厳しくても、',
+            lifeLesson2: '諦めずに粘り強くあれば',
+            lifeLesson3: '最善はこれから訪れる',
+            scoreLabel: 'スコア',
+            obstaclesDestroyed: '破壊した障害',
+            continue: '続ける',
+            menu: 'メニュー'
         },
         
         hud: {
-            lives: 'Vies',
-            score: 'Score',
-            level: 'Niveau',
-            combo: 'Combo',
-            wisdom: 'Sagesse'
+            lives: 'ライフ',
+            score: 'スコア',
+            level: 'レベル',
+            combo: 'コンボ',
+            wisdom: '知恵'
+        },
+        
+        messages: {
+            leviathan: '🐉 レヴィアサン出現！攻撃を避けろ！',
+            quickVictory: '生きろ！そして生まれ変われ！生き返れ！',
+            quickVictoryLine1: '生きろ！そして生まれ変われ！',
+            quickVictoryLine2: '生き返れ！',
+            notFinished: 'まだ終わってない？',
+            watchYourLife: 'ライフに注意！'
+        },
+        
+        ui: {
+            paradise: '楽園',
+            score: 'スコア',
+            souls: '魂',
+            total: '合計',
+            xp: 'XP',
+            brokenClock: '壊れた時計 - 時の支配者'
+        },
+        
+        level2: {
+            title: '🚪 天国の門',
+            survived: 'あなたは{seconds}秒生き延びました',
+            continue: '続ける',
+            chooseGrace: '恵みを選ぶ'
         }
     },
     
     trophies: {
-        title: 'COLLECTION DE TROPHÉES',
-        subtitle: 'Messages de courage et d\'espoir',
-        unlocked: 'Débloqué',
-        locked: 'Verrouillé',
-        share: 'Partager',
+        title: 'トロフィーコレクション',
+        menuTitle: '🏆 トロフィー＆メッセージ 🏆',
+        subtitle: '勇気と希望のメッセージ',
+        by: 'エマニュエル・パイエより',
+        totalXP: '合計XP',
+        unlocked: 'アンロック済み',
+        unlockedCount: 'アンロックトロフィー',
+        locked: 'ロック中',
+        share: 'シェア',
+        close: '🚪 閉じる',
+        newTrophy: '🏆 新しいトロフィー！',
+        xpGained: 'XP',
+        unlockedOn: 'アンロック日',
+        shareButton: '📤 シェア',
+        lockedMessage: 'メッセージをアンロックするにはこの障害を越えてください...',
         categories: {
-            life: 'Épreuves de la Vie',
-            existential: 'Menaces Existentielles',
-            richness: 'Péchés de Richesse',
-            mid: 'Dangers Intermédiaires',
-            fun: 'Moments Fun',
-            special: 'Trophées Spéciaux'
+            life: '人生の試練',
+            existential: '実存的脅威',
+            richness: '富の罪',
+            mid: '中間の危険',
+            fun: '楽しい瞬間',
+            special: '特別なトロフィー'
+        },
+        labels: {
+            wheelchair: '♿ 車椅子',
+            car_accident: '🚗 事故',
+            coffin: '⚰️ 棺',
+            safe: '🏦 金庫',
+            house: '🏠 壊れた家',
+            wolf: '🐺 狼',
+            black_sheep: '🐑 黒い羊',
+            addiction: '📦 依存症',
+            death: '💀 死',
+            cancer: '🎗️ がん',
+            nuclear: '☢️ 反核',
+            meteor: '☄️ 隕石',
+            procrastination: '⏰ 先延ばし',
+            anger: '😡 怒り',
+            madness: '🌀 狂気',
+            avarice: '💰 強欲',
+            luxure: '💋 色欲',
+            nepotisme: '🤝 縁故主義',
+            selection: '👥 選別',
+            esclavage: '⛓️ 奴隷制',
+            surexploitation: '🏭 過剰搾取',
+            white_sheep: '🐑✨ 白い羊 - 恵み',
+            charity: '💝 慈善',
+            gold_coin: '💰 金貨 - 自由',
+            grace: '✝️ 恵み - イエス',
+            impatient: '⏰💔 壊れた時計 - 時の支配者',
+            eagle: '🦅 鷲',
+            thunder: '⚡ 雷',
+            disco_ball: '🪩 ディスコボール',
+            pizza: '🍕 ピザ',
+            trampoline: '🤸 トランポリン',
+            banana: '🍌 バナナ',
+            magnet: '🧲 磁石',
+            balloon: '🎈 風船',
+            tornado: '🌪️ 竜巻',
+            rocket: '🚀 ロケット'
         }
     },
     
     narrative: {
-        // Obstacles de la vie
+        // 人生の障害
         wheelchair: {
-            text: "Ce fauteuil roulant ? Moi aussi je vis avec un handicap... Mais regarde, je peux encore voler avec mes rêves ! Ton corps peut être limité, mais ton esprit est libre. Dieu t'a donné des ailes que personne ne peut briser. 💪✨",
-            hope: "Tu n'es pas défini par tes limitations"
+            text: "この車椅子？私も障害を抱えて生きている...でも見て、私はまだ夢と共に飛べる！あなたの体は制限されているかもしれないが、心は自由だ。神はあなたに誰も壊せない翼を与えた。💪✨",
+            hope: "あなたは制限によって定義されない"
         },
         car_accident: {
-            text: "Cette voiture brisée me rappelle mes propres accidents de la vie... Les chocs, les traumatismes. Mais tu sais quoi ? Dieu répare les cœurs brisés. Chaque cicatrice raconte une histoire de survie. Tu es plus fort que tu ne le crois. 🚗💔➡️❤️",
-            hope: "Tes blessures deviennent ta force"
+            text: "この壊れた車は私自身の人生の事故を思い出させる...衝撃、トラウマ。でも知ってる？神は壊れた心を癒す。全ての傷跡は生存の物語を語る。あなたは思うより強い。🚗💔➡️❤️",
+            hope: "あなたの傷は力になる"
         },
         coffin: {
-            text: "Un cercueil... La mort n'est pas la fin, c'est juste une porte vers l'éternité. Je ne crains plus la mort, car je sais que l'amour de Dieu est plus fort. Chaque jour est un cadeau. Vis pleinement ! ⚰️➡️👼",
-            hope: "La vie est éternelle en Dieu"
+            text: "棺...死は終わりではなく、永遠への扉にすぎない。私はもう死を恐れない。神の愛の方が強いと知っているから。毎日が贈り物だ。完全に生きよう！⚰️➡️👼",
+            hope: "命は神の中で永遠"
         },
         safe: {
-            text: "Ce coffre-fort fermé... On enferme nos peurs, nos secrets, nos douleurs. Mais Dieu voit tout et pardonne tout. Ouvre ton cœur, libère-toi de ce qui te retient prisonnier. La vraie richesse, c'est la liberté intérieure. 🔒➡️🕊️",
-            hope: "Libère ton cœur, trouve la paix"
+            text: "この閉じた金庫...私たちは恐れ、秘密、痛みを閉じ込める。でも神は全てを見て、全てを許す。心を開き、あなたを囚人にしているものから解放されよう。真の富は内なる自由だ。🔒➡️🕊️",
+            hope: "心を解放し、平和を見つけよう"
         },
         house: {
-            text: "Cette maison semble solide... Mais les vraies fondations, ce n'est pas le béton, c'est la foi. Construis ta vie sur l'amour, la compassion, l'entraide. Ton foyer spirituel sera indestructible. 🏠❤️",
-            hope: "Bâtis sur l'amour, pas sur la peur"
+            text: "この家は堅固に見える...でも本当の基盤はコンクリートではなく、信仰だ。愛、思いやり、助け合いの上に人生を築こう。あなたの精神的な家は破壊不可能だ。🏠❤️",
+            hope: "恐れではなく愛の上に築こう"
         },
         wolf: {
-            text: "Le loup... Il représente la peur, le prédateur qui te traque. Mais rappelle-toi: tu n'es jamais seul. Dieu est ton berger, il te protège. Face au loup, tu es plus fort que tu ne le penses. 🐺➡️🛡️",
-            hope: "Dieu est ton protecteur"
+            text: "狼...それは恐れを表し、あなたを追う捕食者だ。でも覚えておいて：あなたは決して一人ではない。神はあなたの羊飼いで、あなたを守る。狼に対して、あなたは思うより強い。🐺➡️🛡️",
+            hope: "神はあなたの守護者"
         },
         black_sheep: {
-            text: "Le mouton noir... Celui qu'on rejette, qu'on exclut. Moi aussi, j'ai été différent. Mais Dieu aime TOUS ses moutons, peu importe leur couleur. L'exclusion est une illusion. L'amour de Dieu est universel. 🐑🖤➡️💖",
-            hope: "Différent ne veut pas dire inférieur"
+            text: "黒い羊...拒絶され、排除される者。私も違っていた。でも神は全ての羊を愛する、色に関係なく。排除は幻想だ。神の愛は普遍的だ。🐑🖤➡️💖",
+            hope: "違うことは劣っているという意味ではない"
         },
         addiction: {
-            text: "Les dépendances... Alcool, drogues, jeux, tout ce qui nous enchaîne. Moi aussi, j'ai lutté. Mais la liberté existe. Demande de l'aide, accepte la main tendue. Dieu te veut libre, pas esclave. 🍷➡️🕊️",
-            hope: "La liberté est possible, demande de l'aide"
+            text: "依存症...アルコール、ドラッグ、ギャンブル、私たちを縛る全てのもの。私も苦しんだ。でも自由は存在する。助けを求め、差し伸べられた手を受け入れよう。神はあなたを自由にしたい、奴隷ではなく。🍷➡️🕊️",
+            hope: "自由は可能、助けを求めよう"
         },
         
-        // Obstacles du ciel (existentiels)
+        // 空の障害（実存的）
         death: {
-            text: "💀 La Mort... Elle fait peur, elle est mystérieuse. Mais la Bible dit qu'elle n'a plus de pouvoir sur ceux qui croient. La mort n'est qu'un passage, pas une fin. Vis chaque jour comme un cadeau. L'éternité t'attend. 🌅",
-            hope: "La mort n'est qu'un passage vers l'éternité"
+            text: "💀 死...それは恐ろしく、神秘的だ。でも聖書は、信じる者には死はもう力がないと言っている。死は通過点にすぎず、終わりではない。毎日を贈り物として生きよう。永遠があなたを待っている。🌅",
+            hope: "死は永遠への通過点にすぎない"
         },
         cancer: {
-            text: "🎗️ Le cancer... Cette maladie terrible qui ronge. Moi aussi, j'ai vu la souffrance. Mais même dans la maladie, Dieu est présent. Il ne t'abandonne pas. La guérison peut venir, mais ta foi reste ta force. 💪🙏",
-            hope: "Même dans la maladie, tu n'es pas seul"
+            text: "🎗️ がん...侵食するこの恐ろしい病気。私も苦しみを見てきた。でも病気の中でも、神は存在する。神はあなたを見捨てない。癒しは来るかもしれないが、あなたの信仰が力のままだ。💪🙏",
+            hope: "病気の中でも、あなたは一人ではない"
         },
         nuclear: {
-            text: "☢️ Le nucléaire... L'humanité capable de tout détruire. Fukushima, Tchernobyl, la guerre atomique. Face à cette folie, choisis la paix. Sois un artisan de paix, un bâtisseur d'espoir. Le monde a besoin de toi. 🕊️🌍",
-            hope: "La paix commence en toi"
+            text: "☢️ 核...全てを破壊できる人類。福島、チェルノブイリ、核戦争。この狂気に対して、平和を選ぼう。平和の職人、希望の建設者になろう。世界はあなたを必要としている。🕊️🌍",
+            hope: "平和はあなたから始まる"
         },
         meteor: {
-            text: "☄️ La météorite... La destruction venue du ciel. Les catastrophes naturelles nous rappellent notre fragilité. Mais ensemble, on est plus forts. Entraide, solidarité, amour: voilà nos vrais boucliers. 🛡️❤️",
-            hope: "Ensemble, on survit à tout"
+            text: "☄️ 隕石...空からの破壊。自然災害は私たちの脆弱性を思い出させる。でも一緒なら、私たちはより強い。助け合い、連帯、愛：これが私たちの本当の盾だ。🛡️❤️",
+            hope: "一緒なら、私たちは全てを乗り越える"
         },
         procrastination: {
-            text: "⏰ La procrastination... Remettre à demain ce qu'on peut faire aujourd'hui. Le temps perdu ne revient jamais. Agis maintenant ! Chaque instant est précieux. Ne laisse pas la peur te paralyser. Ose vivre ! ⏰➡️💪",
-            hope: "Le moment présent est tout ce que tu as"
+            text: "⏰ 先延ばし...今日できることを明日に延ばす。失われた時間は二度と戻らない。今行動しよう！全ての瞬間が貴重だ。恐れに麻痺させられるな。生きる勇気を持とう！⏰➡️💪",
+            hope: "今この瞬間が全てだ"
         },
         anger: {
-            text: "😡 La colère... Elle brûle, elle détruit. Moi aussi, j'ai ressenti cette rage. Mais la colère est un poison. Pardonne, libère, avance. Dieu t'aide à transformer ta colère en force constructive. 🔥➡️❤️",
-            hope: "Transforme ta colère en force d'amour"
+            text: "😡 怒り...それは燃え、破壊する。私もこの怒りを感じた。でも怒りは毒だ。許し、解放し、前進しよう。神はあなたの怒りを建設的な力に変えるのを助ける。🔥➡️❤️",
+            hope: "怒りを愛の力に変えよう"
         },
         madness: {
-            text: "🤪 La folie... Perdre la raison, perdre pied. La santé mentale est fragile. Si tu souffres, parle. Demande de l'aide. Tu n'es pas fou, tu es humain. Dieu guérit aussi les esprits brisés. 🧠💔➡️💚",
-            hope: "Ta santé mentale compte, demande de l'aide"
+            text: "🤪 狂気...理性を失い、足場を失う。メンタルヘルスは脆弱だ。苦しんでいるなら、話そう。助けを求めよう。あなたは狂っていない、人間だ。神は壊れた精神も癒す。🧠💔➡️💚",
+            hope: "あなたのメンタルヘルスは重要、助けを求めよう"
         },
         
-        // Péchés de richesse
+        // 富の罪
         avarice: {
-            text: "💰 L'AVARICE - L'amour de l'argent. Accumuler, thésauriser, jamais assez. Mais la richesse matérielle est vide. Le vrai trésor, c'est l'amour, la générosité, le partage. Donne, et tu recevras au centuple. 💸➡️❤️",
-            hope: "La vraie richesse est dans le don"
+            text: "💰 強欲 - お金への愛。蓄積し、貯蔵し、決して十分ではない。でも物質的な富は空虚だ。本当の宝は、愛、寛大さ、分かち合いだ。与えれば、百倍受け取る。💸➡️❤️",
+            hope: "真の富は与えることにある"
         },
         luxure: {
-            text: "💋 LA LUXURE - La quête insatiable de plaisir charnel. Le corps est beau, l'amour est saint. Mais la luxure est une prison. Respecte-toi, respecte l'autre. L'amour vrai dépasse le désir. 🔥➡️💞",
-            hope: "L'amour vrai transcende le désir"
+            text: "💋 色欲 - 肉体的快楽の飽くなき追求。体は美しく、愛は神聖だ。でも色欲は牢獄だ。自分を尊重し、他者を尊重しよう。真の愛は欲望を超える。🔥➡️💞",
+            hope: "真の愛は欲望を超越する"
         },
         nepotisme: {
-            text: "👨‍👩‍👧‍👦 LE NÉPOTISME - Favoriser ses proches au détriment de la justice. C'est de la corruption déguisée. Dieu demande l'équité, pas le favoritisme. Chaque personne mérite sa chance. Sois juste. ⚖️",
-            hope: "La justice avant le favoritisme"
+            text: "👨‍👩‍👧‍👦 縁故主義 - 正義を犠牲にして身内を優遇する。これは偽装した腐敗だ。神は公平を求め、えこひいきではない。全ての人はチャンスに値する。公正であれ。⚖️",
+            hope: "えこひいきより正義を"
         },
         selection: {
-            text: "🧬 LA SÉLECTION - Choisir qui vit, qui meurt, qui mérite. Eugénisme, discrimination, exclusion. Mais Dieu aime chaque vie, chaque être. Personne n'a le droit de jouer à Dieu. Chaque vie a une valeur infinie. ❤️",
-            hope: "Chaque vie a une valeur infinie"
+            text: "🧬 選別 - 誰が生き、誰が死に、誰が値するかを選ぶ。優生学、差別、排除。でも神は全ての命、全ての存在を愛する。誰も神の役割を演じる権利はない。全ての命には無限の価値がある。❤️",
+            hope: "全ての命には無限の価値がある"
         },
         esclavage: {
-            text: "⛓️ L'ESCLAVAGE - Exploiter, dominer, asservir. L'histoire est pleine de ces horreurs. Mais Dieu libère les opprimés. Sois du côté de la liberté, pas de l'oppression. Défends la dignité humaine. 🕊️",
-            hope: "La liberté est un droit universel"
+            text: "⛓️ 奴隷制 - 搾取し、支配し、奴隷にする。歴史はこれらの恐怖に満ちている。でも神は抑圧された者を解放する。自由の側に立とう、抑圧ではなく。人間の尊厳を守ろう。🕊️",
+            hope: "自由は普遍的な権利"
         },
         surexploitation: {
-            text: "🌍 LA SUREXPLOITATION - Épuiser la Terre, exploiter les ressources sans limite. La planète agonise. Mais il est encore temps. Respecte la Création, préserve la nature. Dieu nous a confié la Terre, pas pour la détruire. 🌱",
-            hope: "Préserve la Création pour demain"
+            text: "🌍 過剰搾取 - 地球を枯渇させ、限度なく資源を搾取する。地球は苦しんでいる。でもまだ時間はある。創造を尊重し、自然を保護しよう。神は私たちに地球を託した、破壊するためではない。🌱",
+            hope: "明日のために創造を保護しよう"
         },
         
-        // Obstacles milieu
+        // 中間の障害
         eagle: {
-            text: "🦅 L'aigle... Majestueux mais dangereux. Dans la vie, certains prédateurs volent haut. Mais toi aussi, tu peux voler. Ne te laisse pas intimider. Ta force est en toi. Déploie tes ailes ! 🦅✨",
-            hope: "Déploie tes ailes, vole haut"
+            text: "🦅 鷲...威厳があるが危険だ。人生では、一部の捕食者は高く飛ぶ。でもあなたも飛べる。威圧されるな。あなたの力はあなたの中にある。翼を広げよう！🦅✨",
+            hope: "翼を広げ、高く飛ぼう"
         },
         thunder: {
-            text: "⚡ La foudre... Imprévisible, terrifiante. Les tempêtes de la vie sont inévitables. Mais après l'orage vient le calme. Tiens bon, la lumière revient toujours. 🌩️➡️🌈",
-            hope: "Après la tempête vient l'arc-en-ciel"
+            text: "⚡ 雷...予測不可能で、恐ろしい。人生の嵐は避けられない。でも嵐の後には静けさが来る。持ちこたえよう、光は常に戻ってくる。🌩️➡️🌈",
+            hope: "嵐の後には虹が来る"
         },
         
-        // Obstacles FUN
+        // 楽しい障害
         disco_ball: {
-            text: "🪩✨ YEEEES! Boule disco! Danse avec moi! La vie c'est aussi ça : des moments de pure joie absurde! Parfois il faut juste lâcher prise et briller comme une boule à facettes! 💃🕺",
-            hope: "La joie est un acte de résistance !"
+            text: "🪩✨ イェーイ！ディスコボール！私と踊ろう！人生はこういうものでもある：純粋に不条理な喜びの瞬間！時には手放してファセットボールのように輝く必要がある！💃🕺",
+            hope: "喜びは抵抗の行為！"
         },
         pizza: {
-            text: "🍕 Pizza party dans le ciel! Même le mouton mérite sa part! La vie c'est pas que des épreuves, c'est aussi partager une pizza avec des amis. Célèbre les petits plaisirs! 😋",
-            hope: "Les petits bonheurs comptent aussi !"
+            text: "🍕 空でピザパーティー！羊にも分け前がある！人生は試練だけではなく、友達とピザを分かち合うことでもある。小さな喜びを祝おう！😋",
+            hope: "小さな幸せも大切！"
         },
         trampoline: {
-            text: "🤸 BOING BOING! Rebondir c'est la vie! Chaque chute est une occasion de rebondir plus haut! Laisse ton cœur d'enfant s'exprimer, saute, ris, vis! 🎪",
-            hope: "Rebondis toujours plus haut !"
+            text: "🤸 ボヨンボヨン！跳ねることが人生だ！全ての落下はより高く跳ね返る機会だ！子供の心を表現し、跳んで、笑って、生きよう！🎪",
+            hope: "いつもより高く跳ね返ろう！"
         },
         banana: {
-            text: "🍌 Attention banane! Oui, même moi je glisse parfois! On a le droit de tomber, de faire des erreurs hilarantes. L'important c'est de se relever en riant! 😂",
-            hope: "Ris de tes chutes, relève-toi !"
+            text: "🍌 バナナ注意！そう、私も時々滑る！転倒する権利があり、陽気なミスをする。大切なのは笑いながら立ち上がることだ！😂",
+            hope: "転倒を笑い、立ち上がろう！"
         },
         magnet: {
-            text: "🧲 Aimant géant! Certaines choses nous attirent irrésistiblement. Mais attention à ne pas perdre le contrôle! Choisis ce qui t'attire: le bien ou le chaos? 🤔",
-            hope: "Choisis bien tes attractions !"
+            text: "🧲 巨大磁石！ある物事が私たちを抗いがたく引き寄せる。でもコントロールを失わないように注意！何があなたを引き寄せるか選ぼう：善かカオスか？🤔",
+            hope: "引き寄せるものをよく選ぼう！"
         },
         balloon: {
-            text: "🎈 Ballon! Léger, joyeux, insouciant! La vie devrait être légère comme un ballon. Laisse tes fardeaux au sol, envole-toi vers la joie! 🎉",
-            hope: "Sois léger comme un ballon !"
+            text: "🎈 風船！軽く、楽しく、無邪気！人生は風船のように軽くあるべきだ。重荷を地面に残し、喜びに向かって飛び立とう！🎉",
+            hope: "風船のように軽くあれ！"
         },
         tornado: {
-            text: "🌪️ Tornade loufoque! Parfois la vie est un tourbillon chaotique! Mais même dans le chaos, trouve ton centre, ton ancrage. Le calme au cœur de la tempête! 🧘",
-            hope: "Trouve le calme dans le chaos !"
+            text: "🌪️ 滑稽な竜巻！時々人生は混沌とした渦だ！でも混沌の中でも、中心、錨を見つけよう。嵐の中心の静けさ！🧘",
+            hope: "混沌の中で静けさを見つけよう！"
         },
         rocket: {
-            text: "🚀 Fusée cosmique! Parfois il faut viser les étoiles, même si ça semble fou! Ose rêver grand, ose l'impossible! Le ciel n'est qu'une limite imaginaire! 🌟",
-            hope: "Vise les étoiles, ose l'impossible !"
+            text: "🚀 宇宙ロケット！時には星を目指す必要がある、狂っているように見えても！大きく夢を見る勇気を、不可能に挑戦する勇気を！空は想像上の限界にすぎない！🌟",
+            hope: "星を目指し、不可能に挑戦しよう！"
         },
         
-        // Trophées spéciaux
+        // 特別なトロフィー
         charity: {
-            text: "🤝 LA CHARITÉ - Donner sans rien attendre en retour. Partager avec celui qui a faim, vêtir celui qui est nu, consoler celui qui pleure. La charité est l'amour en action. Et cet amour change le monde. ❤️",
-            hope: "L'amour en action change le monde"
+            text: "🤝 慈善 - 見返りを期待せず与える。飢えた者と分かち合い、裸の者に着せ、泣く者を慰める。慈善は行動する愛だ。そしてこの愛が世界を変える。❤️",
+            hope: "行動する愛が世界を変える"
         },
         impatient: {
-            text: "⏱️ L'IMPATIENCE - Toujours pressé, jamais satisfait. Mais Dieu travaille dans son temps, pas le nôtre. Apprends la patience, la confiance. Les meilleures choses prennent du temps. 🌱➡️🌳",
-            hope: "La patience est une force"
+            text: "⏱️ 焦り - いつも急いで、決して満足しない。でも神は私たちの時間ではなく、神の時間で働く。忍耐、信頼を学ぼう。最良のものには時間がかかる。🌱➡️🌳",
+            hope: "忍耐は力"
         },
         gold_coin: {
-            text: "💰 LA PIÈCE D'OR - Symbole de richesse matérielle. Mais la vraie richesse n'est pas dans l'or. Elle est dans les relations, l'amour, la paix intérieure. Cherche le trésor du cœur, pas celui du coffre. 💎➡️❤️",
-            hope: "Le vrai trésor est dans le cœur"
+            text: "💰 金貨 - 物質的富の象徴。でも真の富は金にはない。それは関係、愛、内なる平和にある。金庫の宝ではなく、心の宝を探そう。💎➡️❤️",
+            hope: "真の宝は心の中にある"
         },
         grace: {
-            text: "✝️ LA GRÂCE - Ce n'est pas une formule magique ni une incantation. La grâce se personnifie par une personne : Dieu fait homme et nommé Jésus. On ne trompera pas Dieu par des secrets ou cachotteries. La grâce est à lui seul. Et demander grâce avec repentance est une voie de salut pour tout être imparfait. Nos pires défauts n'auront plus d'importance devant lui avec un cœur disposé à être renouvelé, transformé pour le meilleur. Ne vous découragez pas en pensant être le pire pécheur. Demandez à Dieu de vous montrer qui vous êtes vraiment. 🕊️💔",
-            hope: "La grâce : Dieu fait homme"
+            text: "✝️ 恵み - これは魔法の公式でも呪文でもない。恵みは人格化される：人となった神、イエスと名付けられた。私たちは秘密や隠し事で神を欺くことはできない。恵みは神だけのものだ。そして悔い改めの心で恵みを求めることは、全ての不完全な存在の救いの道だ。最悪の欠点も、新たにされ、より良く変えられる心構えがあれば、神の前では重要ではなくなる。最悪の罪人だと思って落胆しないで。神にあなたが本当に誰であるかを示すよう求めよう。🕊️💔",
+            hope: "恵み：人となった神"
         },
         white_sheep: {
-            text: "🏳️‍🌈🐑 LE MOUTON BLANC - L'innocence, la pureté, mais aussi l'acceptation. Peu importe ton orientation, ta couleur, ton origine: Dieu t'aime tel que tu es. L'homophobie, le racisme, la discrimination sont des péchés. L'amour ne juge pas. L'amour accepte. L'amour libère. Tu es aimé(e), tu es accepté(e), tu es précieux(se). 🌈❤️",
-            hope: "Tu es aimé(e) tel(le) que tu es"
+            text: "🏳️‍🌈🐑 白い羊 - 無垢、純粋、そして受容。あなたの志向、色、出身に関係なく：神はあなたをありのままに愛する。同性愛嫌悪、人種差別、差別は罪だ。愛は裁かない。愛は受け入れる。愛は解放する。あなたは愛されている、受け入れられている、貴重だ。🌈❤️",
+            hope: "あなたはありのままに愛されている"
         },
         
-        // Dialogue final
+        // 最終対話
         finalDialogue: {
-            ant: "Regarde-toi, Mouton! Tu as traversé tous les obstacles! Je n'y croyais pas!",
-            jojo: "Moi non plus, mon frère! Mais tu l'as fait! Tu as prouvé que l'espoir est plus fort que tout!",
-            bee: "Tes ailes invisibles ont volé plus haut que les miennes! Tu es un héros!",
-            sheep: "Merci mes amis... Mais ce n'est pas moi le héros. C'est nous tous ensemble. C'est l'amour, c'est la foi, c'est l'espoir. Et maintenant... je vois la Porte du Paradis...",
-            jesus: "Viens, mon enfant. Tu as bien combattu. Entre dans la joie éternelle. Ta lutte n'a pas été vaine. L'amour a vaincu."
+            title: '🐑 最終対話 🐑',
+            antLabel: '🐜 アリ：',
+            jojoLabel: '🐐 ヤギのジョジョ：',
+            beeLabel: '🐝 ミツバチ：',
+            sheepLabel: '🐑 勇気の羊：',
+            jesusLabel: '✝️ イエス：',
+            author: '- エマニュエル・パイエ',
+            viewTrophies: '🏆 全メッセージを見る（トロフィー）',
+            ant: "見てよ、羊！あなたは全ての障害を乗り越えた！信じられなかった！",
+            jojo: "僕もだよ、兄弟！でもあなたはやった！希望が全てより強いことを証明した！",
+            bee: "あなたの見えない翼は私のより高く飛んだ！あなたはヒーローだ！",
+            sheep: "ありがとう友達...でもヒーローは私じゃない。みんな一緒だ。それは愛、信仰、希望だ。そして今...天国の門が見える...",
+            jesus: "来なさい、わが子よ。よく戦った。永遠の喜びに入りなさい。あなたの戦いは無駄ではなかった。愛が勝った。"
         }
     },
     
     notifications: {
-        levelTransition: 'Passage au niveau suivant...',
-        trophyUnlocked: 'Trophée débloqué !',
-        powerUpCollected: 'Power-up collecté !',
-        lifeRestored: 'Vie restaurée !'
+        levelTransition: '次のレベルへ移行中...',
+        trophyUnlocked: 'トロフィーアンロック！',
+        powerUpCollected: 'パワーアップ獲得！',
+        lifeRestored: 'ライフ回復！'
+    },
+    
+    messages: {
+        finalVictory: {
+            title: '✨ おめでとう ✨',
+            grace: 'イエスの恵みは確かな知恵です。',
+            keepLight: '光を灯し続けよう',
+            keepHeart: 'そして心を目覚めさせ続けよう。',
+            chooseLife: '生命を選ぼう。',
+            continue: 'おめでとう！あなたは粘り強く、全ての障害を乗り越えました。忍耐と決意が成功の鍵です。次のレベルに進む準備はできていますか？'
+        }
+    },
+    
+    proverbs: {
+        firstProverb: '自由は飛ぶ力',
+        proverbs: [
+            '流れる水は二度と戻らない',
+            '静かな水のように穏やか',
+            '大海の中の一滴',
+            '嵐の後には静けさが来る',
+            '水は器の形をとる',
+            '忍耐は苦いが、その果実は甘い',
+            '沈黙は金',
+            '待つ者に全てが来る',
+            '夜は助言をもたらす',
+            '星は全ての人のために輝く',
+            '海は滴でできている',
+            '最も長い旅は一歩から始まる',
+            '知恵は驚きの中で始まる',
+            '汝自身を知れ',
+            '真実は井戸の底にある',
+            '賢者は自分の過ちから学ぶ',
+            '笑顔は最も美しい曲線',
+            '時が全ての傷を癒す',
+            '内なる平和は全ての宝に値する',
+            '全ての終わりは新しい始まり'
+        ]
+    },
+    
+    powerUps: {
+        spiritual: {
+            courage: { name: '勇気', message: '💪 勇気！全てに立ち向かえる！', tip: '超強力ジャンプ！' },
+            force: { name: '力', message: '⚡ 神聖なる力！光の戦士！', tip: '全てを破壊！' },
+            patience: { name: '忍耐', message: '🕰️ 忍耐！静かに飛ぼう！', tip: 'コントロールされた飛行！' },
+            resilience: { name: '回復力', message: '🛡️ 回復力！装甲完備！', tip: 'シールド発動！' },
+            assurance: { name: '確信', message: '👑 確信！輝いている！', tip: '輝くオーラ！' },
+            liberte: { name: '自由', message: '🕊️ 自由！鎖を打ち破れ！', tip: '真の解放！' },
+            controle: { name: 'コントロール', message: '🧠 コントロール！自制しよう！', tip: '完璧な支配！' },
+            sagesse: { name: '知恵', message: '🧘 知恵！内なる平和！', tip: '明晰な精神！' },
+            gestion: { name: '管理', message: '📊 管理！最適化！', tip: '効率性！' },
+            agir: { name: '行動', message: '🎯 行動！実行に移そう！', tip: '積極的な行動！' },
+            combattre: { name: '戦う', message: '⚔️ 戦う！戦闘モード！', tip: '戦士！' },
+            nepasabandonner: { name: '諦めない', message: '🚫 諦めない！粘り強く！', tip: '不動！' },
+            perseverer: { name: '忍耐する', message: '🏆 忍耐する！続けよう！', tip: '決意！' }
+        },
+        fun: {
+            disco: { name: 'ディスコモード', message: '🕺 ディスコモード！レッツダンス！', tip: '自動ディスコムーブ！' },
+            giant: { name: '巨大', message: '🦣 巨大羊！でっかい！', tip: 'サイズ×3！' },
+            tiny: { name: '極小', message: '🐭 とても小さい！簡単回避！', tip: 'ステルスモード！' },
+            rainbow: { name: '虹', message: '🌈 レインボーシープ！素晴らしい！', tip: '色付きの軌跡！' },
+            magnet_bonus: { name: 'ボーナス磁石', message: '🧲 全ボーナスがあなたを引き寄せる！', tip: '自動収集！' },
+            spring: { name: 'カンガルー', message: '🦘 カンガルーモード！ボヨンボヨン！', tip: '無限バウンド！' },
+            jetpack: { name: 'ジェットパック', message: '🎒 ジェットパック起動！ブーン！', tip: 'ターボ飛行！' },
+            ninja: { name: '忍者', message: '🥷 忍者モード！不可視！', tip: '実体がない！' },
+            party: { name: 'パーティー', message: '🎉 パーティータイム！', tip: '紙吹雪だらけ！' },
+            coffee: { name: 'カフェイン', message: '☕ カフェイン！スピード×5！', tip: 'ハイパースピード！' }
+        }
+    },
+    
+    obstacles: {
+        ground: {
+            wheelchair: '障害',
+            car_accident: '事故',
+            coffin: '喪失',
+            safe: '貧困',
+            house: '家族',
+            wolf: '暴力',
+            black_sheep: '拒絶',
+            addiction: '依存症',
+            job_stress: '仕事',
+            debt: '借金',
+            loneliness: '孤独',
+            betrayal: '裏切り'
+        },
+        middle: {
+            depression: 'うつ病',
+            anxiety: '不安',
+            doubt: '疑い',
+            phantom: '幽霊',
+            shark: 'サメ',
+            eagle: '鷲',
+            thunder: '稲妻',
+            cruise_ship: 'クルーズ船'
+        },
+        sky: {
+            death: '死',
+            cancer: 'がん',
+            nuclear: '核',
+            meteor: '隕石',
+            procrastination: '怠惰',
+            anger: '怒り',
+            madness: '狂気'
+        },
+        richness: {
+            avarice: '強欲',
+            luxure: '色欲',
+            nepotisme: '縁故主義',
+            selection: '選別',
+            esclavage: '奴隷制',
+            surexploitation: '搾取'
+        },
+        sins: {
+            pride: '傲慢',
+            greed: '強欲',
+            lust: '色欲',
+            envy: '嫉妬',
+            gluttony: '暴食',
+            wrath: '憤怒',
+            sloth: '怠惰'
+        },
+        fun: {
+            disco_ball: 'パーティー',
+            pizza: '休憩',
+            trampoline: 'ボヨン',
+            banana: '滑る',
+            magnet: '磁石',
+            balloon: '軽い',
+            tornado: '竜巻',
+            rocket: 'ロケット'
+        },
+        funMessages: {
+            disco_ball: '🥹 パーティータイム！羊が踊る！',
+            pizza: '🍕 食べ過ぎ！消化が遅い...',
+            trampoline: '🎪 スーパーボヨン！🚀',
+            banana: '🍌 バナナの皮！ウォーッシュ！',
+            magnet: '🧲 磁石のように引き寄せられた！',
+            balloon: '🎈 羽のように軽い！',
+            tornado: '🌪️ 狂気の渦！',
+            rocket: '🚀 発射ー！'
+        },
+        weapons: {
+            sword: '剣',
+            laser_gun: 'レーザー',
+            net: 'ネット',
+            shield: 'シールド',
+            hammer: 'ハンマー',
+            raygun: '光線'
+        },
+        level1Bosses: {
+            whale: 'クジラ',
+            pacman: 'パックマン',
+            dragon: 'ドラゴン',
+            ufo: 'UFO',
+            shark: 'サメ',
+            cruise_ship: 'クルーズ船',
+            robot: 'ロボット',
+            alien: 'エイリアン',
+            monster: 'モンスター',
+            big_boss: 'ビッグボス'
+        }
+    },
+    endless: {
+        bosses: {
+            whale: 'フクシマ',
+            pacman: 'クラーケン',
+            dragon: '火のドラゴン',
+            serpent: '毒蛇',
+            ufo: 'UFO',
+            shark: 'サメ',
+            robot: 'ロボット',
+            serpent_stage: 'ステージの蛇',
+            dragon_stage: 'ステージのドラゴン'        },
+        gameOver: {
+            title: 'ゲームオーバー',
+            skull: '💀',
+            score: 'スコア',
+            newRecord: '🏆 新記録！ 🏆',
+            record: '記録',
+            replay: '🔄 もう一度プレイ',
+            rebirth: '生きろ！そして生まれ変われ！\n生命に戻れ！'
+        }
+    },
+    intro: {
+        phases: {
+            paradise: "これが楽園？",
+            shield: "戦術シールド...",
+            sword: "レーザー剣...",
+            bomb: "イオン爆弾...",
+            wtf: "でもこれは何だ...💀",
+            boom: "ボーン！💥",
+            no: "やめて！何？😱"
+        }
     }
 };

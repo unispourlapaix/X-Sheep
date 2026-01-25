@@ -1,4 +1,6 @@
 // FunPowers.js - Bonus hilarants qui apparaissent toutes les 2 minutes
+import { i18n } from '../i18n/I18nManager.js';
+
 export class FunPowers {
     static definitions = [
         {
@@ -92,6 +94,17 @@ export class FunPowers {
             tip: 'Hyper vitesse!'
         }
     ];
+    
+    static getTranslated(id) {
+        const powerUpData = i18n.translations?.powerUps?.fun?.[id];
+        if (!powerUpData) return null;
+        
+        return {
+            name: powerUpData.name || '',
+            message: powerUpData.message || '',
+            tip: powerUpData.tip || ''
+        };
+    }
     
     static getRandom() {
         return this.definitions[Math.floor(Math.random() * this.definitions.length)];

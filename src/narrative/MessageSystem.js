@@ -1,4 +1,6 @@
 // MessageSystem.js - Système d'affichage des messages
+import { i18n } from '../i18n/I18nManager.js';
+
 export class MessageSystem {
     constructor(game) {
         this.game = game;
@@ -115,32 +117,32 @@ export class MessageSystem {
     showDialogue(dialogue) {
         this.container.innerHTML = `
             <h3 style="color:#DAA520;font-size:28px;margin-bottom:20px">
-                🐑 Dialogue Final 🐑
+                ${i18n.t('narrative.finalDialogue.title')}
             </h3>
             <div style="text-align:left;margin:20px 0">
                 <p style="margin-bottom:15px">
-                    <strong>🐜 La Fourmi :</strong><br>
+                    <strong>${i18n.t('narrative.finalDialogue.antLabel')}</strong><br>
                     "${dialogue.ant}"
                 </p>
                 <p style="margin-bottom:15px">
-                    <strong>🐐 Jojo la Chèvre :</strong><br>
+                    <strong>${i18n.t('narrative.finalDialogue.jojoLabel')}</strong><br>
                     "${dialogue.jojo}"
                 </p>
                 <p style="margin-bottom:15px">
-                    <strong>🐝 L'Abeille :</strong><br>
+                    <strong>${i18n.t('narrative.finalDialogue.beeLabel')}</strong><br>
                     "${dialogue.bee}"
                 </p>
                 <p style="margin-bottom:15px">
-                    <strong>🐑 Le Mouton Courage :</strong><br>
+                    <strong>${i18n.t('narrative.finalDialogue.sheepLabel')}</strong><br>
                     "${dialogue.sheep}"
                 </p>
                 <p style="margin-top:20px;padding:15px;background:linear-gradient(135deg,rgba(255,215,0,0.2),rgba(255,165,0,0.2));border-radius:10px;border-left:4px solid #FFD700">
-                    <strong style="color:#DAA520">✝️ Jésus :</strong><br>
+                    <strong style="color:#DAA520">${i18n.t('narrative.finalDialogue.jesusLabel')}</strong><br>
                     <span style="font-size:18px;font-weight:bold;color:#333">"${dialogue.jesus}"</span>
                 </p>
             </div>
             <p style="font-style:italic;color:#888;margin-top:20px">
-                - Emmanuel Payet
+                ${i18n.t('narrative.finalDialogue.author')}
             </p>
             <div style="text-align:center;margin-top:30px">
                 <button onclick="window.openTrophyMenu()" style="
@@ -153,7 +155,7 @@ export class MessageSystem {
                     color:#333;
                     cursor:pointer;
                     box-shadow:0 5px 15px rgba(0,0,0,0.3);
-                ">🏆 Voir tous les messages (Trophées)</button>
+                ">${i18n.t('narrative.finalDialogue.viewTrophies')}</button>
             </div>
         `;
         

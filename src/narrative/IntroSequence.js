@@ -4,6 +4,7 @@
 // ============================================
 
 import { SheepAnimator } from '../graphics/SheepAnimator.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class IntroSequence {
     constructor(game) {
@@ -20,42 +21,42 @@ export class IntroSequence {
         this.phases = [
             {
                 duration: 240,  // 4 secondes (ralenti)
-                text: "C'est ça le paradis ?",
+                textKey: 'intro.phases.paradise',
                 action: null
             },
             {
                 duration: 90,  // 1.5 secondes - coffre apparaît (ralenti)
-                text: null,
+                textKey: null,
                 action: 'showChest'
             },
             {
                 duration: 180,  // 3 secondes (ralenti)
-                text: "Bouclier tactique...",
+                textKey: 'intro.phases.shield',
                 action: 'showItem1'
             },
             {
                 duration: 180,  // 3 secondes (ralenti)
-                text: "Épée laser...",
+                textKey: 'intro.phases.sword',
                 action: 'showItem2'
             },
             {
                 duration: 180,  // 3 secondes (ralenti)
-                text: "Bombe ionique...",
+                textKey: 'intro.phases.bomb',
                 action: 'showItem3'
             },
             {
                 duration: 210,  // 3.5 secondes (ralenti)
-                text: "Mais c'est quoi ce merdier... 💀",
+                textKey: 'intro.phases.wtf',
                 action: null
             },
             {
                 duration: 150,  // 2.5 secondes (ralenti)
-                text: "BOOOM! 💥",
+                textKey: 'intro.phases.boom',
                 action: 'explosion'
             },
             {
                 duration: 120,  // 2 secondes - nouvelle phase
-                text: "non! wtf? 😱",
+                textKey: 'intro.phases.no',
                 action: 'gameStart'
             }
         ];
@@ -209,8 +210,9 @@ export class IntroSequence {
         this.drawSheep(ctx, this.sheepX, this.sheepY + this.sheepBounce);
         
         // Bulle de dialogue au-dessus de la tête du mouton
-        if (currentPhase.text) {
-            this.drawDialogue(ctx, currentPhase.text, this.sheepX + 20, this.sheepY - 80);
+        if (currentPhase.textKey) {
+            const dialogueText = i18n.t(currentPhase.textKey);
+            this.drawDialogue(ctx, dialogueText, this.sheepX + 20, this.sheepY - 80);
         }
         
         // Dessiner le coffre et items

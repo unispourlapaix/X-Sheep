@@ -42,10 +42,31 @@ export default {
         },
         
         score: 'Score',
-        graphics: {
-            title: 'Choose graphic style',
-            normal: 'Normal',
-            pixelArt: 'Pixel Art'
+        
+        controls: {
+            graphics: {
+                title: 'Choose graphics style',
+                normal: 'Normal',
+                bth: 'Bth',
+                label: {
+                    normal: 'Normal',
+                    bth: 'Bth'
+                },
+                popup: {
+                    title: 'Graphics Style',
+                    modeNormal: '📺 Normal Mode',
+                    modeBth: '📟 Bth Mode',
+                    willApply: 'The change will be applied in the next game',
+                    ok: 'OK'
+                }
+            },
+            language: {
+                title: 'Change language',
+                change: 'Change language / Changer de langue',
+                panelTitle: '🌍 Language / Langue',
+                ltrSection: 'LTR Languages',
+                rtlSection: 'RTL Languages (العربية / עברית)'
+            }
         }
     },
     
@@ -53,28 +74,49 @@ export default {
         levels: {
             level1: 'LEVEL 1: Life\'s Trials',
             level2: 'LEVEL 2: The 7 Deadly Sins',
-            level3: 'LEVEL 3: Navigation and Wisdom'
+            level3: 'LEVEL 3: Navigation and Wisdom',
+            level2Title: 'LEVEL 2: THE 7 DEADLY SINS',
+            level2Description: 'Impossible survival... Resist as long as possible!',
+            level3Title: 'LEVEL 3: THE QUEST FOR WISDOM',
+            level3Description: 'Navigate the night waters, collect wisdom and avoid marine dangers!'
         },
         
         buttons: {
             retry: 'Retry',
             menu: 'Main Menu',
-            continue: 'Continue',
+            continue: 'Continue 🌟',
             close: 'Close',
             trophies: 'View All Messages (Trophies)'
         },
         
         gameOver: {
             title: 'GAME OVER',
-            reachedLevel: 'Level Reached',
+            rebirth: '🔄 Go live! and be reborn! GO BACK TO LIFE!',
+            totalScore: 'Total Score',
             score: 'Score',
-            obstaclesAvoided: 'Obstacles Avoided'
+            xp: 'XP',
+            obstaclesAvoided: 'Obstacles Avoided',
+            retry: 'Retry',
+            mainMenu: 'Main Menu',
+            returnMenu: 'RETURN TO MENU'
         },
         
         victory: {
             title: 'VICTORY!',
             levelCompleted: 'Level Completed!',
-            congratulations: 'Congratulations! You persevered and overcame all obstacles. Patience and determination are the keys to success. Ready for the next level?'
+            congratulations: 'Congratulations! You persevered and overcame all obstacles. Patience and determination are the keys to success. Ready for the next level?',
+            impatience: 'IMPATIENCE!',
+            bossesDestroyed: '⚔️ BOSSES ANNIHILATED ⚔️',
+            legendConfirmed: '👑 LEGEND CONFIRMED 👑',
+            victoriousCombat: 'VICTORIOUS COMBAT TILL THE END',
+            perseverance: 'PERSEVERANCE = VICTORY',
+            lifeLesson1: 'Even if life\'s battle is hard,',
+            lifeLesson2: 'you must persevere and never give up',
+            lifeLesson3: 'because often the best is yet to come',
+            scoreLabel: 'SCORE',
+            obstaclesDestroyed: 'OBSTACLES DESTROYED',
+            continue: 'CONTINUE',
+            menu: 'MENU'
         },
         
         hud: {
@@ -83,15 +125,50 @@ export default {
             level: 'Level',
             combo: 'Combo',
             wisdom: 'Wisdom'
+        },
+        
+        messages: {
+            leviathan: '🐉 THE LEVIATHAN APPEARS! Dodge its attacks!',
+            quickVictory: 'GO LIVE! and be reborn! GO BACK TO LIFE!',
+            quickVictoryLine1: 'GO LIVE! and be reborn!',
+            quickVictoryLine2: 'GO BACK TO LIFE!',
+            notFinished: "no! it's not over?",
+            watchYourLife: 'WATCH YOUR LIFE!'
+        },
+        
+        ui: {
+            paradise: 'PARADISE',
+            score: 'Score',
+            souls: 'souls',
+            total: 'TOTAL',
+            xp: 'XP',
+            brokenClock: 'Broken clock - Master of time'
+        },
+        
+        level2: {
+            title: '🚪 THE GATE OF PARADISE',
+            survived: 'You survived {seconds} seconds',
+            continue: 'CONTINUE',
+            chooseGrace: 'CHOOSE GRACE'
         }
     },
     
     trophies: {
         title: 'TROPHY COLLECTION',
+        menuTitle: '🏆 TROPHIES & MESSAGES 🏆',
         subtitle: 'Messages of courage and hope',
+        by: 'By Emmanuel Payet',
+        totalXP: 'Total XP',
         unlocked: 'Unlocked',
+        unlockedCount: 'Trophies unlocked',
         locked: 'Locked',
         share: 'Share',
+        close: '🚪 Close',
+        newTrophy: '🏆 New Trophy!',
+        xpGained: 'XP',
+        unlockedOn: 'Unlocked on',
+        shareButton: '📤 Share',
+        lockedMessage: 'Pass this obstacle to unlock the message...',
         categories: {
             life: 'Life\'s Trials',
             existential: 'Existential Threats',
@@ -286,6 +363,14 @@ export default {
             hope: "You are loved as you are"
         },
         finalDialogue: {
+            title: '🐑 Final Dialogue 🐑',
+            antLabel: '🐜 The Ant:',
+            jojoLabel: '🐐 Jojo the Goat:',
+            beeLabel: '🐝 The Bee:',
+            sheepLabel: '🐑 Courage the Sheep:',
+            jesusLabel: '✝️ Jesus:',
+            author: '- Emmanuel Payet',
+            viewTrophies: '🏆 View All Messages (Trophies)',
             ant: "Look at you, Sheep! You crossed all obstacles! I didn't believe it!",
             jojo: "Me neither, brother! But you did it! You proved that hope is stronger than anything!",
             bee: "Your invisible wings flew higher than mine! You're a hero!",
@@ -299,5 +384,255 @@ export default {
         trophyUnlocked: 'Trophy Unlocked!',
         powerUpCollected: 'Power-up Collected!',
         lifeRestored: 'Life Restored!'
+    },
+    
+    messages: {
+        finalVictory: {
+            title: '✨ CONGRATULATIONS ✨',
+            grace: "Jesus' grace is a certain wisdom.",
+            keepLight: 'Keep your light burning',
+            keepHeart: 'and your heart awake.',
+            chooseLife: 'Choose life.',
+            continue: 'Congratulations! You persevered and overcame all obstacles. Patience and determination are the keys to success. Ready for the next level?'
+        }
+    },
+    
+    proverbs: {
+        firstProverb: 'Freedom is the power to fly',
+        proverbs: [
+            'Water that flows never returns',
+            'Calm as still water',
+            'A drop of water in the ocean',
+            'After the storm comes calm',
+            'Water takes the shape of the vase',
+            'Patience is bitter but its fruits are sweet',
+            'Silence is golden',
+            'Everything comes to those who wait',
+            'Sleep on it',
+            'The stars shine for everyone',
+            'The ocean is made of drops',
+            'The longest journey begins with a step',
+            'Wisdom begins in wonder',
+            'Know thyself',
+            'Truth lies at the bottom of the well',
+            'The wise learn from their mistakes',
+            'A smile is the most beautiful curve',
+            'Time heals all wounds',
+            'Inner peace is worth all treasures',
+            'Every end is a new beginning'
+        ]
+    },
+    
+    powerUps: {
+        spiritual: {
+            courage: { name: 'COURAGE', message: '💪 COURAGE! You can face anything!', tip: 'Super jumps!' },
+            force: { name: 'STRENGTH', message: '⚡ DIVINE STRENGTH! Warrior of light!', tip: 'Smash everything!' },
+            patience: { name: 'PATIENCE', message: '🕰️ PATIENCE! Fly with serenity!', tip: 'Controlled flight!' },
+            resilience: { name: 'RESILIENCE', message: '🛡️ RESILIENCE! You are armored!', tip: 'Shield activated!' },
+            assurance: { name: 'CONFIDENCE', message: '👑 CONFIDENCE! You shine!', tip: 'Radiant aura!' },
+            liberte: { name: 'FREEDOM', message: '🕊️ FREEDOM! Break your chains!', tip: 'True liberation!' },
+            controle: { name: 'CONTROL', message: '🧠 CONTROL! Master yourself!', tip: 'Perfect mastery!' },
+            sagesse: { name: 'WISDOM', message: '🧘 WISDOM! Inner peace!', tip: 'Clarity of mind!' },
+            gestion: { name: 'MANAGEMENT', message: '📊 MANAGEMENT! Optimize!', tip: 'Efficiency!' },
+            agir: { name: 'ACT', message: '🎯 ACT! Take action!', tip: 'Active initiative!' },
+            combattre: { name: 'FIGHT', message: '⚔️ FIGHT! Combat mode!', tip: 'Warrior!' },
+            nepasabandonner: { name: 'NEVER GIVE UP', message: '🚫 NEVER GIVE UP! Persevere!', tip: 'Unwavering!' },
+            perseverer: { name: 'PERSEVERE', message: '🏆 PERSEVERE! Keep going!', tip: 'Determination!' }
+        },
+        fun: {
+            disco: { name: 'DISCO MODE', message: '🕺 DISCO MODE! Let\'s dance!', tip: 'Automatic disco moves!' },
+            giant: { name: 'GIANT', message: '🦣 GIANT SHEEP! HUUUGE!', tip: 'Size x3!' },
+            tiny: { name: 'TINY', message: '🐭 Tiny! Easy dodge!', tip: 'Stealth mode!' },
+            rainbow: { name: 'RAINBOW', message: '🌈 RAINBOW SHEEP! Fabulous!', tip: 'Colored trail!' },
+            magnet_bonus: { name: 'BONUS MAGNET', message: '🧠 All bonuses attract you!', tip: 'Auto collect!' },
+            spring: { name: 'KANGAROO', message: '🦘 Kangaroo mode! Boing boing!', tip: 'Infinite bounces!' },
+            jetpack: { name: 'JETPACK', message: '🎒 JETPACK activated! Vrooom!', tip: 'Turbo flight!' },
+            ninja: { name: 'NINJA', message: '🥷 Ninja mode! Invisible!', tip: 'Intangible!' },
+            party: { name: 'PARTY', message: '🎉 IT\'S PARTY TIME!', tip: 'Confetti everywhere!' },
+            coffee: { name: 'CAFFEINE', message: '☕ CAFFEINE! Speed x5!', tip: 'Hyper speed!' }
+        }
+    },
+    
+    obstacles: {
+        ground: {
+            wheelchair: 'DISABILITY',
+            car_accident: 'ACCIDENT',
+            coffin: 'GRIEF',
+            safe: 'POVERTY',
+            house: 'FAMILY',
+            wolf: 'VIOLENCE',
+            black_sheep: 'REJECTION',
+            addiction: 'ADDICTION',
+            job_stress: 'WORK',
+            debt: 'DEBTS',
+            loneliness: 'LONELINESS',
+            betrayal: 'BETRAYAL'
+        },
+        middle: {
+            depression: 'DEPRESSION',
+            anxiety: 'ANXIETY',
+            doubt: 'DOUBT',
+            phantom: 'PHANTOM',
+            shark: 'SHARK',
+            eagle: 'EAGLE',
+            thunder: 'LIGHTNING',
+            cruise_ship: 'CRUISE SHIP'
+        },
+        sky: {
+            death: 'DEATH',
+            cancer: 'CANCER',
+            nuclear: 'NUCLEAR',
+            meteor: 'METEOR',
+            procrastination: 'LAZINESS',
+            anger: 'ANGER',
+            madness: 'MADNESS'
+        },
+        richness: {
+            avarice: 'GREED',
+            luxure: 'LUST',
+            nepotisme: 'NEPOTISM',
+            selection: 'SELECTION',
+            esclavage: 'SLAVERY',
+            surexploitation: 'EXPLOITATION'
+        },
+        sins: {
+            pride: 'PRIDE',
+            greed: 'GREED',
+            lust: 'LUST',
+            envy: 'ENVY',
+            gluttony: 'GLUTTONY',
+            wrath: 'WRATH',
+            sloth: 'SLOTH'
+        },
+        fun: {
+            disco_ball: 'PARTY',
+            pizza: 'BREAK',
+            trampoline: 'BOING',
+            banana: 'SLIP',
+            magnet: 'MAGNET',
+            balloon: 'LIGHT',
+            tornado: 'TORNADO',
+            rocket: 'ROCKET'
+        },
+        funMessages: {
+            disco_ball: '🥹 Party time! Sheep dances!',
+            pizza: '🍕 Too full! Slow digestion...',
+            trampoline: '🎪 SUPER BOING! 🚀',
+            banana: '🍌 Banana peel! WHOOOOSH!',
+            magnet: '🧲 Attracted like a magnet!',
+            balloon: '🎈 Light as a feather!',
+            tornado: '🌪️ Whirlwind of madness!',
+            rocket: '🚀 TAKEOFFFF!'
+        },
+        weapons: {
+            sword: 'SWORD',
+            laser_gun: 'LASER',
+            net: 'NET',
+            shield: 'SHIELD',
+            hammer: 'HAMMER',
+            raygun: 'RAYGUN'
+        },
+        level1Bosses: {
+            whale: 'WHALE',
+            pacman: 'PACMAN',
+            dragon: 'DRAGON',
+            ufo: 'UFO',
+            shark: 'SHARK',
+            cruise_ship: 'CRUISE SHIP',
+            robot: 'ROBOT',
+            alien: 'ALIEN',
+            monster: 'MONSTER',
+            big_boss: 'BIG BOSS'
+        }
+    },
+    endless: {
+        bosses: {
+            whale: 'FUKUSHIMA',
+            pacman: 'KRAKEN',
+            dragon: 'FIRE DRAGON',
+            serpent: 'VENOMOUS SERPENT',
+            ufo: 'UFO',
+            shark: 'SHARK',
+            robot: 'ROBOT',
+            serpent_stage: 'STAGE SERPENT',
+            dragon_stage: 'STAGE DRAGON'
+        },
+        bossComments: {
+            whale: {
+                appearance: ["Wahhh... a radioactive whale! 😱", "Nooo... Fukushima came for me! 💀", "This thing is insane! 🤯"],
+                defeat: ["Back to the ocean, big one! 😎", "Never eating sushi again... 🤢"],
+                onomatopoeia: ["SPLASH!", "GLOUP!", "BLOUUUB!"]
+            },
+            pacman: {
+                appearance: ["A Kraken with a rocket?! 😵", "Who armed this beast?! 🤨", "Tentacles + lasers = bad idea! 😰"],
+                defeat: ["Go back to video games, squid! 🎮", "Not so tough now! 😏"],
+                onomatopoeia: ["BZZZZT!", "WHOOSH!", "SLAP!"]
+            },
+            dragon: {
+                appearance: ["A dragon?! In PARADISE?! 🔥", "There's really a security problem here... 😑", "WAHHH a fire dragon! Run sheep, run! 🏃"],
+                defeat: ["Back to your dungeon, lizard! 🦎", "Grilled dragon, well done! 🍖"],
+                onomatopoeia: ["ROOAAR!", "WHOOOF!", "CRAAASH!"]
+            },
+            serpent: {
+                appearance: ["A giant snake... Obviously. 🐍", "Is this Noah's Ark or what?! 😤", "Ssssup... 😰"],
+                defeat: ["Go bite someone else! 😤", "Flattened snake, mission accomplished! ✅"],
+                onomatopoeia: ["SSSSSSS!", "SNAP!", "HISSS!"]
+            },
+            ufo: {
+                appearance: ["ALIENS NOW?! 👽", "Who's managing this paradise?! 🤬", "E.T. phone... nobody! 📞"],
+                defeat: ["Back to your planet, martian! 🚀", "Area 51 is waiting! 👋"],
+                onomatopoeia: ["VZZZZZ!", "PEW PEW!", "BEEP BOOP!"]
+            },
+            shark: {
+                appearance: ["A cyborg shark?! This is crazy! 🦈", "Terminator fish version! 🤖", "Nooo... not the teeth! 😱"],
+                defeat: ["Fried shark circuits! 🍤", "Jaws: Game Over! 🎬"],
+                onomatopoeia: ["CHOMP!", "BZZT BZZT!", "SPLASH!"]
+            },
+            robot: {
+                appearance: ["A domestic robot trying to kill me?! 🤖", "My vacuum cleaner rebelled! 😵", "Wahhh... his eyes are crazy! 👀"],
+                defeat: ["Back to the factory! 🏭", "Forced reboot successful! 💻"],
+                onomatopoeia: ["BZZZZT!", "ERROR ERROR!", "CRASH!"]
+            },
+            demon: {
+                appearance: ["A DEMON in paradise?! Is this a joke?! 😈", "Even the devil is here now?! 😱", "Get behind me, Satan! 🙏"],
+                defeat: ["Back to hell where you belong! 🔥", "The light always wins! ✨"],
+                onomatopoeia: ["GRRRR!", "ROAAR!", "ARGHHH!"]
+            },
+            stageSerpent: {
+                appearance: ["MOMMY!!! 😱😱😱", "MOOOM! What is this monster?! 🐍💀", "NO NO NO! HELP MOM! 😭"],
+                defeat: ["YEAH! Even the big ones fall! 💪", "World champion! 🏆"],
+                onomatopoeia: ["SSSSSSS!", "BOOM!", "CRASH!"]
+            },
+            stageDragon: {
+                appearance: ["MOMMY!!! 😱😱😱", "MOOOM! A giant dragon! 🐉🔥", "MOM I WANT TO GO HOME! 😭💀"],
+                defeat: ["XXL Dragon: DEFEATED! 😎", "Bigger = more wool to burn! 🔥"],
+                onomatopoeia: ["ROOOAAAAR!", "FWOOOOSH!", "BOOM!"]
+            },
+            generic: {
+                lowHealth: ["Ouch ouch ouch... that hurts! 🤕", "Can't hold much longer... 😰", "Need a doctor! 🏥"],
+                powerUp: ["Oh yeah! Power-up! ⚡", "Let's go! 😎", "We'll show them! 💪"],
+                nearDeath: ["NO NO NO! Not now! 😱", "Hang in there, little sheep! 🐑", "Just... a bit... more... 💀"]
+            }
+        },
+        gameOver: {
+            title: 'GAME OVER',
+            skull: '💀',
+            score: 'SCORE',
+            newRecord: '🏆 NEW RECORD! 🏆',
+            record: 'Record',
+            replay: '🔄 PLAY AGAIN',
+            rebirth: 'GO LIVE! and be reborn!\nRETURN TO LIFE!'
+        }
+    },
+    intro: {
+        phases: {
+            paradise: "Is this heaven?",
+            shield: "Tactical shield...",
+            sword: "Laser sword...",
+            bomb: "Ion bomb...",
+            wtf: "Wait, what the hell... 💀",
+            boom: "BOOOM! 💥",
+            no: "no! wtf? 😱"
+        }
     }
 };

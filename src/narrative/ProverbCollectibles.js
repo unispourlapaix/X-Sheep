@@ -2,7 +2,18 @@
  * ProverbCollectibles.js - Proverbes et sagesse à collecter sur l'eau
  */
 
+import { i18n } from '../i18n/I18nManager.js';
+
 export class ProverbCollectibles {
+    static getFirstProverbText() {
+        return i18n.t('proverbs.firstProverb');
+    }
+    
+    static getProverbText(index) {
+        const proverbs = i18n.translations?.proverbs?.proverbs || [];
+        return proverbs[index] || "Sagesse...";
+    }
+    
     static firstProverb = { text: "La liberté est le pouvoir de voler", wisdom: 10, icon: '🕊️' };
     
     static proverbs = [
@@ -31,7 +42,9 @@ export class ProverbCollectibles {
     static getFirst() {
         // Premier proverbe: Liberté
         return {
-            ...this.firstProverb,
+            text: this.getFirstProverbText(),
+            wisdom: 10,
+            icon: '🕊️',
             x: 1050,
             y: 350, // Position centrale
             width: 40,
@@ -44,14 +57,17 @@ export class ProverbCollectibles {
     }
     
     static getRandom() {
-        const proverb = this.proverbs[Math.floor(Math.random() * this.proverbs.length)];
+        const index = Math.floor(Math.random() * this.proverbs.length);
+        const baseProverb = this.proverbs[index];
         
         // 3 lignes possibles : haute, milieu, basse (mieux équilibrées)
         const lines = [200, 320, 400];
         const lineY = lines[Math.floor(Math.random() * lines.length)];
         
         return {
-            ...proverb,
+            text: this.getProverbText(index),
+            wisdom: baseProverb.wisdom,
+            icon: baseProverb.icon,
             x: 1050, // Spawn à droite du canvas
             y: lineY,
             width: 40,

@@ -1,5 +1,6 @@
 // HeavenGate.js - La Porte du Paradis (fin)
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class HeavenGate {
     constructor(game) {
@@ -58,7 +59,7 @@ export class HeavenGate {
             // Afficher un message d'avertissement
             if (this.game.notificationSystem) {
                 this.game.notificationSystem.showNarrative({
-                    text: 'ATTENTION À TA VIE !',
+                    text: i18n.t('game.messages.watchYourLife'),
                     duration: 3000
                 });
             }
@@ -220,7 +221,7 @@ export class HeavenGate {
         // Sous-titre - plus petit
         ctx.fillStyle = '#FF8C00';
         ctx.font = 'bold 16px Arial';
-        ctx.fillText('Horloge brisée - Maître du temps', canvas.width / 2, boxY + 105);
+        ctx.fillText(i18n.t('game.ui.brokenClock'), canvas.width / 2, boxY + 105);
 
         // Messages - plus compacts
         ctx.textAlign = 'left';
@@ -263,7 +264,7 @@ export class HeavenGate {
         ctx.textAlign = 'center';
         ctx.font = 'bold 14px Arial';
         ctx.fillStyle = '#333';
-        ctx.fillText(`Score : ${this.game.score.toLocaleString('fr-FR')} âmes 💖`, canvas.width / 2, textY);
+        ctx.fillText(`${i18n.t('game.ui.score')} : ${this.game.score.toLocaleString('fr-FR')} ${i18n.t('game.ui.souls')} 💖`, canvas.width / 2, textY);
 
         // Trophée débloqué
         ctx.font = 'bold 13px Arial';
@@ -402,7 +403,7 @@ export class HeavenGate {
         ctx.textAlign = 'center';
         ctx.fillText('☁️', this.x + this.width/2, this.y - 10);
         ctx.font = 'bold 10px Arial';
-        ctx.fillText('PARADIS', this.x + this.width/2, this.y + this.height + 20);
+        ctx.fillText(i18n.t('game.ui.paradise'), this.x + this.width/2, this.y + this.height + 20);
 
         // Rayons divins
         const time = Date.now() * 0.001;

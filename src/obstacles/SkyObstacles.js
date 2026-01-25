@@ -1,7 +1,11 @@
 // SkyObstacles.js - Obstacles fixes du haut
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class SkyObstacles {
+    static getTranslatedText(id) {
+        return i18n.translations?.obstacles?.sky?.[id] || '';
+    }
     static definitions = [
         {
             id: 'death',
@@ -71,6 +75,7 @@ export class SkyObstacles {
         
         return {
             ...def,
+            text: this.getTranslatedText(def.id) || def.text,
             x: GameConfig.CANVAS_WIDTH, // Spawn à droite
             y: Math.max(minY, Math.min(maxY, y)),
             type: 'sky'

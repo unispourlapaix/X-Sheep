@@ -1,7 +1,11 @@
 // MiddleObstacles.js - Obstacles du milieu (flottants)
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class MiddleObstacles {
+    static getTranslatedText(id) {
+        return i18n.translations?.obstacles?.middle?.[id] || '';
+    }
     static definitions = [
         {
             id: 'depression',

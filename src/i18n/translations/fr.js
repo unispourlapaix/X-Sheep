@@ -42,10 +42,31 @@ export default {
         },
         
         score: 'Score',
-        graphics: {
-            title: 'Choisir le style graphique',
-            normal: 'Normal',
-            pixelArt: 'Pixel Art'
+        
+        controls: {
+            graphics: {
+                title: 'Choisir le style graphique',
+                normal: 'Normal',
+                bth: 'Bth',
+                label: {
+                    normal: 'Normal',
+                    bth: 'Bth'
+                },
+                popup: {
+                    title: 'Style Graphique',
+                    modeNormal: '📺 Mode Normal',
+                    modeBth: '📟 Mode Bth',
+                    willApply: 'Le changement sera appliqué à la prochaine partie',
+                    ok: 'OK'
+                }
+            },
+            language: {
+                title: 'Changer de langue',
+                change: 'Change language / Changer de langue',
+                panelTitle: '🌍 Language / Langue',
+                ltrSection: 'Langues LTR',
+                rtlSection: 'Langues RTL (العربية / עברית)'
+            }
         }
     },
     
@@ -53,28 +74,49 @@ export default {
         levels: {
             level1: 'NIVEAU 1: Les Épreuves de la Vie',
             level2: 'NIVEAU 2: Les 7 Péchés Capitaux',
-            level3: 'NIVEAU 3: Navigation et Sagesse'
+            level3: 'NIVEAU 3: Navigation et Sagesse',
+            level2Title: 'NIVEAU 2: LES 7 PÉCHÉS CAPITAUX',
+            level2Description: 'Survie impossible... Résiste le plus longtemps possible!',
+            level3Title: 'NIVEAU 3: LA QUÊTE DE LA SAGESSE',
+            level3Description: 'Navigue sur les eaux nocturnes, collecte la sagesse et évite les dangers marins !'
         },
         
         buttons: {
             retry: 'Réessayer',
             menu: 'Menu Principal',
-            continue: 'Continuer',
+            continue: 'Continuer 🌟',
             close: 'Fermer',
             trophies: 'Voir tous les messages (Trophées)'
         },
         
         gameOver: {
             title: 'GAME OVER',
-            reachedLevel: 'Niveau atteint',
+            rebirth: '🔄 Va vivre! et renais ! RETOURNE VIVRE !',
+            totalScore: 'Score Total',
             score: 'Score',
-            obstaclesAvoided: 'Obstacles évités'
+            xp: 'XP',
+            obstaclesAvoided: 'Obstacles évités',
+            retry: 'Réessayer',
+            mainMenu: 'Menu Principal',
+            returnMenu: 'RETOUR AU MENU'
         },
         
         victory: {
             title: 'VICTOIRE!',
             levelCompleted: 'Niveau terminé!',
-            congratulations: 'Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?'
+            congratulations: 'Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?',
+            impatience: 'IMPATIENCE !',
+            bossesDestroyed: '⚔️ BOSS ANNIHÉLÉS ⚔️',
+            legendConfirmed: '👑 LÉGENDE CONFIRMÉE 👑',
+            victoriousCombat: 'COMBAT VICTORIEUX JUSQU\'AU BOUT',
+            perseverance: 'PERSÉVÉRANCE = VICTOIRE',
+            lifeLesson1: 'Même si le combat de la vie est dur,',
+            lifeLesson2: 'il faut persévérer et ne jamais abandonner',
+            lifeLesson3: 'car souvent le meilleur est à venir',
+            scoreLabel: 'SCORE',
+            obstaclesDestroyed: 'OBSTACLES DÉTRUITS',
+            continue: 'CONTINUER',
+            menu: 'MENU'
         },
         
         hud: {
@@ -83,15 +125,50 @@ export default {
             level: 'Niveau',
             combo: 'Combo',
             wisdom: 'Sagesse'
+        },
+        
+        messages: {
+            leviathan: '🐉 LE LÉVIATHAN APPARAÎT ! Esquive ses attaques !',
+            quickVictory: 'VA VIE! et renai ! RETOURNE VIVRE !',
+            quickVictoryLine1: 'VA VIE! et renai !',
+            quickVictoryLine2: 'RETOURNE VIVRE !',
+            notFinished: "non! c pas fini ?",
+            watchYourLife: 'ATTENTION À TA VIE !'
+        },
+        
+        ui: {
+            paradise: 'PARADIS',
+            score: 'Score',
+            souls: 'âmes',
+            total: 'TOTAL',
+            xp: 'XP',
+            brokenClock: 'Horloge brisée - Maître du temps'
+        },
+        
+        level2: {
+            title: '🚪 LA PORTE DU PARADIS',
+            survived: 'Tu as survécu {seconds} secondes',
+            continue: 'CONTINUER',
+            chooseGrace: 'CHOISIR LA GRÂCE'
         }
     },
     
     trophies: {
         title: 'COLLECTION DE TROPHÉES',
+        menuTitle: '🏆 TROPHÉES & MESSAGES 🏆',
         subtitle: 'Messages de courage et d\'espoir',
+        by: 'Par Emmanuel Payet',
+        totalXP: 'XP Total',
         unlocked: 'Débloqué',
+        unlockedCount: 'Trophées débloqués',
         locked: 'Verrouillé',
         share: 'Partager',
+        close: '🚪 Fermer',
+        newTrophy: '🏆 Nouveau Trophée !',
+        xpGained: 'XP',
+        unlockedOn: 'Débloqué le',
+        shareButton: '📤 Partager',
+        lockedMessage: 'Passe cet obstacle pour débloquer le message...',
         categories: {
             life: 'Épreuves de la Vie',
             existential: 'Menaces Existentielles',
@@ -299,6 +376,14 @@ export default {
         
         // Dialogue final
         finalDialogue: {
+            title: '🐑 Dialogue Final 🐑',
+            antLabel: '🐜 La Fourmi :',
+            jojoLabel: '🐐 Jojo la Chèvre :',
+            beeLabel: '🐝 L\'Abeille :',
+            sheepLabel: '🐑 Le Mouton Courage :',
+            jesusLabel: '✝️ Jésus :',
+            author: '- Emmanuel Payet',
+            viewTrophies: '🏆 Voir tous les messages (Trophées)',
             ant: "Regarde-toi, Mouton! Tu as traversé tous les obstacles! Je n'y croyais pas!",
             jojo: "Moi non plus, mon frère! Mais tu l'as fait! Tu as prouvé que l'espoir est plus fort que tout!",
             bee: "Tes ailes invisibles ont volé plus haut que les miennes! Tu es un héros!",
@@ -312,5 +397,255 @@ export default {
         trophyUnlocked: 'Trophée débloqué !',
         powerUpCollected: 'Power-up collecté !',
         lifeRestored: 'Vie restaurée !'
+    },
+    
+    messages: {
+        finalVictory: {
+            title: '✨ BRAVO ✨',
+            grace: 'La grâce de Jésus est une sagesse certaine.',
+            keepLight: 'Garde ta lumière allumée',
+            keepHeart: 'et ton cœur éveillé.',
+            chooseLife: 'Choisis la vie.',
+            continue: 'Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?'
+        }
+    },
+    
+    proverbs: {
+        firstProverb: 'La liberté est le pouvoir de voler',
+        proverbs: [
+            'L\'eau qui coule ne revient jamais',
+            'Calme comme l\'eau dormante',
+            'Une goutte d\'eau dans l\'océan',
+            'Après la tempête vient le calme',
+            'L\'eau prend la forme du vase',
+            'La patience est amère mais ses fruits sont doux',
+            'Le silence est d\'or',
+            'Tout vient à point à qui sait attendre',
+            'La nuit porte conseil',
+            'Les étoiles brillent pour tous',
+            'L\'océan est fait de gouttes',
+            'Le plus long voyage commence par un pas',
+            'La sagesse commence dans l\'émerveillement',
+            'Connais-toi toi-même',
+            'La vérité est au fond du puits',
+            'Le sage apprend de ses erreurs',
+            'Un sourire est la plus belle courbe',
+            'Le temps guérit toutes les blessures',
+            'La paix intérieure vaut tous les trésors',
+            'Chaque fin est un nouveau commencement'
+        ]
+    },
+    
+    powerUps: {
+        spiritual: {
+            courage: { name: 'COURAGE', message: '💪 COURAGE ! Tu peux tout affronter !', tip: 'Sauts surpuissants !' },
+            force: { name: 'FORCE', message: '⚡ FORCE DIVINE ! Guerrier de lumière !', tip: 'Défonce tout !' },
+            patience: { name: 'PATIENCE', message: '🕰️ PATIENCE ! Vole avec sérénité !', tip: 'Vol contrôlé !' },
+            resilience: { name: 'RÉSILIENCE', message: '🛡️ RÉSILIENCE ! Tu es blindé !', tip: 'Bouclier activé !' },
+            assurance: { name: 'ASSURANCE', message: '👑 ASSURANCE ! Tu rayonnes !', tip: 'Aura rayonnante !' },
+            liberte: { name: 'LIBERTÉ', message: '🕊️ LIBERTÉ ! Brise tes chaînes !', tip: 'Vraie libération !' },
+            controle: { name: 'CONTRÔLE', message: '🧠 CONTRÔLE ! Maîtrise-toi !', tip: 'Maîtrise parfaite !' },
+            sagesse: { name: 'SAGESSE', message: '🧘 SAGESSE ! Paix intérieure !', tip: 'Clarté d\'esprit !' },
+            gestion: { name: 'GESTION', message: '📊 GESTION ! Optimise !', tip: 'Efficacité !' },
+            agir: { name: 'AGIR', message: '🎯 AGIR ! Passe à l\'action !', tip: 'Initiative active !' },
+            combattre: { name: 'SE BATTRE', message: '⚔️ SE BATTRE ! Mode combat !', tip: 'Guerrier !' },
+            nepasabandonner: { name: 'NE PAS ABANDONNER', message: '🚫 NE PAS ABANDONNER ! Persévère !', tip: 'Inébranlable !' },
+            perseverer: { name: 'PERSÉVÉRER', message: '🏆 PERSÉVÉRER ! Continue !', tip: 'Détermination !' }
+        },
+        fun: {
+            disco: { name: 'MODE DISCO', message: '🕺 MODE DISCO! Let\'s dance!', tip: 'Mouvement disco automatique!' },
+            giant: { name: 'GÉANT', message: '🦣 MOUTON GÉANT! GROOOOOS!', tip: 'Taille x3!' },
+            tiny: { name: 'MINUSCULE', message: '🐭 Tout petit! Esquive facile!', tip: 'Mode furtif!' },
+            rainbow: { name: 'ARC-EN-CIEL', message: '🌈 RAINBOW SHEEP! Fabuleux!', tip: 'Traînée colorée!' },
+            magnet_bonus: { name: 'AIMANT À BONUS', message: '🧲 Tous les bonus t\'attirent!', tip: 'Collecte automatique!' },
+            spring: { name: 'KANGOUROU', message: '🦘 Mode kangourou! Boing boing!', tip: 'Rebonds infinis!' },
+            jetpack: { name: 'JETPACK', message: '🎒 JETPACK activé! Vrooooom!', tip: 'Vol turbo!' },
+            ninja: { name: 'NINJA', message: '🥷 Mode ninja! Invisible!', tip: 'Intangible!' },
+            party: { name: 'FÊTE', message: '🎉 C\'EST LA FÊTE!', tip: 'Confettis partout!' },
+            coffee: { name: 'CAFÉINE', message: '☕ CAFÉINE! Speed x5!', tip: 'Hyper vitesse!' }
+        }
+    },
+    
+    obstacles: {
+        ground: {
+            wheelchair: 'HANDICAP',
+            car_accident: 'ACCIDENT',
+            coffin: 'DEUIL',
+            safe: 'PAUVRETÉ',
+            house: 'FAMILLE',
+            wolf: 'VIOLENCE',
+            black_sheep: 'REJET',
+            addiction: 'ADDICTION',
+            job_stress: 'TRAVAIL',
+            debt: 'DETTES',
+            loneliness: 'SOLITUDE',
+            betrayal: 'TRAHISON'
+        },
+        middle: {
+            depression: 'DÉPRESSION',
+            anxiety: 'ANXIÉTÉ',
+            doubt: 'DOUTE',
+            phantom: 'PHANTOM',
+            shark: 'REQUIN',
+            eagle: 'AIGLE',
+            thunder: 'ÉCLAIR',
+            cruise_ship: 'PAQUEBOT'
+        },
+        sky: {
+            death: 'MORT',
+            cancer: 'CANCER',
+            nuclear: 'NUCLÉAIRE',
+            meteor: 'MÉTÉORITE',
+            procrastination: 'PARESSE',
+            anger: 'COLÈRE',
+            madness: 'FOLIE'
+        },
+        richness: {
+            avarice: 'AVARICE',
+            luxure: 'LUXURE',
+            nepotisme: 'NÉPOTISME',
+            selection: 'SÉLECTION',
+            esclavage: 'ESCLAVAGE',
+            surexploitation: 'EXPLOITATION'
+        },
+        sins: {
+            pride: 'ORGUEIL',
+            greed: 'AVARICE',
+            lust: 'LUXURE',
+            envy: 'ENVIE',
+            gluttony: 'GOURMANDISE',
+            wrath: 'COLÈRE',
+            sloth: 'PARESSE'
+        },
+        fun: {
+            disco_ball: 'SOIRÉE',
+            pizza: 'PAUSE',
+            trampoline: 'BOING',
+            banana: 'GLISSE',
+            magnet: 'AIMANT',
+            balloon: 'LÉGER',
+            tornado: 'TORNADO',
+            rocket: 'FUSÉE'
+        },
+        funMessages: {
+            disco_ball: '🥹 Party time! Le mouton danse!',
+            pizza: '🍕 Trop mangé! Digestion lente...',
+            trampoline: '🎪 SUPER BOING! 🚀',
+            banana: '🍌 Peau de banane! WHOOOOSH!',
+            magnet: '🧲 Attiré comme un aimant!',
+            balloon: '🎈 Léger comme une plume!',
+            tornado: '🌪️ Tourbillon de folie!',
+            rocket: '🚀 DÉCOLLAGEEEE!'
+        },
+        weapons: {
+            sword: 'ÉPÉE',
+            laser_gun: 'LASER',
+            net: 'FILET',
+            shield: 'BOUCLIER',
+            hammer: 'MARTEAU',
+            raygun: 'RAYON'
+        },
+        level1Bosses: {
+            whale: 'BALEINE',
+            pacman: 'PACMAN',
+            dragon: 'DRAGON',
+            ufo: 'OVNI',
+            shark: 'REQUIN',
+            cruise_ship: 'PAQUEBOT',
+            robot: 'ROBOT',
+            alien: 'ALIEN',
+            monster: 'MONSTRE',
+            big_boss: 'BIG BOSS'
+        }
+    },
+    endless: {
+        bosses: {
+            whale: 'FUKUSHIMA',
+            pacman: 'KRAKEN',
+            dragon: 'DRAGON DE FEU',
+            serpent: 'SERPENT VENIMEUX',
+            ufo: 'OVNI',
+            shark: 'REQUIN',
+            robot: 'ROBOT',
+            serpent_stage: 'SERPENT DE PALIER',
+            dragon_stage: 'DRAGON DE PALIER'
+        },
+        bossComments: {
+            whale: {
+                appearance: ["Wahhh... une baleine radioactive ! 😱", "Nooon... Fukushima est venu me chercher ! 💀", "C'est une dinguerie ce truc ! 🤯"],
+                defeat: ["Retourne à l'océan, grosse ! 😎", "Plus jamais de sushi pour moi... 🤢"],
+                onomatopoeia: ["SPLASH!", "GLOUP!", "BLOUUUB!"]
+            },
+            pacman: {
+                appearance: ["Un Kraken avec une fusée ?! 😵", "Mais qui a armé cette bestiole ?! 🤨", "Tentacules + lasers = mauvaise idée ! 😰"],
+                defeat: ["Retourne jouer aux jeux vidéos, le calamar ! 🎮", "Tu fais moins le malin maintenant ! 😏"],
+                onomatopoeia: ["BZZZZT!", "WHOOSH!", "SLAP!"]
+            },
+            dragon: {
+                appearance: ["Un dragon ?! Dans le PARADIS ?! 🔥", "Y'a vraiment un problème de sécurité ici... 😑", "WAHHH un dragon de feu ! Cours mouton, cours ! 🏃"],
+                defeat: ["Retourne dans ton donjon, lézard ! 🦎", "Dragon grillé, bien cuit ! 🍖"],
+                onomatopoeia: ["ROOAAR!", "WHOOOF!", "CRAAASH!"]
+            },
+            serpent: {
+                appearance: ["Un serpent géant... Évidemment. 🐍", "Non mais c'est l'arche de Noé ou quoi ?! 😤", "Ssssalut toi... 😰"],
+                defeat: ["Va mordre quelqu'un d'autre ! 😤", "Serpent aplati, mission accomplie ! ✅"],
+                onomatopoeia: ["SSSSSSS!", "SNAP!", "HISSS!"]
+            },
+            ufo: {
+                appearance: ["DES ALIENS MAINTENANT ?! 👽", "Mais qui gère ce paradis ?! 🤬", "E.T. téléphone... personne ! 📞"],
+                defeat: ["Retourne sur ta planète, le martien ! 🚀", "Area 51 t'attend ! 👋"],
+                onomatopoeia: ["VZZZZZ!", "PEW PEW!", "BEEP BOOP!"]
+            },
+            shark: {
+                appearance: ["Un requin cyborg ?! C'est du délire ! 🦈", "Terminator version poisson ! 🤖", "Nooon... pas les dents, pas les dents ! 😱"],
+                defeat: ["Requin frit aux circuits ! 🍤", "Jaws : Game Over ! 🎬"],
+                onomatopoeia: ["CHOMP!", "BZZT BZZT!", "SPLASH!"]
+            },
+            robot: {
+                appearance: ["Un robot domestique qui veut me tuer ?! 🤖", "Mon aspirateur s'est rebellé ! 😵", "Wahhh... ses yeux sont complètement fous ! 👀"],
+                defeat: ["Retour à l'usine pour toi ! 🏭", "Redémarrage forcé réussi ! 💻"],
+                onomatopoeia: ["BZZZZT!", "BEEP!", "KRRRRK!"]
+            },
+            demon: {
+                appearance: ["Un DÉMON au paradis ?! C'est une blague ?! 😈", "Même le diable est là maintenant ?! 😱", "Arrière, Satan ! 🙏"],
+                defeat: ["Retourne en enfer d'où tu viens ! 🔥", "La lumière gagne toujours ! ✨"],
+                onomatopoeia: ["GRRRR!", "ROAAR!", "ARGHHH!"]
+            },
+            stageSerpent: {
+                appearance: ["MAMAN !!! 😱😱😱", "MAMAAAN ! C'est quoi ce monstre ?! 🐍💀", "NON NON NON ! MAMAN À L'AIDE ! 😭"],
+                defeat: ["OUAIS ! Même les gros tombent ! 💪", "Champion du monde ! 🏆"],
+                onomatopoeia: ["SSSSSSS!", "BOOM!", "CRASH!"]
+            },
+            stageDragon: {
+                appearance: ["MAMAN !!! 😱😱😱", "MAMAAAN ! Un dragon géant ! 🐉🔥", "MAMAN JE VEUX RENTRER ! 😭💀"],
+                defeat: ["Dragon XXL : VAINCU ! 😎", "Plus grand = plus de laine à brûler ! 🔥"],
+                onomatopoeia: ["ROOOAAAAR!", "FWOOOOSH!", "BOOM!"]
+            },
+            generic: {
+                lowHealth: ["Aïe aïe aïe... ça pique ! 🤕", "Je tiens plus très longtemps... 😰", "Besoin d'un médecin ! 🏥"],
+                powerUp: ["Oh yeah ! Power-up ! ⚡", "C'est parti mon kiki ! 😎", "On va leur montrer ! 💪"],
+                nearDeath: ["NON NON NON ! Pas maintenant ! 😱", "Accroches-toi, petit mouton ! 🐑", "Juste... encore... un peu... 💀"]
+            }
+        },
+        gameOver: {
+            title: 'GAME OVER',
+            skull: '💀',
+            score: 'SCORE',
+            newRecord: '🏆 NOUVEAU RECORD ! 🏆',
+            record: 'Record',
+            replay: '🔄 REJOUER',
+            rebirth: 'VA VIE! et renai !\nRETOURNE VIVRE !'
+        }
+    },
+    intro: {
+        phases: {
+            paradise: "C'est ça le paradis ?",
+            shield: "Bouclier tactique...",
+            sword: "Épée laser...",
+            bomb: "Bombe ionique...",
+            wtf: "Mais c'est quoi ce merdier... 💀",
+            boom: "BOOOM! 💥",
+            no: "non! wtf? 😱"
+        }
     }
 };

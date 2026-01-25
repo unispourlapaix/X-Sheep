@@ -152,6 +152,12 @@ class App {
             endlessStats[2].textContent = t('menu.modes.endless.stats.record');
         }
         
+        // Bouton réglages graphiques
+        const renderMode = localStorage.getItem('xsheep_renderMode') || 'pixel';
+        if (window.updateRenderIcon) {
+            window.updateRenderIcon(renderMode);
+        }
+        
         console.log('📝 Traductions appliquées au menu');
     }
     

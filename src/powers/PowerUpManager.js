@@ -3,6 +3,7 @@ import { GameConfig } from '../config/GameConfig.js';
 import { SpiritualPowers } from './SpiritualPowers.js';
 import { FunPowers } from './FunPowers.js';
 import { Physics } from '../core/Physics.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class PowerUpManager {
     constructor(game) {
@@ -21,6 +22,32 @@ export class PowerUpManager {
         FunPowers.definitions.forEach(power => {
             this.activePowers[power.id] = 0;
         });
+    }
+    
+    getTranslatedPowerUp(powerUp) {
+        // Si le powerUp a des getters translatedName/Message/Tip, les utiliser
+        if (powerUp.translatedName) {
+            return {
+                ...powerUp,
+                name: powerUp.translatedName,
+                message: powerUp.translatedMessage || powerUp.message,
+                tip: powerUp.translatedTip || powerUp.tip
+            };
+        }
+        
+        // Sinon, chercher dans i18n.translations
+        const type = SpiritualPowers.definitions.find(p => p.id === powerUp.id) ? 'spiritual' : 'fun';
+        const translated = i18n.translations?.powerUps?.[type]?.[powerUp.id];
+        
+        if (translated) {
+            return {
+                ...powerUp,
+                name: translated.name || powerUp.name,
+                message: translated.message || powerUp.message,
+                tip: translated.tip || powerUp.tip
+            };
+        }
+        return powerUp;
     }
     
     update() {
@@ -140,8 +167,11 @@ export class PowerUpManager {
             }, 200); // Court délai après le son "gline"
         }
         
+        // Obtenir la version traduite
+        const translatedPowerUp = this.getTranslatedPowerUp(powerUp);
+        
         // Message motivant
-        console.log(`💪 ${powerUp.name} activé !`);
+        console.log(`💪 ${translatedPowerUp.name} activé !`);
         
         // Donner XP bonus si le power-up en a
         if (powerUp.xpReward && this.game?.obstacleManager) {
@@ -154,7 +184,7 @@ export class PowerUpManager {
                 x: x,
                 y: y,
                 icon: powerUp.icon,
-                text: powerUp.name,
+                text: translatedPowerUp.name,
                 color: powerUp.color,
                 duration: 2000,
                 onClose: () => {

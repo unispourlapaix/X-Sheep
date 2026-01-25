@@ -55,7 +55,7 @@ export class TrophySystem {
             id: Date.now(),
             obstacleId: obstacleId,
             xp: xp,
-            hope: message?.hope || 'Trophée débloqué',
+            hope: message?.hope || i18n.t('game.notifications.trophyUnlocked'),
             startTime: Date.now(),
             duration: 3000, // 3 secondes
             x: 0, // Sera calculé dans render
@@ -148,14 +148,14 @@ export class TrophySystem {
             ctx.fillStyle = '#333';
             ctx.font = 'bold 16px Arial';
             ctx.textAlign = 'left';
-            ctx.fillText('🏆 Nouveau Trophée !', notif.x + 15, notif.y + 25);
+            ctx.fillText(i18n.t('trophies.newTrophy'), notif.x + 15, notif.y + 25);
 
             ctx.font = '14px Arial';
             ctx.fillText(notif.hope, notif.x + 15, notif.y + 50);
 
             ctx.fillStyle = '#8B4513';
             ctx.font = 'bold 14px Arial';
-            ctx.fillText(`+${notif.xp} XP`, notif.x + 15, notif.y + 72);
+            ctx.fillText(`+${notif.xp} ${i18n.t('trophies.xpGained')}`, notif.x + 15, notif.y + 72);
 
             ctx.restore();
         }
@@ -195,6 +195,12 @@ export class TrophySystem {
     }
     
     show() {
+        // S'assurer que les traductions sont chargées avant de render
+        if (!i18n.translations) {
+            console.warn('⚠️ Traductions non chargées, attente...');
+            setTimeout(() => this.show(), 100);
+            return;
+        }
         this.render();
         this.container.style.display = 'block';
     }
@@ -211,14 +217,14 @@ export class TrophySystem {
         this.container.innerHTML = `
             <div style="max-width:900px;margin:0 auto;color:#FFF">
                 <div style="text-align:center;margin-bottom:30px">
-                    <h1 style="color:#FFD700;font-size:36px;margin:0">🏆 TROPHÉES & MESSAGES 🏆</h1>
-                    <p style="color:#87CEEB;font-size:18px;margin:10px 0">Par Emmanuel Payet</p>
+                    <h1 style="color:#FFD700;font-size:36px;margin:0">${i18n.t('trophies.menuTitle')}</h1>
+                    <p style="color:#87CEEB;font-size:18px;margin:10px 0">${i18n.t('trophies.by')}</p>
                     <div style="background:rgba(255,215,0,0.2);padding:15px;border-radius:15px;margin:20px 0">
                         <p style="font-size:20px;margin:5px 0">
-                            <strong>XP Total : ${this.totalXP}</strong>
+                            <strong>${i18n.t('trophies.totalXP')} : ${this.totalXP}</strong>
                         </p>
                         <p style="font-size:16px;margin:5px 0">
-                            Trophées débloqués : ${unlockedCount} / ${totalCount} (${progress}%)
+                            ${i18n.t('trophies.unlockedCount')} : ${unlockedCount} / ${totalCount} (${progress}%)
                         </p>
                         <div style="background:rgba(0,0,0,0.3);height:20px;border-radius:10px;overflow:hidden;margin:10px 0">
                             <div style="background:linear-gradient(90deg,#FFD700,#FFA500);height:100%;width:${progress}%;transition:width 0.5s"></div>
@@ -241,7 +247,7 @@ export class TrophySystem {
                         color:#333;
                         cursor:pointer;
                         box-shadow:0 5px 15px rgba(0,0,0,0.3);
-                    ">🚪 Fermer</button>
+                    ">${i18n.t('trophies.close')}</button>
                 </div>
             </div>
         `;
@@ -410,7 +416,7 @@ export class TrophySystem {
         // Bas de page
         ctx.fillStyle = '#87CEEB';
         ctx.font = '20px "Courier New", monospace';
-        ctx.fillText('Par Emmanuel Payet', 540, 1050);
+        ctx.fillText(i18n.t('trophies.by'), 540, 1050);
         
         // Télécharger l'image
         canvas.toBlob((blob) => {
@@ -432,6 +438,9 @@ export class TrophySystem {
             const trophy = this.trophies.get(obstacleId);
             const unlocked = trophy !== undefined;
             
+            // Obtenir le message traduit
+            const translatedMessage = i18n?.translations?.narrative?.[obstacleId] || message;
+            
             html += `
                 <div style="
                     background:${unlocked ? 'linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,165,0,0.15))' : 'rgba(50,50,50,0.5)'};
@@ -445,7 +454,7 @@ export class TrophySystem {
                         <span style="font-size:32px;margin-right:10px">${unlocked ? '🏆' : '🔒'}</span>
                         <div style="flex:1">
                             <h3 style="color:${unlocked ? '#FFD700' : '#888'};margin:0;font-size:18px">
-                                ${message.hope}
+                                ${translatedMessage.hope}
                             </h3>
                             <p style="color:#AAA;font-size:12px;margin:5px 0">
                                 ${this.getObstacleLabel(obstacleId)}
@@ -463,12 +472,12 @@ export class TrophySystem {
                             margin-top:10px;
                         ">
                             <p style="color:#FFF;line-height:1.6;margin:0;font-size:14px">
-                                ${message.text}
+                                ${translatedMessage.text}
                             </p>
                         </div>
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
                             <p style="color:#666;font-size:11px;margin:0">
-                                Débloqué le ${new Date(trophy.unlockedAt).toLocaleDateString('fr-FR')}
+                                ${i18n.t('trophies.unlockedOn')} ${new Date(trophy.unlockedAt).toLocaleDateString(i18n.currentLang === 'en' ? 'en-US' : 'fr-FR')}
                             </p>
                             <button onclick="window.shareTrophy('${obstacleId}')" style="
                                 background:linear-gradient(135deg,#FFD700,#FFA500);
@@ -480,11 +489,11 @@ export class TrophySystem {
                                 color:#333;
                                 cursor:pointer;
                                 box-shadow:0 2px 5px rgba(0,0,0,0.3);
-                            ">📤 Partager</button>
+                            ">${i18n.t('trophies.shareButton')}</button>
                         </div>
                     ` : `
                         <p style="color:#666;font-style:italic;margin:10px 0 0 0">
-                            Passe cet obstacle pour débloquer le message...
+                            ${i18n.t('trophies.lockedMessage')}
                         </p>
                     `}
                 </div>

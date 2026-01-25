@@ -1,278 +1,587 @@
-// Traductions françaises (langue par défaut)
+// Italiano - Italian translations
 export default {
     meta: {
-        language: 'Français',
-        code: 'fr',
-        flag: '🇫🇷'
+        language: 'Italiano',
+        code: 'it',
+        flag: '🇮🇹'
     },
     
     menu: {
         title: 'X-Sheep is back',
-        subtitle: "L'Espoir en Action",
-        createdBy: 'Créé avec 💖 par',
+        subtitle: 'La Speranza in Azione',
+        createdBy: 'Creato con 💖 da',
         author: 'Emmanuel Payet',
         
         modes: {
             adventure: {
-                title: 'AVENTURE',
+                title: 'AVVENTURA',
                 description: [
-                    'Traverse les épreuves de la vie.',
-                    'Messages narratifs profonds.',
-                    'Atteins la Porte du Paradis.'
+                    'Attraversa le prove della vita.',
+                    'Messaggi narrativi profondi.',
+                    'Raggiungi la Porta del Paradiso.'
                 ],
                 stats: {
-                    chapters: 'Chapitres',
-                    minutes: 'Minutes',
-                    hope: 'Espoir'
+                    chapters: 'Capitoli',
+                    minutes: 'Minuti',
+                    hope: 'Speranza'
                 }
             },
             endless: {
-                title: 'INFINI',
+                title: 'INFINITO',
                 description: [
-                    'Survie sans fin.',
-                    'Score et combos maximaux.',
-                    'Bats tous les records !'
+                    'Sopravvivenza senza fine.',
+                    'Punteggio e combo massimi.',
+                    'Batti tutti i record!'
                 ],
                 stats: {
-                    waves: 'Vagues',
-                    duration: 'Durée',
+                    waves: 'Ondate',
+                    duration: 'Durata',
                     record: 'Record'
                 }
             }
         },
         
-        score: 'Score',
-        graphics: {
-            title: 'Choisir le style graphique',
-            normal: 'Normal',
-            pixelArt: 'Pixel Art'
+        score: 'Punteggio',
+        
+        controls: {
+            graphics: {
+                title: 'Scegli stile grafico',
+                normal: 'Normale',
+                bth: 'Bth',
+                label: {
+                    normal: 'Normale',
+                    bth: 'Bth'
+                },
+                popup: {
+                    title: 'Stile Grafico',
+                    modeNormal: '📺 Modalità Normale',
+                    modeBth: '📟 Modalità Bth',
+                    willApply: 'Il cambiamento verrà applicato alla prossima partita',
+                    ok: 'OK'
+                }
+            },
+            language: {
+                title: 'Cambia lingua',
+                change: 'Change language / Cambia lingua',
+                panelTitle: '🌍 Language / Lingua',
+                ltrSection: 'Lingue LTR',
+                rtlSection: 'Lingue RTL (العربية / עברית)'
+            }
         }
     },
     
     game: {
         levels: {
-            level1: 'NIVEAU 1: Les Épreuves de la Vie',
-            level2: 'NIVEAU 2: Les 7 Péchés Capitaux',
-            level3: 'NIVEAU 3: Navigation et Sagesse'
+            level1: 'LIVELLO 1: Le Prove della Vita',
+            level2: 'LIVELLO 2: I 7 Peccati Capitali',
+            level3: 'LIVELLO 3: Navigazione e Saggezza',
+            level2Title: 'LIVELLO 2: I 7 PECCATI CAPITALI',
+            level2Description: 'Sopravvivenza impossibile... Resisti il più a lungo possibile!',
+            level3Title: 'LIVELLO 3: LA RICERCA DELLA SAGGEZZA',
+            level3Description: 'Naviga nelle acque notturne, raccogli saggezza ed evita i pericoli marini!'
         },
         
         buttons: {
-            retry: 'Réessayer',
-            menu: 'Menu Principal',
-            continue: 'Continuer',
-            close: 'Fermer',
-            trophies: 'Voir tous les messages (Trophées)'
+            retry: 'Riprova',
+            menu: 'Menu Principale',
+            continue: 'Continua 🌟',
+            close: 'Chiudi',
+            trophies: 'Vedi tutti i messaggi (Trofei)'
         },
         
         gameOver: {
             title: 'GAME OVER',
-            reachedLevel: 'Niveau atteint',
-            score: 'Score',
-            obstaclesAvoided: 'Obstacles évités'
+            rebirth: '🔄 Vai a vivere! e rinasce! TORNA A VIVERE!',
+            totalScore: 'Punteggio Totale',
+            score: 'Punteggio',
+            xp: 'XP',
+            obstaclesAvoided: 'Ostacoli Evitati',
+            retry: 'Riprova',
+            mainMenu: 'Menu Principale',
+            returnMenu: 'TORNA AL MENU'
         },
         
         victory: {
-            title: 'VICTOIRE!',
-            levelCompleted: 'Niveau terminé!',
-            congratulations: 'Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?'
+            title: 'VITTORIA!',
+            levelCompleted: 'Livello completato!',
+            congratulations: 'Complimenti! Hai perseverato e superato tutti gli ostacoli. La pazienza e la determinazione sono le chiavi del successo. Pronto per il prossimo livello?',
+            impatience: 'IMPAZIENZA!',
+            bossesDestroyed: '⚔️ BOSS ANNIENTATI ⚔️',
+            legendConfirmed: '👑 LEGGENDA CONFERMATA 👑',
+            victoriousCombat: 'COMBATTIMENTO VITTORIOSO FINO ALLA FINE',
+            perseverance: 'PERSEVERANZA = VITTORIA',
+            lifeLesson1: 'Anche se la battaglia della vita è dura,',
+            lifeLesson2: 'bisogna perseverare e non arrendersi mai',
+            lifeLesson3: 'perché spesso il meglio deve ancora venire',
+            scoreLabel: 'PUNTEGGIO',
+            obstaclesDestroyed: 'OSTACOLI DISTRUTTI',
+            continue: 'CONTINUA',
+            menu: 'MENU'
         },
         
         hud: {
-            lives: 'Vies',
-            score: 'Score',
-            level: 'Niveau',
+            lives: 'Vite',
+            score: 'Punteggio',
+            level: 'Livello',
             combo: 'Combo',
-            wisdom: 'Sagesse'
+            wisdom: 'Saggezza'
+        },
+        
+        messages: {
+            leviathan: '🐉 IL LEVIATANO APPARE! Schiva i suoi attacchi!',
+            quickVictory: 'Vai a vivere! e rinasce! TORNA A VIVERE!',
+            quickVictoryLine1: 'Vai a vivere! e rinasce!',
+            quickVictoryLine2: 'TORNA A VIVERE!',
+            notFinished: 'no! non è finita?',
+            watchYourLife: 'ATTENTO ALLA TUA VITA!'
+        },
+        
+        ui: {
+            paradise: 'PARADISO',
+            score: 'Punteggio',
+            souls: 'anime',
+            total: 'TOTALE',
+            xp: 'XP',
+            brokenClock: 'Orologio rotto - Maestro del tempo'
+        },
+        
+        level2: {
+            title: '🚪 LA PORTA DEL PARADISO',
+            survived: 'Sei sopravvissuto {seconds} secondi',
+            continue: 'CONTINUA',
+            chooseGrace: 'SCEGLI LA GRAZIA'
         }
     },
     
     trophies: {
-        title: 'COLLECTION DE TROPHÉES',
-        subtitle: 'Messages de courage et d\'espoir',
-        unlocked: 'Débloqué',
-        locked: 'Verrouillé',
-        share: 'Partager',
+        title: 'COLLEZIONE DI TROFEI',
+        menuTitle: '🏆 TROFEI E MESSAGGI 🏆',
+        subtitle: 'Messaggi di coraggio e speranza',
+        by: 'Di Emmanuel Payet',
+        totalXP: 'XP Totale',
+        unlocked: 'Sbloccato',
+        unlockedCount: 'Trofei sbloccati',
+        locked: 'Bloccato',
+        share: 'Condividi',
+        close: '🚪 Chiudi',
+        newTrophy: '🏆 Nuovo Trofeo!',
+        xpGained: 'XP',
+        unlockedOn: 'Sbloccato il',
+        shareButton: '📤 Condividi',
+        lockedMessage: 'Supera questo ostacolo per sbloccare il messaggio...',
         categories: {
-            life: 'Épreuves de la Vie',
-            existential: 'Menaces Existentielles',
-            richness: 'Péchés de Richesse',
-            mid: 'Dangers Intermédiaires',
-            fun: 'Moments Fun',
-            special: 'Trophées Spéciaux'
+            life: 'Prove della Vita',
+            existential: 'Minacce Esistenziali',
+            richness: 'Peccati di Ricchezza',
+            mid: 'Pericoli Intermedi',
+            fun: 'Momenti Divertenti',
+            special: 'Trofei Speciali'
+        },
+        labels: {
+            wheelchair: '♿ Sedia a Rotelle',
+            car_accident: '🚗 Incidente',
+            coffin: '⚰️ Bara',
+            safe: '🏦 Cassaforte',
+            house: '🏠 Casa Distrutta',
+            wolf: '🐺 Lupo',
+            black_sheep: '🐑 Pecora Nera',
+            addiction: '📦 Dipendenza',
+            death: '💀 Morte',
+            cancer: '🎗️ Cancro',
+            nuclear: '☢️ Reazione antinucleare',
+            meteor: '☄️ Meteorite',
+            procrastination: '⏰ Procrastinazione',
+            anger: '😡 Rabbia',
+            madness: '🌀 Follia',
+            avarice: '💰 Avarizia',
+            luxure: '💋 Lussuria',
+            nepotisme: '🤝 Nepotismo',
+            selection: '👥 Selezione',
+            esclavage: '⛓️ Schiavitù',
+            surexploitation: '🏭 Sovrasfruttamento',
+            white_sheep: '🐑✨ Pecora Bianca - La Grazia',
+            charity: '💝 Carità',
+            gold_coin: '💰 Moneta d\'Oro - Libertà',
+            grace: '✝️ La Grazia - Gesù',
+            impatient: '⏰💔 Orologio rotto - Maestro del tempo',
+            eagle: '🦅 Aquila',
+            thunder: '⚡ Fulmine',
+            disco_ball: '🪩 Palla da Discoteca',
+            pizza: '🍕 Pizza',
+            trampoline: '🤸 Trampolino',
+            banana: '🍌 Banana',
+            magnet: '🧲 Magnete',
+            balloon: '🎈 Palloncino',
+            tornado: '🌪️ Tornado',
+            rocket: '🚀 Razzo'
         }
     },
     
     narrative: {
-        // Obstacles de la vie
         wheelchair: {
-            text: "Ce fauteuil roulant ? Moi aussi je vis avec un handicap... Mais regarde, je peux encore voler avec mes rêves ! Ton corps peut être limité, mais ton esprit est libre. Dieu t'a donné des ailes que personne ne peut briser. 💪✨",
-            hope: "Tu n'es pas défini par tes limitations"
+            text: "Questa sedia a rotelle? Anch'io vivo con una disabilità... Ma guarda, posso ancora volare con i miei sogni! Il tuo corpo può essere limitato, ma il tuo spirito è libero. Dio ti ha dato ali che nessuno può spezzare. 💪✨",
+            hope: "Non sei definito dalle tue limitazioni"
         },
         car_accident: {
-            text: "Cette voiture brisée me rappelle mes propres accidents de la vie... Les chocs, les traumatismes. Mais tu sais quoi ? Dieu répare les cœurs brisés. Chaque cicatrice raconte une histoire de survie. Tu es plus fort que tu ne le crois. 🚗💔➡️❤️",
-            hope: "Tes blessures deviennent ta force"
+            text: "Questa macchina distrutta mi ricorda i miei incidenti della vita... Gli shock, i traumi. Ma sai cosa? Dio ripara i cuori infranti. Ogni cicatrice racconta una storia di sopravvivenza. Sei più forte di quanto pensi. 🚗💔➡️❤️",
+            hope: "Le tue ferite diventano la tua forza"
         },
         coffin: {
-            text: "Un cercueil... La mort n'est pas la fin, c'est juste une porte vers l'éternité. Je ne crains plus la mort, car je sais que l'amour de Dieu est plus fort. Chaque jour est un cadeau. Vis pleinement ! ⚰️➡️👼",
-            hope: "La vie est éternelle en Dieu"
+            text: "Una bara... La morte non è la fine, è solo una porta verso l'eternità. Non temo più la morte, perché so che l'amore di Dio è più forte. Ogni giorno è un dono. Vivi pienamente! ⚰️➡️👼",
+            hope: "La vita è eterna in Dio"
         },
         safe: {
-            text: "Ce coffre-fort fermé... On enferme nos peurs, nos secrets, nos douleurs. Mais Dieu voit tout et pardonne tout. Ouvre ton cœur, libère-toi de ce qui te retient prisonnier. La vraie richesse, c'est la liberté intérieure. 🔒➡️🕊️",
-            hope: "Libère ton cœur, trouve la paix"
+            text: "Questa cassaforte chiusa... Rinchiudiamo le nostre paure, i nostri segreti, i nostri dolori. Ma Dio vede tutto e perdona tutto. Apri il tuo cuore, liberati da ciò che ti tiene prigioniero. La vera ricchezza è la libertà interiore. 🔒➡️🕊️",
+            hope: "Libera il tuo cuore, trova la pace"
         },
         house: {
-            text: "Cette maison semble solide... Mais les vraies fondations, ce n'est pas le béton, c'est la foi. Construis ta vie sur l'amour, la compassion, l'entraide. Ton foyer spirituel sera indestructible. 🏠❤️",
-            hope: "Bâtis sur l'amour, pas sur la peur"
+            text: "Questa casa sembra solida... Ma le vere fondamenta non sono il cemento, è la fede. Costruisci la tua vita sull'amore, la compassione, l'aiuto reciproco. La tua casa spirituale sarà indistruttibile. 🏠❤️",
+            hope: "Costruisci sull'amore, non sulla paura"
         },
         wolf: {
-            text: "Le loup... Il représente la peur, le prédateur qui te traque. Mais rappelle-toi: tu n'es jamais seul. Dieu est ton berger, il te protège. Face au loup, tu es plus fort que tu ne le penses. 🐺➡️🛡️",
-            hope: "Dieu est ton protecteur"
+            text: "Il lupo... Rappresenta la paura, il predatore che ti insegue. Ma ricorda: non sei mai solo. Dio è il tuo pastore, ti protegge. Di fronte al lupo, sei più forte di quanto pensi. 🐺➡️🛡️",
+            hope: "Dio è il tuo protettore"
         },
         black_sheep: {
-            text: "Le mouton noir... Celui qu'on rejette, qu'on exclut. Moi aussi, j'ai été différent. Mais Dieu aime TOUS ses moutons, peu importe leur couleur. L'exclusion est une illusion. L'amour de Dieu est universel. 🐑🖤➡️💖",
-            hope: "Différent ne veut pas dire inférieur"
+            text: "La pecora nera... Quella che viene rifiutata, esclusa. Anch'io sono stato diverso. Ma Dio ama TUTTE le sue pecore, qualunque sia il loro colore. L'esclusione è un'illusione. L'amore di Dio è universale. 🐑🖤➡️💖",
+            hope: "Diverso non significa inferiore"
         },
         addiction: {
-            text: "Les dépendances... Alcool, drogues, jeux, tout ce qui nous enchaîne. Moi aussi, j'ai lutté. Mais la liberté existe. Demande de l'aide, accepte la main tendue. Dieu te veut libre, pas esclave. 🍷➡️🕊️",
-            hope: "La liberté est possible, demande de l'aide"
+            text: "Le dipendenze... Alcol, droga, gioco, tutto ciò che ci incatena. Anch'io ho lottato. Ma la libertà esiste. Chiedi aiuto, accetta la mano tesa. Dio ti vuole libero, non schiavo. 🍷➡️🕊️",
+            hope: "La libertà è possibile, chiedi aiuto"
         },
         
-        // Obstacles du ciel (existentiels)
         death: {
-            text: "💀 La Mort... Elle fait peur, elle est mystérieuse. Mais la Bible dit qu'elle n'a plus de pouvoir sur ceux qui croient. La mort n'est qu'un passage, pas une fin. Vis chaque jour comme un cadeau. L'éternité t'attend. 🌅",
-            hope: "La mort n'est qu'un passage vers l'éternité"
+            text: "💀 La Morte... Fa paura, è misteriosa. Ma la Bibbia dice che non ha più potere su chi crede. La morte è solo un passaggio, non una fine. Vivi ogni giorno come un dono. L'eternità ti aspetta. 🌅",
+            hope: "La morte è solo un passaggio verso l'eternità"
         },
         cancer: {
-            text: "🎗️ Le cancer... Cette maladie terrible qui ronge. Moi aussi, j'ai vu la souffrance. Mais même dans la maladie, Dieu est présent. Il ne t'abandonne pas. La guérison peut venir, mais ta foi reste ta force. 💪🙏",
-            hope: "Même dans la maladie, tu n'es pas seul"
+            text: "🎗️ Il cancro... Questa terribile malattia che corrode. Anch'io ho visto la sofferenza. Ma anche nella malattia, Dio è presente. Non ti abbandona. La guarigione può venire, ma la tua fede rimane la tua forza. 💪🙏",
+            hope: "Anche nella malattia, non sei solo"
         },
         nuclear: {
-            text: "☢️ Le nucléaire... L'humanité capable de tout détruire. Fukushima, Tchernobyl, la guerre atomique. Face à cette folie, choisis la paix. Sois un artisan de paix, un bâtisseur d'espoir. Le monde a besoin de toi. 🕊️🌍",
-            hope: "La paix commence en toi"
+            text: "☢️ Il nucleare... L'umanità capace di distruggere tutto. Fukushima, Chernobyl, la guerra atomica. Di fronte a questa follia, scegli la pace. Sii un artigiano di pace, un costruttore di speranza. Il mondo ha bisogno di te. 🕊️🌍",
+            hope: "La pace inizia in te"
         },
         meteor: {
-            text: "☄️ La météorite... La destruction venue du ciel. Les catastrophes naturelles nous rappellent notre fragilité. Mais ensemble, on est plus forts. Entraide, solidarité, amour: voilà nos vrais boucliers. 🛡️❤️",
-            hope: "Ensemble, on survit à tout"
+            text: "☄️ Il meteorite... La distruzione venuta dal cielo. Le catastrofi naturali ci ricordano la nostra fragilità. Ma insieme siamo più forti. Aiuto reciproco, solidarietà, amore: questi sono i nostri veri scudi. 🛡️❤️",
+            hope: "Insieme sopravviviamo a tutto"
         },
         procrastination: {
-            text: "⏰ La procrastination... Remettre à demain ce qu'on peut faire aujourd'hui. Le temps perdu ne revient jamais. Agis maintenant ! Chaque instant est précieux. Ne laisse pas la peur te paralyser. Ose vivre ! ⏰➡️💪",
-            hope: "Le moment présent est tout ce que tu as"
+            text: "⏰ La procrastinazione... Rimandare a domani ciò che si può fare oggi. Il tempo perso non torna mai. Agisci ora! Ogni istante è prezioso. Non lasciare che la paura ti paralizzi. Osa vivere! ⏰➡️💪",
+            hope: "Il momento presente è tutto ciò che hai"
         },
         anger: {
-            text: "😡 La colère... Elle brûle, elle détruit. Moi aussi, j'ai ressenti cette rage. Mais la colère est un poison. Pardonne, libère, avance. Dieu t'aide à transformer ta colère en force constructive. 🔥➡️❤️",
-            hope: "Transforme ta colère en force d'amour"
+            text: "😡 La rabbia... Brucia, distrugge. Anch'io ho sentito questa rabbia. Ma la rabbia è un veleno. Perdona, libera, vai avanti. Dio ti aiuta a trasformare la tua rabbia in forza costruttiva. 🔥➡️❤️",
+            hope: "Trasforma la tua rabbia in forza d'amore"
         },
         madness: {
-            text: "🤪 La folie... Perdre la raison, perdre pied. La santé mentale est fragile. Si tu souffres, parle. Demande de l'aide. Tu n'es pas fou, tu es humain. Dieu guérit aussi les esprits brisés. 🧠💔➡️💚",
-            hope: "Ta santé mentale compte, demande de l'aide"
+            text: "🤪 La follia... Perdere la ragione, perdere il controllo. La salute mentale è fragile. Se soffri, parla. Chiedi aiuto. Non sei pazzo, sei umano. Dio guarisce anche gli spiriti infranti. 🧠💔➡️💚",
+            hope: "La tua salute mentale conta, chiedi aiuto"
         },
         
-        // Péchés de richesse
         avarice: {
-            text: "💰 L'AVARICE - L'amour de l'argent. Accumuler, thésauriser, jamais assez. Mais la richesse matérielle est vide. Le vrai trésor, c'est l'amour, la générosité, le partage. Donne, et tu recevras au centuple. 💸➡️❤️",
-            hope: "La vraie richesse est dans le don"
+            text: "💰 L'AVARIZIA - L'amore per il denaro. Accumulare, tesaurizzare, mai abbastanza. Ma la ricchezza materiale è vuota. Il vero tesoro è l'amore, la generosità, la condivisione. Dona, e riceverai cento volte tanto. 💸➡️❤️",
+            hope: "La vera ricchezza è nel dare"
         },
         luxure: {
-            text: "💋 LA LUXURE - La quête insatiable de plaisir charnel. Le corps est beau, l'amour est saint. Mais la luxure est une prison. Respecte-toi, respecte l'autre. L'amour vrai dépasse le désir. 🔥➡️💞",
-            hope: "L'amour vrai transcende le désir"
+            text: "💋 LA LUSSURIA - La ricerca insaziabile del piacere carnale. Il corpo è bello, l'amore è santo. Ma la lussuria è una prigione. Rispettati, rispetta l'altro. L'amore vero supera il desiderio. 🔥➡️💞",
+            hope: "L'amore vero trascende il desiderio"
         },
         nepotisme: {
-            text: "👨‍👩‍👧‍👦 LE NÉPOTISME - Favoriser ses proches au détriment de la justice. C'est de la corruption déguisée. Dieu demande l'équité, pas le favoritisme. Chaque personne mérite sa chance. Sois juste. ⚖️",
-            hope: "La justice avant le favoritisme"
+            text: "👨‍👩‍👧‍👦 IL NEPOTISMO - Favorire i propri cari a scapito della giustizia. È corruzione mascherata. Dio chiede equità, non favoritismo. Ogni persona merita la sua opportunità. Sii giusto. ⚖️",
+            hope: "La giustizia prima del favoritismo"
         },
         selection: {
-            text: "🧬 LA SÉLECTION - Choisir qui vit, qui meurt, qui mérite. Eugénisme, discrimination, exclusion. Mais Dieu aime chaque vie, chaque être. Personne n'a le droit de jouer à Dieu. Chaque vie a une valeur infinie. ❤️",
-            hope: "Chaque vie a une valeur infinie"
+            text: "🧬 LA SELEZIONE - Scegliere chi vive, chi muore, chi merita. Eugenetica, discriminazione, esclusione. Ma Dio ama ogni vita, ogni essere. Nessuno ha il diritto di giocare a fare Dio. Ogni vita ha un valore infinito. ❤️",
+            hope: "Ogni vita ha un valore infinito"
         },
         esclavage: {
-            text: "⛓️ L'ESCLAVAGE - Exploiter, dominer, asservir. L'histoire est pleine de ces horreurs. Mais Dieu libère les opprimés. Sois du côté de la liberté, pas de l'oppression. Défends la dignité humaine. 🕊️",
-            hope: "La liberté est un droit universel"
+            text: "⛓️ LA SCHIAVITÙ - Sfruttare, dominare, asservire. La storia è piena di questi orrori. Ma Dio libera gli oppressi. Stai dalla parte della libertà, non dell'oppressione. Difendi la dignità umana. 🕊️",
+            hope: "La libertà è un diritto universale"
         },
         surexploitation: {
-            text: "🌍 LA SUREXPLOITATION - Épuiser la Terre, exploiter les ressources sans limite. La planète agonise. Mais il est encore temps. Respecte la Création, préserve la nature. Dieu nous a confié la Terre, pas pour la détruire. 🌱",
-            hope: "Préserve la Création pour demain"
+            text: "🌍 IL SOVRASFRUTTAMENTO - Esaurire la Terra, sfruttare le risorse senza limiti. Il pianeta agonizza. Ma c'è ancora tempo. Rispetta la Creazione, preserva la natura. Dio ci ha affidato la Terra, non per distruggerla. 🌱",
+            hope: "Preserva la Creazione per domani"
         },
         
-        // Obstacles milieu
         eagle: {
-            text: "🦅 L'aigle... Majestueux mais dangereux. Dans la vie, certains prédateurs volent haut. Mais toi aussi, tu peux voler. Ne te laisse pas intimider. Ta force est en toi. Déploie tes ailes ! 🦅✨",
-            hope: "Déploie tes ailes, vole haut"
+            text: "🦅 L'aquila... Maestosa ma pericolosa. Nella vita, alcuni predatori volano alto. Ma anche tu puoi volare. Non lasciarti intimidire. La tua forza è in te. Spiega le tue ali! 🦅✨",
+            hope: "Spiega le tue ali, vola alto"
         },
         thunder: {
-            text: "⚡ La foudre... Imprévisible, terrifiante. Les tempêtes de la vie sont inévitables. Mais après l'orage vient le calme. Tiens bon, la lumière revient toujours. 🌩️➡️🌈",
-            hope: "Après la tempête vient l'arc-en-ciel"
+            text: "⚡ Il fulmine... Imprevedibile, terrificante. Le tempeste della vita sono inevitabili. Ma dopo la tempesta viene la calma. Tieni duro, la luce ritorna sempre. 🌩️➡️🌈",
+            hope: "Dopo la tempesta viene l'arcobaleno"
         },
         
-        // Obstacles FUN
         disco_ball: {
-            text: "🪩✨ YEEEES! Boule disco! Danse avec moi! La vie c'est aussi ça : des moments de pure joie absurde! Parfois il faut juste lâcher prise et briller comme une boule à facettes! 💃🕺",
-            hope: "La joie est un acte de résistance !"
+            text: "🪩✨ SÌÌÌ! Palla da discoteca! Balla con me! La vita è anche questo: momenti di pura gioia assurda! A volte bisogna solo lasciarsi andare e brillare come una palla a specchi! 💃🕺",
+            hope: "La gioia è un atto di resistenza!"
         },
         pizza: {
-            text: "🍕 Pizza party dans le ciel! Même le mouton mérite sa part! La vie c'est pas que des épreuves, c'est aussi partager une pizza avec des amis. Célèbre les petits plaisirs! 😋",
-            hope: "Les petits bonheurs comptent aussi !"
+            text: "🍕 Pizza party in cielo! Anche la pecora merita la sua parte! La vita non è solo prove, è anche condividere una pizza con gli amici. Celebra i piccoli piaceri! 😋",
+            hope: "Le piccole gioie contano anche!"
         },
         trampoline: {
-            text: "🤸 BOING BOING! Rebondir c'est la vie! Chaque chute est une occasion de rebondir plus haut! Laisse ton cœur d'enfant s'exprimer, saute, ris, vis! 🎪",
-            hope: "Rebondis toujours plus haut !"
+            text: "🤸 BOING BOING! Rimbalzare è la vita! Ogni caduta è un'occasione per rimbalzare più in alto! Lascia che il tuo cuore da bambino si esprima, salta, ridi, vivi! 🎪",
+            hope: "Rimbalza sempre più in alto!"
         },
         banana: {
-            text: "🍌 Attention banane! Oui, même moi je glisse parfois! On a le droit de tomber, de faire des erreurs hilarantes. L'important c'est de se relever en riant! 😂",
-            hope: "Ris de tes chutes, relève-toi !"
+            text: "🍌 Attenzione banana! Sì, anche io scivolo a volte! Abbiamo il diritto di cadere, di fare errori esilaranti. L'importante è rialzarsi ridendo! 😂",
+            hope: "Ridi delle tue cadute, rialzati!"
         },
         magnet: {
-            text: "🧲 Aimant géant! Certaines choses nous attirent irrésistiblement. Mais attention à ne pas perdre le contrôle! Choisis ce qui t'attire: le bien ou le chaos? 🤔",
-            hope: "Choisis bien tes attractions !"
+            text: "🧲 Magnete gigante! Alcune cose ci attirano irresistibilmente. Ma attento a non perdere il controllo! Scegli cosa ti attira: il bene o il caos? 🤔",
+            hope: "Scegli bene le tue attrazioni!"
         },
         balloon: {
-            text: "🎈 Ballon! Léger, joyeux, insouciant! La vie devrait être légère comme un ballon. Laisse tes fardeaux au sol, envole-toi vers la joie! 🎉",
-            hope: "Sois léger comme un ballon !"
+            text: "🎈 Palloncino! Leggero, gioioso, spensierato! La vita dovrebbe essere leggera come un palloncino. Lascia i tuoi fardelli a terra, vola verso la gioia! 🎉",
+            hope: "Sii leggero come un palloncino!"
         },
         tornado: {
-            text: "🌪️ Tornade loufoque! Parfois la vie est un tourbillon chaotique! Mais même dans le chaos, trouve ton centre, ton ancrage. Le calme au cœur de la tempête! 🧘",
-            hope: "Trouve le calme dans le chaos !"
+            text: "🌪️ Tornado pazzesco! A volte la vita è un vortice caotico! Ma anche nel caos, trova il tuo centro, il tuo ancoraggio. La calma nel cuore della tempesta! 🧘",
+            hope: "Trova la calma nel caos!"
         },
         rocket: {
-            text: "🚀 Fusée cosmique! Parfois il faut viser les étoiles, même si ça semble fou! Ose rêver grand, ose l'impossible! Le ciel n'est qu'une limite imaginaire! 🌟",
-            hope: "Vise les étoiles, ose l'impossible !"
+            text: "🚀 Razzo cosmico! A volte bisogna mirare alle stelle, anche se sembra folle! Osa sognare in grande, osa l'impossibile! Il cielo è solo un limite immaginario! 🌟",
+            hope: "Mira alle stelle, osa l'impossibile!"
         },
         
-        // Trophées spéciaux
         charity: {
-            text: "🤝 LA CHARITÉ - Donner sans rien attendre en retour. Partager avec celui qui a faim, vêtir celui qui est nu, consoler celui qui pleure. La charité est l'amour en action. Et cet amour change le monde. ❤️",
-            hope: "L'amour en action change le monde"
+            text: "🤝 LA CARITÀ - Dare senza aspettarsi nulla in cambio. Condividere con chi ha fame, vestire chi è nudo, consolare chi piange. La carità è l'amore in azione. E questo amore cambia il mondo. ❤️",
+            hope: "L'amore in azione cambia il mondo"
         },
         impatient: {
-            text: "⏱️ L'IMPATIENCE - Toujours pressé, jamais satisfait. Mais Dieu travaille dans son temps, pas le nôtre. Apprends la patience, la confiance. Les meilleures choses prennent du temps. 🌱➡️🌳",
-            hope: "La patience est une force"
+            text: "⏱️ L'IMPAZIENZA - Sempre di fretta, mai soddisfatto. Ma Dio lavora nel suo tempo, non nel nostro. Impara la pazienza, la fiducia. Le cose migliori richiedono tempo. 🌱➡️🌳",
+            hope: "La pazienza è una forza"
         },
         gold_coin: {
-            text: "💰 LA PIÈCE D'OR - Symbole de richesse matérielle. Mais la vraie richesse n'est pas dans l'or. Elle est dans les relations, l'amour, la paix intérieure. Cherche le trésor du cœur, pas celui du coffre. 💎➡️❤️",
-            hope: "Le vrai trésor est dans le cœur"
+            text: "💰 LA MONETA D'ORO - Simbolo di ricchezza materiale. Ma la vera ricchezza non è nell'oro. È nelle relazioni, nell'amore, nella pace interiore. Cerca il tesoro del cuore, non quello del forziere. 💎➡️❤️",
+            hope: "Il vero tesoro è nel cuore"
         },
         grace: {
-            text: "✝️ LA GRÂCE - Ce n'est pas une formule magique ni une incantation. La grâce se personnifie par une personne : Dieu fait homme et nommé Jésus. On ne trompera pas Dieu par des secrets ou cachotteries. La grâce est à lui seul. Et demander grâce avec repentance est une voie de salut pour tout être imparfait. Nos pires défauts n'auront plus d'importance devant lui avec un cœur disposé à être renouvelé, transformé pour le meilleur. Ne vous découragez pas en pensant être le pire pécheur. Demandez à Dieu de vous montrer qui vous êtes vraiment. 🕊️💔",
-            hope: "La grâce : Dieu fait homme"
+            text: "✝️ LA GRAZIA - Non è una formula magica né un incantesimo. La grazia si personifica in una persona: Dio fatto uomo e chiamato Gesù. Non inganneremo Dio con segreti o nascondimenti. La grazia è solo sua. E chiedere grazia con pentimento è una via di salvezza per ogni essere imperfetto. I nostri peggiori difetti non avranno importanza davanti a lui con un cuore disposto a essere rinnovato, trasformato per il meglio. Non scoraggiarti pensando di essere il peggior peccatore. Chiedi a Dio di mostrarti chi sei veramente. 🕊️💔",
+            hope: "La grazia: Dio fatto uomo"
         },
         white_sheep: {
-            text: "🏳️‍🌈🐑 LE MOUTON BLANC - L'innocence, la pureté, mais aussi l'acceptation. Peu importe ton orientation, ta couleur, ton origine: Dieu t'aime tel que tu es. L'homophobie, le racisme, la discrimination sont des péchés. L'amour ne juge pas. L'amour accepte. L'amour libère. Tu es aimé(e), tu es accepté(e), tu es précieux(se). 🌈❤️",
-            hope: "Tu es aimé(e) tel(le) que tu es"
+            text: "🏳️‍🌈🐑 LA PECORA BIANCA - L'innocenza, la purezza, ma anche l'accettazione. Qualunque sia il tuo orientamento, il tuo colore, la tua origine: Dio ti ama così come sei. L'omofobia, il razzismo, la discriminazione sono peccati. L'amore non giudica. L'amore accetta. L'amore libera. Sei amato/a, sei accettato/a, sei prezioso/a. 🌈❤️",
+            hope: "Sei amato/a così come sei"
         },
         
-        // Dialogue final
         finalDialogue: {
-            ant: "Regarde-toi, Mouton! Tu as traversé tous les obstacles! Je n'y croyais pas!",
-            jojo: "Moi non plus, mon frère! Mais tu l'as fait! Tu as prouvé que l'espoir est plus fort que tout!",
-            bee: "Tes ailes invisibles ont volé plus haut que les miennes! Tu es un héros!",
-            sheep: "Merci mes amis... Mais ce n'est pas moi le héros. C'est nous tous ensemble. C'est l'amour, c'est la foi, c'est l'espoir. Et maintenant... je vois la Porte du Paradis...",
-            jesus: "Viens, mon enfant. Tu as bien combattu. Entre dans la joie éternelle. Ta lutte n'a pas été vaine. L'amour a vaincu."
+            title: '🐑 Dialogo Finale 🐑',
+            antLabel: '🐜 La Formica:',
+            jojoLabel: '🐐 Jojo la Capra:',
+            beeLabel: '🐝 L\'Ape:',
+            sheepLabel: '🐑 La Pecora Coraggio:',
+            jesusLabel: '✝️ Gesù:',
+            author: '- Emmanuel Payet',
+            viewTrophies: '🏆 Vedi tutti i messaggi (Trofei)',
+            ant: "Guardati, Pecora! Hai attraversato tutti gli ostacoli! Non ci credevo!",
+            jojo: "Neanch'io, fratello! Ma ce l'hai fatta! Hai dimostrato che la speranza è più forte di tutto!",
+            bee: "Le tue ali invisibili hanno volato più in alto delle mie! Sei un eroe!",
+            sheep: "Grazie amici miei... Ma l'eroe non sono io. Siamo tutti noi insieme. È l'amore, è la fede, è la speranza. E ora... vedo la Porta del Paradiso...",
+            jesus: "Vieni, figlio mio. Hai combattuto bene. Entra nella gioia eterna. La tua lotta non è stata vana. L'amore ha vinto."
         }
     },
     
     notifications: {
-        levelTransition: 'Passage au niveau suivant...',
-        trophyUnlocked: 'Trophée débloqué !',
-        powerUpCollected: 'Power-up collecté !',
-        lifeRestored: 'Vie restaurée !'
+        levelTransition: 'Passaggio al livello successivo...',
+        trophyUnlocked: 'Trofeo sbloccato!',
+        powerUpCollected: 'Power-up raccolto!',
+        lifeRestored: 'Vita ripristinata!'
+    },
+    
+    messages: {
+        finalVictory: {
+            title: '✨ BRAVO ✨',
+            grace: 'La grazia di Gesù è una saggezza certa.',
+            keepLight: 'Mantieni la tua luce accesa',
+            keepHeart: 'e il tuo cuore sveglio.',
+            chooseLife: 'Scegli la vita.',
+            continue: 'Complimenti! Hai perseverato e superato tutti gli ostacoli. La pazienza e la determinazione sono le chiavi del successo. Pronto per il prossimo livello?'
+        }
+    },
+    
+    proverbs: {
+        firstProverb: 'La libertà è il potere di volare',
+        proverbs: [
+            'L\'acqua che scorre non torna mai',
+            'Calmo come l\'acqua dormiente',
+            'Una goccia d\'acqua nell\'oceano',
+            'Dopo la tempesta viene la calma',
+            'L\'acqua prende la forma del vaso',
+            'La pazienza è amara ma i suoi frutti sono dolci',
+            'Il silenzio è d\'oro',
+            'Tutto viene a chi sa aspettare',
+            'La notte porta consiglio',
+            'Le stelle brillano per tutti',
+            'L\'oceano è fatto di gocce',
+            'Il viaggio più lungo inizia con un passo',
+            'La saggezza inizia nella meraviglia',
+            'Conosci te stesso',
+            'La verità è in fondo al pozzo',
+            'Il saggio impara dai suoi errori',
+            'Un sorriso è la curva più bella',
+            'Il tempo guarisce tutte le ferite',
+            'La pace interiore vale tutti i tesori',
+            'Ogni fine è un nuovo inizio'
+        ]
+    },
+    
+    powerUps: {
+        spiritual: {
+            courage: { name: 'CORAGGIO', message: '💪 CORAGGIO! Puoi affrontare tutto!', tip: 'Salti super potenti!' },
+            force: { name: 'FORZA', message: '⚡ FORZA DIVINA! Guerriero della luce!', tip: 'Distruggi tutto!' },
+            patience: { name: 'PAZIENZA', message: '🕰️ PAZIENZA! Vola con serenità!', tip: 'Volo controllato!' },
+            resilience: { name: 'RESILIENZA', message: '🛡️ RESILIENZA! Sei corazzato!', tip: 'Scudo attivato!' },
+            assurance: { name: 'SICUREZZA', message: '👑 SICUREZZA! Irradi!', tip: 'Aura radiante!' },
+            liberte: { name: 'LIBERTÀ', message: '🕊️ LIBERTÀ! Spezza le tue catene!', tip: 'Vera liberazione!' },
+            controle: { name: 'CONTROLLO', message: '🧠 CONTROLLO! Controllati!', tip: 'Controllo perfetto!' },
+            sagesse: { name: 'SAGGEZZA', message: '🧘 SAGGEZZA! Pace interiore!', tip: 'Chiarezza mentale!' },
+            gestion: { name: 'GESTIONE', message: '📊 GESTIONE! Ottimizza!', tip: 'Efficienza!' },
+            agir: { name: 'AGIRE', message: '🎯 AGIRE! Passa all\'azione!', tip: 'Iniziativa attiva!' },
+            combattre: { name: 'COMBATTERE', message: '⚔️ COMBATTERE! Modalità combattimento!', tip: 'Guerriero!' },
+            nepasabandonner: { name: 'NON ARRENDERSI', message: '🚫 NON ARRENDERSI! Persevera!', tip: 'Incrollabile!' },
+            perseverer: { name: 'PERSEVERARE', message: '🏆 PERSEVERARE! Continua!', tip: 'Determinazione!' }
+        },
+        fun: {
+            disco: { name: 'MODALITÀ DISCO', message: '🕺 MODALITÀ DISCO! Balliamo!', tip: 'Movimento disco automatico!' },
+            giant: { name: 'GIGANTE', message: '🦣 PECORA GIGANTE! ENORME!', tip: 'Dimensione x3!' },
+            tiny: { name: 'MINUSCOLO', message: '🐭 Piccolissimo! Schivata facile!', tip: 'Modalità furtiva!' },
+            rainbow: { name: 'ARCOBALENO', message: '🌈 PECORA ARCOBALENO! Favoloso!', tip: 'Scia colorata!' },
+            magnet_bonus: { name: 'MAGNETE BONUS', message: '🧲 Tutti i bonus ti attirano!', tip: 'Raccolta automatica!' },
+            spring: { name: 'CANGURO', message: '🦘 Modalità canguro! Boing boing!', tip: 'Rimbalzi infiniti!' },
+            jetpack: { name: 'JETPACK', message: '🎒 JETPACK attivato! Vroooom!', tip: 'Volo turbo!' },
+            ninja: { name: 'NINJA', message: '🥷 Modalità ninja! Invisibile!', tip: 'Intangibile!' },
+            party: { name: 'FESTA', message: '🎉 È FESTA!', tip: 'Coriandoli ovunque!' },
+            coffee: { name: 'CAFFEINA', message: '☕ CAFFEINA! Velocità x5!', tip: 'Iper velocità!' }
+        }
+    },
+    
+    obstacles: {
+        ground: {
+            wheelchair: 'DISABILITÀ',
+            car_accident: 'INCIDENTE',
+            coffin: 'LUTTO',
+            safe: 'POVERTÀ',
+            house: 'FAMIGLIA',
+            wolf: 'VIOLENZA',
+            black_sheep: 'RIFIUTO',
+            addiction: 'DIPENDENZA',
+            job_stress: 'LAVORO',
+            debt: 'DEBITI',
+            loneliness: 'SOLITUDINE',
+            betrayal: 'TRADIMENTO'
+        },
+        middle: {
+            depression: 'DEPRESSIONE',
+            anxiety: 'ANSIA',
+            doubt: 'DUBBIO',
+            phantom: 'FANTASMA',
+            shark: 'SQUALO',
+            eagle: 'AQUILA',
+            thunder: 'FULMINE',
+            cruise_ship: 'NAVE DA CROCIERA'
+        },
+        sky: {
+            death: 'MORTE',
+            cancer: 'CANCRO',
+            nuclear: 'NUCLEARE',
+            meteor: 'METEORITE',
+            procrastination: 'PIGRIZIA',
+            anger: 'RABBIA',
+            madness: 'FOLLIA'
+        },
+        richness: {
+            avarice: 'AVARIZIA',
+            luxure: 'LUSSURIA',
+            nepotisme: 'NEPOTISMO',
+            selection: 'SELEZIONE',
+            esclavage: 'SCHIAVITÙ',
+            surexploitation: 'SFRUTTAMENTO'
+        },
+        sins: {
+            pride: 'SUPERBIA',
+            greed: 'AVARIZIA',
+            lust: 'LUSSURIA',
+            envy: 'INVIDIA',
+            gluttony: 'GOLA',
+            wrath: 'IRA',
+            sloth: 'ACCIDIA'
+        },
+        fun: {
+            disco_ball: 'FESTA',
+            pizza: 'PAUSA',
+            trampoline: 'BOING',
+            banana: 'SCIVOLATA',
+            magnet: 'MAGNETE',
+            balloon: 'LEGGERO',
+            tornado: 'TORNADO',
+            rocket: 'RAZZO'
+        },
+        funMessages: {
+            disco_ball: '🥹 Festa time! La pecora balla!',
+            pizza: '🍕 Mangiato troppo! Digestione lenta...',
+            trampoline: '🎪 SUPER BOING! 🚀',
+            banana: '🍌 Buccia di banana! WHOOOOSH!',
+            magnet: '🧲 Attratto come un magnete!',
+            balloon: '🎈 Leggero come una piuma!',
+            tornado: '🌪️ Vortice di follia!',
+            rocket: '🚀 DECOLLOOO!'
+        },
+        weapons: {
+            sword: 'SPADA',
+            laser_gun: 'LASER',
+            net: 'RETE',
+            shield: 'SCUDO',
+            hammer: 'MARTELLO',
+            raygun: 'RAGGIO'
+        },
+        level1Bosses: {
+            whale: 'BALENA',
+            pacman: 'PACMAN',
+            dragon: 'DRAGO',
+            ufo: 'UFO',
+            shark: 'SQUALO',
+            cruise_ship: 'NAVE DA CROCIERA',
+            robot: 'ROBOT',
+            alien: 'ALIENO',
+            monster: 'MOSTRO',
+            big_boss: 'GRANDE CAPO'
+        }
+    },
+    endless: {
+        bosses: {
+            whale: 'FUKUSHIMA',
+            pacman: 'KRAKEN',
+            dragon: 'DRAGO DI FUOCO',
+            serpent: 'SERPENTE VELENOSO',
+            ufo: 'UFO',
+            shark: 'SQUALO',
+            robot: 'ROBOT',
+            serpent_stage: 'SERPENTE DI LIVELLO',
+            dragon_stage: 'DRAGO DI LIVELLO'
+        },
+        gameOver: {
+            title: 'GAME OVER',
+            skull: '💀',
+            score: 'PUNTEGGIO',
+            newRecord: '🏆 NUOVO RECORD! 🏆',
+            record: 'Record',
+            replay: '🔄 GIOCA ANCORA',
+            rebirth: 'VAI A VIVERE! e rinasce!\nTORNA ALLA VITA!'
+        }
+    },
+    intro: {
+        phases: {
+            paradise: "È questo il paradiso?",
+            shield: "Scudo tattico...",
+            sword: "Spada laser...",
+            bomb: "Bomba ionica...",
+            wtf: "Ma cos'è questo casino... 💀",
+            boom: "BOOM! 💥",
+            no: "no! cosa? 😱"
+        }
     }
 };

@@ -1,278 +1,587 @@
-// Traductions françaises (langue par défaut)
+// Kréol Rénioné - Reunion Creole translations
 export default {
     meta: {
-        language: 'Français',
-        code: 'fr',
-        flag: '🇫🇷'
+        language: 'Kréol Rénioné',
+        code: 'rc',
+        flag: '🇷🇪'
     },
     
     menu: {
         title: 'X-Sheep is back',
-        subtitle: "L'Espoir en Action",
-        createdBy: 'Créé avec 💖 par',
-        author: 'Emmanuel Payet',
+        subtitle: 'Lespwar dann laksyon',
+        createdBy: 'Kréyé èk 💖',
+        author: 'Emmanuel Paye',
         
         modes: {
             adventure: {
-                title: 'AVENTURE',
+                title: 'Lavantir',
                 description: [
-                    'Traverse les épreuves de la vie.',
-                    'Messages narratifs profonds.',
-                    'Atteins la Porte du Paradis.'
+                    'Travers lé zéprèv dann la vi.',
+                    'Bann mésaz naratif profon.',
+                    'Gingn dépi la port dann paradi.'
                 ],
                 stats: {
-                    chapters: 'Chapitres',
-                    minutes: 'Minutes',
-                    hope: 'Espoir'
+                    chapters: 'Sapat',
+                    minutes: 'Minit',
+                    hope: 'Lespwar'
                 }
             },
             endless: {
-                title: 'INFINI',
+                title: 'Sanfin',
                 description: [
-                    'Survie sans fin.',
-                    'Score et combos maximaux.',
-                    'Bats tous les records !'
+                    'Sirvi sanfin.',
+                    'Bann gro pwin èk konbo.',
+                    'Kass toute bann rékor!'
                 ],
                 stats: {
-                    waves: 'Vagues',
-                    duration: 'Durée',
-                    record: 'Record'
+                    waves: 'Vag',
+                    duration: 'Diré',
+                    record: 'Rékor'
                 }
             }
         },
         
-        score: 'Score',
-        graphics: {
-            title: 'Choisir le style graphique',
-            normal: 'Normal',
-            pixelArt: 'Pixel Art'
+        score: 'Pwin',
+        
+        controls: {
+            graphics: {
+                title: 'Swazi out stil grafik',
+                normal: 'Normal',
+                bth: 'Bth',
+                label: {
+                    normal: 'Normal',
+                    bth: 'Bth'
+                },
+                popup: {
+                    title: 'Stil Grafik',
+                    modeNormal: '📺 Mod Normal',
+                    modeBth: '📟 Mod Bth',
+                    willApply: 'Out sanzmawn i sra apliké dann proshain parti',
+                    ok: 'Dako'
+                }
+            },
+            language: {
+                title: 'Sanz out lang',
+                change: 'Change language / Sanz out lang',
+                panelTitle: '🌍 Language / Lang',
+                ltrSection: 'Lang LTR',
+                rtlSection: 'Lang RTL (العربية / עברית)'
+            }
         }
     },
     
     game: {
         levels: {
-            level1: 'NIVEAU 1: Les Épreuves de la Vie',
-            level2: 'NIVEAU 2: Les 7 Péchés Capitaux',
-            level3: 'NIVEAU 3: Navigation et Sagesse'
+            level1: 'Nivo 1: Lé zéprèv dann la vi',
+            level2: 'Nivo 2: Sèt pésé kapital',
+            level3: 'Nivo 3: Navige èk lasazès',
+            level2Title: 'Nivo 2: Sèt pésé kapital',
+            level2Description: 'Sirvi inposib... Tyin bontan lontan!',
+            level3Title: 'Nivo 3: Vwayaz vèr lasazès',
+            level3Description: 'Navige dann lamer la nuit, ramass lasazès ék évit bann danzé maritim!'
         },
         
         buttons: {
-            retry: 'Réessayer',
-            menu: 'Menu Principal',
-            continue: 'Continuer',
-            close: 'Fermer',
-            trophies: 'Voir tous les messages (Trophées)'
+            retry: 'Rèsèy',
+            menu: 'Meni prinsipal',
+            continue: 'Kontinyé 🌟',
+            close: 'Fèrm',
+            trophies: 'Gèt tout bann mésaz (Trofé)'
         },
         
         gameOver: {
-            title: 'GAME OVER',
-            reachedLevel: 'Niveau atteint',
-            score: 'Score',
-            obstaclesAvoided: 'Obstacles évités'
+            title: 'Zé fini',
+            rebirth: '🔄 Alé viv! Réné ankor! Rtourn dann la vi!',
+            totalScore: 'Pwin total',
+            score: 'Pwin',
+            xp: 'Espéryans',
+            obstaclesAvoided: 'Bann obstakl évité',
+            retry: 'Rèsèy',
+            mainMenu: 'Meni prinsipal',
+            returnMenu: 'Rtourn dann meni'
         },
         
         victory: {
-            title: 'VICTOIRE!',
-            levelCompleted: 'Niveau terminé!',
-            congratulations: 'Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?'
+            title: 'Viktwar!',
+            levelCompleted: 'Nivo konplété!',
+            congratulations: 'Félisitasyon! Out la persévér é out la dépass tout bann obstakl. Pasyans épi détèrminasyon lé la klé dann siksé. Paré pou proshèn nivo?',
+            impatience: 'Anpasyans!',
+            bossesDestroyed: '⚔️ Bann boss détrui ⚔️',
+            legendConfirmed: '👑 Léjann konfirmé 👑',
+            victoriousCombat: 'Konba viktoryé ziska lafin',
+            perseverance: 'Persévérans = Viktwar',
+            lifeLesson1: 'Mèm si bann konba dann la vi lé dir,',
+            lifeLesson2: 'Fo persévér é zamé pas abandonn',
+            lifeLesson3: 'Parske li mèyèr i arive ankor aprè',
+            scoreLabel: 'Pwin',
+            obstaclesDestroyed: 'Bann obstakl détrui',
+            continue: 'Kontinyé',
+            menu: 'Meni'
         },
         
         hud: {
-            lives: 'Vies',
-            score: 'Score',
-            level: 'Niveau',
-            combo: 'Combo',
-            wisdom: 'Sagesse'
+            lives: 'Bann lavi',
+            score: 'Pwin',
+            level: 'Nivo',
+            combo: 'Konbo',
+            wisdom: 'Lasazès'
+        },
+        
+        messages: {
+            leviathan: '🐉 Lévyatan i aparé! Évit son bann atak!',
+            quickVictory: 'Alé viv! Réné ankor! Rtourn dann la vi!',
+            quickVictoryLine1: 'Alé viv! Réné ankor!',
+            quickVictoryLine2: 'Rtourn dann la vi!',
+            notFinished: 'Non! Ankor pa fini?',
+            watchYourLife: 'Vèy out bann lavi!'
+        },
+        
+        ui: {
+            paradise: 'Paradi',
+            score: 'Pwin',
+            souls: 'Bann lanm',
+            total: 'Total',
+            xp: 'Espéryans',
+            brokenClock: 'Lorloz kasé - Mèt dann tan'
+        },
+        
+        level2: {
+            title: '🚪 La port dann paradi',
+            survived: 'Out la sirvi {seconds} ségond',
+            continue: 'Kontinyé',
+            chooseGrace: 'Swazi lagras'
         }
     },
     
     trophies: {
-        title: 'COLLECTION DE TROPHÉES',
-        subtitle: 'Messages de courage et d\'espoir',
-        unlocked: 'Débloqué',
-        locked: 'Verrouillé',
-        share: 'Partager',
+        title: 'Kolèksyon trofé',
+        menuTitle: '🏆 Bann trofé èk mésaz 🏆',
+        subtitle: 'Bann mésaz kouraz épi lespwar',
+        by: 'Emmanuel Paye',
+        totalXP: 'Espéryans total',
+        unlocked: 'Débloké',
+        unlockedCount: 'Bann trofé débloké',
+        locked: 'Bloké',
+        share: 'Partaz',
+        close: '🚪 Fèrm',
+        newTrophy: '🏆 Nouvo trofé!',
+        xpGained: 'Espéryans',
+        unlockedOn: 'Débloké lo:',
+        shareButton: '📤 Partaz',
+        lockedMessage: 'Dépass sa obstakl la pou débloké li mésaz...',
         categories: {
-            life: 'Épreuves de la Vie',
-            existential: 'Menaces Existentielles',
-            richness: 'Péchés de Richesse',
-            mid: 'Dangers Intermédiaires',
-            fun: 'Moments Fun',
-            special: 'Trophées Spéciaux'
+            life: 'Bann zéprèv dann la vi',
+            existential: 'Bann mènas égzistansyèl',
+            richness: 'Bann pésé dann rishès',
+            mid: 'Bann danzé moyin',
+            fun: 'Bann moman amizman',
+            special: 'Bann trofé spésyal'
+        },
+        labels: {
+            wheelchair: '♿ Fotèy roulan',
+            car_accident: '🚗 Aksidan',
+            coffin: '⚰️ Sèrkèy',
+            safe: '🏦 Koffor',
+            house: '🏠 Kaz détrui',
+            wolf: '🐺 Lou',
+            black_sheep: '🐑 Moutón nwar',
+            addiction: '📦 Addiksyon',
+            death: '💀 Lanmor',
+            cancer: '🎗️ Kansèr',
+            nuclear: '☢️ Réaksyon anti-nikléèr',
+            meteor: '☄️ Météor',
+            procrastination: '⏰ Prokrasté',
+            anger: '😡 Kolèr',
+            madness: '🌀 Lafoli',
+            avarice: '💰 Lavaris',
+            luxure: '💋 Liksir',
+            nepotisme: '🤝 Népotism',
+            selection: '👥 Sélèksyon',
+            esclavage: '⛓️ Esklavaz',
+            surexploitation: '🏭 Siréksplwatasyon',
+            white_sheep: '🐑✨ Moutón blan - Lagras',
+            charity: '💝 Sharité',
+            gold_coin: '💰 Pyès dor - Libèrté',
+            grace: '✝️ Lagras - Zézi',
+            impatient: '⏰💔 Lorloz kasé - Mèt dann tan',
+            eagle: '🦅 Zègl',
+            thunder: '⚡ Tonn',
+            disco_ball: '🪩 Bal disko',
+            pizza: '🍕 Pisa',
+            trampoline: '🤸 Tranpolin',
+            banana: '🍌 Fig',
+            magnet: '🧲 Lèman',
+            balloon: '🎈 Balon',
+            tornado: '🌪️ Tornada',
+            rocket: '🚀 Fokèt'
         }
     },
     
     narrative: {
-        // Obstacles de la vie
         wheelchair: {
-            text: "Ce fauteuil roulant ? Moi aussi je vis avec un handicap... Mais regarde, je peux encore voler avec mes rêves ! Ton corps peut être limité, mais ton esprit est libre. Dieu t'a donné des ailes que personne ne peut briser. 💪✨",
-            hope: "Tu n'es pas défini par tes limitations"
+            text: "Sa fotèy roulan la? Mwin osi mi vi èk inn andikap... Mé gèt, mi pé ankor vol èk mon bann rèv! Out kór i pé èt limit, mé out lèspri lé libr. Bondyé la donn aou bann zèl ké personn pé kass. 💪✨",
+            hope: "Ou lé pa défini par out bann limit"
         },
         car_accident: {
-            text: "Cette voiture brisée me rappelle mes propres accidents de la vie... Les chocs, les traumatismes. Mais tu sais quoi ? Dieu répare les cœurs brisés. Chaque cicatrice raconte une histoire de survie. Tu es plus fort que tu ne le crois. 🚗💔➡️❤️",
-            hope: "Tes blessures deviennent ta force"
+            text: "Sa bagnol kasé la i rapl amwin mon propre aksidan dann la vi... Lo shok, lo troma. Mé sav kosa? Bondyé i répèr bann kèr kasé. Shak sikatris i rakont inn listwar dann sirvi. Ou lé pli for ké sak ou pans. 🚗💔➡️❤️",
+            hope: "Out bann sikatris i vyin out fors"
         },
         coffin: {
-            text: "Un cercueil... La mort n'est pas la fin, c'est juste une porte vers l'éternité. Je ne crains plus la mort, car je sais que l'amour de Dieu est plus fort. Chaque jour est un cadeau. Vis pleinement ! ⚰️➡️👼",
-            hope: "La vie est éternelle en Dieu"
+            text: "Inn sèrkèy... Lanmor lé pa inn finisman, sèlman inn port vèr létèrnitè. Mi krèn pi lanmor, parske mi koné lamour Bondyé lé pli for. Shak zour lé inn kado. Vi plinman! ⚰️➡️👼",
+            hope: "La vi lé étèrnel dann Bondyé"
         },
         safe: {
-            text: "Ce coffre-fort fermé... On enferme nos peurs, nos secrets, nos douleurs. Mais Dieu voit tout et pardonne tout. Ouvre ton cœur, libère-toi de ce qui te retient prisonnier. La vraie richesse, c'est la liberté intérieure. 🔒➡️🕊️",
-            hope: "Libère ton cœur, trouve la paix"
+            text: "Sa koffor fèrmé la... Nou i fèrm nout bann krèn, nout bann sékré, nout bann doulèr. Mé Bondyé i vwa tout é i pardonn tout. Ouvèr out kèr, libèr aou dann sak i anprizon aou. Vréman rishès lé libèrté intéryèr. 🔒➡️🕊️",
+            hope: "Libèr out kèr é trouv lapé"
         },
         house: {
-            text: "Cette maison semble solide... Mais les vraies fondations, ce n'est pas le béton, c'est la foi. Construis ta vie sur l'amour, la compassion, l'entraide. Ton foyer spirituel sera indestructible. 🏠❤️",
-            hope: "Bâtis sur l'amour, pas sur la peur"
+            text: "Sa kaz la i sanm solid... Mé vréman fondmantal sé pa béton, sé lafwa. Bati out la vi si lamour, konpasyon, antréd mitièl. Out kaz spiritièl la sra pa détruizib. 🏠❤️",
+            hope: "Bati si lamour, pa si krèn"
         },
         wolf: {
-            text: "Le loup... Il représente la peur, le prédateur qui te traque. Mais rappelle-toi: tu n'es jamais seul. Dieu est ton berger, il te protège. Face au loup, tu es plus fort que tu ne le penses. 🐺➡️🛡️",
-            hope: "Dieu est ton protecteur"
+            text: "Lou... I réprézan krèn, lo prédatèr ki po shass aou. Mé i fó rapèl: Out lé zamé tout sèl. Bondyé lé out pastèr é i protèz aou. Douvan lou, out lé pli for ké sak ou pans. 🐺➡️🛡️",
+            hope: "Bondyé lé out protèktèr"
         },
         black_sheep: {
-            text: "Le mouton noir... Celui qu'on rejette, qu'on exclut. Moi aussi, j'ai été différent. Mais Dieu aime TOUS ses moutons, peu importe leur couleur. L'exclusion est une illusion. L'amour de Dieu est universel. 🐑🖤➡️💖",
-            hope: "Différent ne veut pas dire inférieur"
+            text: "Moutón nwar... Sèla rézèté, ékskli. Mwin osi mwin té diféran. Mé Bondyé i èm tout son bann moutón, sanm kilswa kouler. Lékskliziyon lé inn ilizyon. Lamour Bondyé lé inivèrsèl. 🐑🖤➡️💖",
+            hope: "Diféran vé pa dir anfèryèr"
         },
         addiction: {
-            text: "Les dépendances... Alcool, drogues, jeux, tout ce qui nous enchaîne. Moi aussi, j'ai lutté. Mais la liberté existe. Demande de l'aide, accepte la main tendue. Dieu te veut libre, pas esclave. 🍷➡️🕊️",
-            hope: "La liberté est possible, demande de l'aide"
+            text: "Addiksyon... Lalkol, drog, zé dann azar, tout sak i anshènn nou. Mwin osi mwin la bat. Mé libèrté i ègzist. Domand lèd, shoz la min tandi. Bondyé i vé aou libr, pa èsklave. 🍷➡️🕊️",
+            hope: "Libèrté lé posib, domand lèd"
         },
         
-        // Obstacles du ciel (existentiels)
         death: {
-            text: "💀 La Mort... Elle fait peur, elle est mystérieuse. Mais la Bible dit qu'elle n'a plus de pouvoir sur ceux qui croient. La mort n'est qu'un passage, pas une fin. Vis chaque jour comme un cadeau. L'éternité t'attend. 🌅",
-            hope: "La mort n'est qu'un passage vers l'éternité"
+            text: "💀 Lanmor... I fé pèr, i mistéryé. Mé la Bib i di ké i na pi pouvar si bann krwayan. Lanmor lé zis inn pasaz, pa inn fin. Vi shak zour kom inn kado. Létèrnitè i atann aou. 🌅",
+            hope: "Lanmor lé zis inn pasaz vèr létèrnitè"
         },
         cancer: {
-            text: "🎗️ Le cancer... Cette maladie terrible qui ronge. Moi aussi, j'ai vu la souffrance. Mais même dans la maladie, Dieu est présent. Il ne t'abandonne pas. La guérison peut venir, mais ta foi reste ta force. 💪🙏",
-            hope: "Même dans la maladie, tu n'es pas seul"
+            text: "🎗️ Kansèr... Sa maladi tèrib la i ronz. Mwin osi mwin la vwar soufrans. Mé mèm dann maladi, Bondyé lé prézan. I abandonn pa aou. Gérison i pé vyin, mé out lafwa rest out fors. 💪🙏",
+            hope: "Mèm dann maladi, out lé pa tout sèl"
         },
         nuclear: {
-            text: "☢️ Le nucléaire... L'humanité capable de tout détruire. Fukushima, Tchernobyl, la guerre atomique. Face à cette folie, choisis la paix. Sois un artisan de paix, un bâtisseur d'espoir. Le monde a besoin de toi. 🕊️🌍",
-            hope: "La paix commence en toi"
+            text: "☢️ Nikléèr... Limanitè i kapab détrui tout. Foukoshima, Tchernobil, gèr atomik. Douvan sa lafoli la, swazi lapé. Vin inn artisan lapé, inn batisr lespwar. Lèmonn i èm bézwin aou. 🕊️🌍",
+            hope: "Lapé i komans èk aou"
         },
         meteor: {
-            text: "☄️ La météorite... La destruction venue du ciel. Les catastrophes naturelles nous rappellent notre fragilité. Mais ensemble, on est plus forts. Entraide, solidarité, amour: voilà nos vrais boucliers. 🛡️❤️",
-            hope: "Ensemble, on survit à tout"
+            text: "☄️ Météor... Déstruksyon dépi lésyèl. Bann katastrof natirèl i rapl nout frazilitè. Mé ansanm nou lé pli for. Antréd, solidarité, lamour: Sa sé nout vré boukliyé. 🛡️❤️",
+            hope: "Nou pass tout ansanm"
         },
         procrastination: {
-            text: "⏰ La procrastination... Remettre à demain ce qu'on peut faire aujourd'hui. Le temps perdu ne revient jamais. Agis maintenant ! Chaque instant est précieux. Ne laisse pas la peur te paralyser. Ose vivre ! ⏰➡️💪",
-            hope: "Le moment présent est tout ce que tu as"
+            text: "⏰ Prokrasté... Rmèt domèn sak nou pé fé zordi. Tan pèrdi i rviyin zamé. Azi astèr! Shak moman lé prèsyé. Lès pa krèn paralis aou. Oz viv! ⏰➡️💪",
+            hope: "Moman prézan lé tout sak out la"
         },
         anger: {
-            text: "😡 La colère... Elle brûle, elle détruit. Moi aussi, j'ai ressenti cette rage. Mais la colère est un poison. Pardonne, libère, avance. Dieu t'aide à transformer ta colère en force constructive. 🔥➡️❤️",
-            hope: "Transforme ta colère en force d'amour"
+            text: "😡 Kolèr... I bril, i détrui. Mwin osi mwin la sant sa la raz. Mé kolèr lé pwézon. Pardonn, lash, avans. Bondyé i èd aou transform out kolèr dann inn fors konstriktiv. 🔥➡️❤️",
+            hope: "Transform out kolèr dann inn fors lamour"
         },
         madness: {
-            text: "🤪 La folie... Perdre la raison, perdre pied. La santé mentale est fragile. Si tu souffres, parle. Demande de l'aide. Tu n'es pas fou, tu es humain. Dieu guérit aussi les esprits brisés. 🧠💔➡️💚",
-            hope: "Ta santé mentale compte, demande de l'aide"
+            text: "🤪 Lafoli... Pèrd lèspri, pèrd kontrol. Santé mantèl lé frazil. Si ou i soufèr, koz. Domand lèd. Out lé pa fou, out lé zimin. Bondyé i géri osi bann lanm kasé. 🧠💔➡️💚",
+            hope: "Out santé mantèl lé inportan, domand lèd"
         },
         
-        // Péchés de richesse
         avarice: {
-            text: "💰 L'AVARICE - L'amour de l'argent. Accumuler, thésauriser, jamais assez. Mais la richesse matérielle est vide. Le vrai trésor, c'est l'amour, la générosité, le partage. Donne, et tu recevras au centuple. 💸➡️❤️",
-            hope: "La vraie richesse est dans le don"
+            text: "💰 Lavaris - Lamour pou larzan. Akiml, stok, zamé asé. Mé rishès matéryèl lé vid. Vréman trézor sé lamour, zénérozitè, partaz. Donn, é out sra rèsi san fwa plis. 💸➡️❤️",
+            hope: "Vréman rishès lé dann donn"
         },
         luxure: {
-            text: "💋 LA LUXURE - La quête insatiable de plaisir charnel. Le corps est beau, l'amour est saint. Mais la luxure est une prison. Respecte-toi, respecte l'autre. L'amour vrai dépasse le désir. 🔥➡️💞",
-            hope: "L'amour vrai transcende le désir"
+            text: "💋 Liksir - Porsit sanfin bann plézir la shèr. Lo kór lé bo é lamour lé sakré. Mé liksir lé inn prizon. Rèspèkt aou, rèspèkt lotèr. Vréman lamour i dépass anvwi. 🔥➡️💞",
+            hope: "Vréman lamour i dépass anvwi"
         },
         nepotisme: {
-            text: "👨‍👩‍👧‍👦 LE NÉPOTISME - Favoriser ses proches au détriment de la justice. C'est de la corruption déguisée. Dieu demande l'équité, pas le favoritisme. Chaque personne mérite sa chance. Sois juste. ⚖️",
-            hope: "La justice avant le favoritisme"
+            text: "👨‍👩‍👧‍👦 Népotism - Favoriz out prop bann moun o détriman la zistis. Sa sé koripsyon kash. Bondyé i domand lékitè, pa favoritism. Tout monn i mérit inn shans. Swa zist. ⚖️",
+            hope: "Zistis avan favoritism"
         },
         selection: {
-            text: "🧬 LA SÉLECTION - Choisir qui vit, qui meurt, qui mérite. Eugénisme, discrimination, exclusion. Mais Dieu aime chaque vie, chaque être. Personne n'a le droit de jouer à Dieu. Chaque vie a une valeur infinie. ❤️",
-            hope: "Chaque vie a une valeur infinie"
+            text: "🧬 Sélèksyon - Swazi kisannla i vi, kisannla i mor, kisannla i mérit. Ozénik, diskriminasyon, ékskliziyon. Mé Bondyé i èm shak la vi, shak ègzistans. Personn i na dwa zw Bondyé. Shak la vi na inn valèr sanfini. ❤️",
+            hope: "Shak la vi na inn valèr sanfini"
         },
         esclavage: {
-            text: "⛓️ L'ESCLAVAGE - Exploiter, dominer, asservir. L'histoire est pleine de ces horreurs. Mais Dieu libère les opprimés. Sois du côté de la liberté, pas de l'oppression. Défends la dignité humaine. 🕊️",
-            hope: "La liberté est un droit universel"
+            text: "⛓️ Esklavaz - Èksplwat, domin, fé èsklave. Listwar lé plin èk sa bann lorèr la. Mé Bondyé i libèr bann moun oprimé. Mèt aou koté libèrté, pa opresyon. Défann dinité lèzomm. 🕊️",
+            hope: "Libèrté lé inn dwa inivèrsèl"
         },
         surexploitation: {
-            text: "🌍 LA SUREXPLOITATION - Épuiser la Terre, exploiter les ressources sans limite. La planète agonise. Mais il est encore temps. Respecte la Création, préserve la nature. Dieu nous a confié la Terre, pas pour la détruire. 🌱",
-            hope: "Préserve la Création pour demain"
+            text: "🌍 Siréksplwatasyon - Épuiz latèr, èksplwat bann rèsours sanfin. Latèr i moury. Mé ankor na tan. Rèspèkt kréasyon, gard lanatiré. Bondyé la kofyé nout la tèr, pa pou détrui ali. 🌱",
+            hope: "Gard kréasyon pou domèn"
         },
         
-        // Obstacles milieu
         eagle: {
-            text: "🦅 L'aigle... Majestueux mais dangereux. Dans la vie, certains prédateurs volent haut. Mais toi aussi, tu peux voler. Ne te laisse pas intimider. Ta force est en toi. Déploie tes ailes ! 🦅✨",
-            hope: "Déploie tes ailes, vole haut"
+            text: "🦅 Zègl... Mazèstyé mé danzéré. Dann la vi, sèrtin prédatèr i vol o. Mé ou osi ou pé vol. Pa i fé pèr. Out fors lé andédan. Déplwa out bann zèl! 🦅✨",
+            hope: "Déplwa out bann zèl é vol o"
         },
         thunder: {
-            text: "⚡ La foudre... Imprévisible, terrifiante. Les tempêtes de la vie sont inévitables. Mais après l'orage vient le calme. Tiens bon, la lumière revient toujours. 🌩️➡️🌈",
-            hope: "Après la tempête vient l'arc-en-ciel"
+            text: "⚡ Tonn... Anprévizib, fé pèr. Bann tanpèt dann la vi lé inévitab. Mé aprè tanpèt i ariv kalm. Tiyin bon, la limyèr i rviyin touzour. 🌩️➡️🌈",
+            hope: "Aprè tanpèt i vyin larkansyèl"
         },
         
-        // Obstacles FUN
         disco_ball: {
-            text: "🪩✨ YEEEES! Boule disco! Danse avec moi! La vie c'est aussi ça : des moments de pure joie absurde! Parfois il faut juste lâcher prise et briller comme une boule à facettes! 💃🕺",
-            hope: "La joie est un acte de résistance !"
+            text: "🪩✨ Wé! Bal disko! Dans èk mwin! La vi sé osi sa: Bann moman bonèr pir é absird! Défwa fo zis détan, brilans kom inn bal mirwar! 💃🕺",
+            hope: "Bonèr sé inn akt résistans!"
         },
         pizza: {
-            text: "🍕 Pizza party dans le ciel! Même le mouton mérite sa part! La vie c'est pas que des épreuves, c'est aussi partager une pizza avec des amis. Célèbre les petits plaisirs! 😋",
-            hope: "Les petits bonheurs comptent aussi !"
+            text: "🍕 Fèt pisa dann lésyèl! Mèm moutón i mérit son par! La vi sé pa sèlman bann zéprèv, sé osi partaz pisa èk bann kamarad. Fèt bann ti bonèr! 😋",
+            hope: "Bann ti bonèr osi i inportan!"
         },
         trampoline: {
-            text: "🤸 BOING BOING! Rebondir c'est la vie! Chaque chute est une occasion de rebondir plus haut! Laisse ton cœur d'enfant s'exprimer, saute, ris, vis! 🎪",
-            hope: "Rebondis toujours plus haut !"
+            text: "🤸 Voupvoup! Rebondi sé la vi! Shak shite sé inn shan pou rebondi pli o! Lès out kèr dann zèfan ksprim, sot, ri, vi! 🎪",
+            hope: "Sot touzour pli o!"
         },
         banana: {
-            text: "🍌 Attention banane! Oui, même moi je glisse parfois! On a le droit de tomber, de faire des erreurs hilarantes. L'important c'est de se relever en riant! 😂",
-            hope: "Ris de tes chutes, relève-toi !"
+            text: "🍌 Atansyon fig! Wé, mwin osi mi glis défwa! Nou na dwa tonb, fé bann èrèr amizant. Linportan sé lèv ansoryan! 😂",
+            hope: "Ri si out bann shite é lèv!"
         },
         magnet: {
-            text: "🧲 Aimant géant! Certaines choses nous attirent irrésistiblement. Mais attention à ne pas perdre le contrôle! Choisis ce qui t'attire: le bien ou le chaos? 🤔",
-            hope: "Choisis bien tes attractions !"
+            text: "🧲 Gro lèman! Sèrtin bann koz i atir nout san résistans. Mé atansyon pa pèrd kontrol! Swazi sak i atir aou: Lo bin ou lo shaos? 🤔",
+            hope: "Swazi out bann atraksyon èk sazès!"
         },
         balloon: {
-            text: "🎈 Ballon! Léger, joyeux, insouciant! La vie devrait être légère comme un ballon. Laisse tes fardeaux au sol, envole-toi vers la joie! 🎉",
-            hope: "Sois léger comme un ballon !"
+            text: "🎈 Balon! Lézhèr, èrèz, san sousi! La vi i dwa èt lézhèr kom inn balon. Lès out bann shar atèr é vol vèr bonèr! 🎉",
+            hope: "Swa lézhèr kom inn balon!"
         },
         tornado: {
-            text: "🌪️ Tornade loufoque! Parfois la vie est un tourbillon chaotique! Mais même dans le chaos, trouve ton centre, ton ancrage. Le calme au cœur de la tempête! 🧘",
-            hope: "Trouve le calme dans le chaos !"
+            text: "🌪️ Tornada fou! Défwa la vi lé inn tourbillon shaotik! Mé mèm dann shaos, trouv out santr, out lankr. Kalm dann santèr tanpèt! 🧘",
+            hope: "Trouv kalm dann shaos!"
         },
         rocket: {
-            text: "🚀 Fusée cosmique! Parfois il faut viser les étoiles, même si ça semble fou! Ose rêver grand, ose l'impossible! Le ciel n'est qu'une limite imaginaire! 🌟",
-            hope: "Vise les étoiles, ose l'impossible !"
+            text: "🚀 Fokèt pou léspass! Défwa fo viz bann zétwal, mèm si sa i sanm fou! Oz rèv gran, oz linposib! Lésyèl lé zis inn limit linmazinasyon! 🌟",
+            hope: "Viz bann zétwal é oz linposib!"
         },
         
-        // Trophées spéciaux
         charity: {
-            text: "🤝 LA CHARITÉ - Donner sans rien attendre en retour. Partager avec celui qui a faim, vêtir celui qui est nu, consoler celui qui pleure. La charité est l'amour en action. Et cet amour change le monde. ❤️",
-            hope: "L'amour en action change le monde"
+            text: "🤝 Sharité - Donn san atann anyèn antour. Partaz èk sèla la fin, abiye sèla tout ni, konsol sèla i plèr. Sharité sé lamour ann aksyon. É sa lamour la i shanz lèmonn. ❤️",
+            hope: "Lamour ann aksyon i shanz lèmonn"
         },
         impatient: {
-            text: "⏱️ L'IMPATIENCE - Toujours pressé, jamais satisfait. Mais Dieu travaille dans son temps, pas le nôtre. Apprends la patience, la confiance. Les meilleures choses prennent du temps. 🌱➡️🌳",
-            hope: "La patience est une force"
+            text: "⏱️ Anpasyans - Touzour i prèss, zamé kontan. Mé Bondyé i travay dann son tan, pa nout tan. Aprann pasyans, konfyans. Bann pli bo koz i pran tan. 🌱➡️🌳",
+            hope: "Pasyans lé inn fors"
         },
         gold_coin: {
-            text: "💰 LA PIÈCE D'OR - Symbole de richesse matérielle. Mais la vraie richesse n'est pas dans l'or. Elle est dans les relations, l'amour, la paix intérieure. Cherche le trésor du cœur, pas celui du coffre. 💎➡️❤️",
-            hope: "Le vrai trésor est dans le cœur"
+            text: "💰 Pyès dor - Sinbol dann rishès matéryèl. Mé vréman rishès lé pa dann lor. Lé dann bann rèlasyon, dann lamour, dann lapé intéryèr. Shèrsh bann trézor dann kèr, pa dann kofr. 💎➡️❤️",
+            hope: "Vréman trézor lé dann kèr"
         },
         grace: {
-            text: "✝️ LA GRÂCE - Ce n'est pas une formule magique ni une incantation. La grâce se personnifie par une personne : Dieu fait homme et nommé Jésus. On ne trompera pas Dieu par des secrets ou cachotteries. La grâce est à lui seul. Et demander grâce avec repentance est une voie de salut pour tout être imparfait. Nos pires défauts n'auront plus d'importance devant lui avec un cœur disposé à être renouvelé, transformé pour le meilleur. Ne vous découragez pas en pensant être le pire pécheur. Demandez à Dieu de vous montrer qui vous êtes vraiment. 🕊️💔",
-            hope: "La grâce : Dieu fait homme"
+            text: "✝️ Lagras - Sa sé pa inn formil mazik ni inn sort. Lagras lé ankaryé dann inn moun: Bondyé vini zomm é i apèl Zézi. Nou sra pa tromp Bondyé èk bann sékré ou kash. Lagras lé zis po li. É domand lagras èk rèpantans sé lo shmin rédenpsyon pou shak ègzistans pa pèrfèk. Nout bann pir défo sra pa kont dovan li, si na inn kèr paré ranouvelé, transform vèr lo méyèr. Dékourazé pa aou si ou pans out lé lo pi gro pèshèr. Domand Bondyé montré aou kisannla out lé vrèman. 🕊️💔",
+            hope: "Lagras: Bondyé vini zomm"
         },
         white_sheep: {
-            text: "🏳️‍🌈🐑 LE MOUTON BLANC - L'innocence, la pureté, mais aussi l'acceptation. Peu importe ton orientation, ta couleur, ton origine: Dieu t'aime tel que tu es. L'homophobie, le racisme, la discrimination sont des péchés. L'amour ne juge pas. L'amour accepte. L'amour libère. Tu es aimé(e), tu es accepté(e), tu es précieux(se). 🌈❤️",
-            hope: "Tu es aimé(e) tel(le) que tu es"
+            text: "🏳️‍🌈🐑 Moutón blan - Linnosans, pirté, é osi aksèptasyon. Sanm kilswa out oryantasyon, out koulèr lapò, out orizhinn: Bondyé i èm aou kom ou lé. Omofobya, rasism, diskriminasyon sé bann pésé. Lamour i ziz pa. Lamour i aksèpt. Lamour i libèr. Out lé émé, out lé aksèpté, out lé prèsyé. 🌈❤️",
+            hope: "Out lé émé kom ou lé"
         },
         
-        // Dialogue final
         finalDialogue: {
-            ant: "Regarde-toi, Mouton! Tu as traversé tous les obstacles! Je n'y croyais pas!",
-            jojo: "Moi non plus, mon frère! Mais tu l'as fait! Tu as prouvé que l'espoir est plus fort que tout!",
-            bee: "Tes ailes invisibles ont volé plus haut que les miennes! Tu es un héros!",
-            sheep: "Merci mes amis... Mais ce n'est pas moi le héros. C'est nous tous ensemble. C'est l'amour, c'est la foi, c'est l'espoir. Et maintenant... je vois la Porte du Paradis...",
-            jesus: "Viens, mon enfant. Tu as bien combattu. Entre dans la joie éternelle. Ta lutte n'a pas été vaine. L'amour a vaincu."
+            title: '🐑 Finalman dialog 🐑',
+            antLabel: '🐜 Fourmi:',
+            jojoLabel: '🐐 Jojo Kabri:',
+            beeLabel: '🐝 Zanbèt:',
+            sheepLabel: '🐑 Moutón kouraz:',
+            jesusLabel: '✝️ Zézi:',
+            author: '- Emmanuel Paye',
+            viewTrophies: '🏆 Gèt tout bann mésaz (Trofé)',
+            ant: "Gèt out ropar, moutón! Out la pass tout bann obstakl! Sé inkrwayab!",
+            jojo: "Mwin osi mi krwa pa, fréro! Mé out la fé ali! Out la prouvé ké lespwar lé pli for ké tout!",
+            bee: "Out bann zèl anvizib la volé pli o ké amwin! Out lé inn éro!",
+            sheep: "Mèrsi mon bann kamarad... Mé léro sé pa mwin. Léro sé nout tout ansanm. Sa sé lamour, sa sé lafwa, sa sé lespwar. É mantnan... Mi vwar la port dann paradi...",
+            jesus: "Vyin, mon zèfan. Out la bat byin. Rantr dann bonèr étèrnèl. Out konba la pa été vanvan. Lamour la ginyé."
         }
     },
     
     notifications: {
-        levelTransition: 'Passage au niveau suivant...',
-        trophyUnlocked: 'Trophée débloqué !',
-        powerUpCollected: 'Power-up collecté !',
-        lifeRestored: 'Vie restaurée !'
+        levelTransition: 'Pasaz vèr proshèn nivo...',
+        trophyUnlocked: 'Trofé débloké!',
+        powerUpCollected: 'Bonus kolèkté!',
+        lifeRestored: 'Lavi rétabli!'
+    },
+    
+    messages: {
+        finalVictory: {
+            title: '✨ Bravo ✨',
+            grace: 'Lagras Zézi lé inn sèrtèn lasazès.',
+            keepLight: 'Gard out limyèr',
+            keepHeart: 'é out kèr véyan.',
+            chooseLife: 'Swazi la vi.',
+            continue: 'Félisitasyon! Out la persévér é out la dépass tout bann obstakl. Pasyans épi détèrminasyon lé la klé dann siksé. Paré pou proshèn nivo?'
+        }
+    },
+    
+    proverbs: {
+        firstProverb: 'Libèrté lé la fors pou vol',
+        proverbs: [
+            'Dlo i koul i rviyin zamé',
+            'Trankilman kom dlo dann baré',
+            'Inn ti gout dann loséyan',
+            'Aprè loraz i viyin lo bo tan',
+            'Dlo i pran form dann rèsipyan',
+            'Pasyans lé amèr, mé son frit lé dou',
+            'Silans lé lor',
+            'Tout i viyin po sèla i sav atann',
+            'La nuit i aporté konsèy',
+            'Bann zétwal i brilans po tout monn',
+            'Loséyan lé fé èk bann gout',
+            'Lo pli long vwayaz i komans èk inn pa',
+            'Lasazès i komans èk lémèrvèyman',
+            'Konè out ropar',
+            'Lavérité lé dann fon do pui',
+            'Sèla i saz i aprann dann bann èrèr',
+            'Sourire lé lo pli bo kourb',
+            'Lo tan i géri tout bann blès',
+            'Lapé intéryèr i vo tout bann trézor',
+            'Shak finisman lé inn nouvo komansman'
+        ]
+    },
+    
+    powerUps: {
+        spiritual: {
+            courage: { name: 'Kouraz', message: '💪 Kouraz! Ou pé afronté tout!', tip: 'Sot sipèr pisan!' },
+            force: { name: 'Fors', message: '⚡ Fors divin! Gèryé limyèr!', tip: 'Détrui tout!' },
+            patience: { name: 'Pasyans', message: '🕰️ Pasyans! Vol èk kalm!', tip: 'Vol kontrôlé!' },
+            resilience: { name: 'Rézilians', message: '🛡️ Rézilians! Out la armèr!', tip: 'Boukliyé aktivé!' },
+            assurance: { name: 'Asireyans', message: '👑 Asireyans! Out i brillans!', tip: 'Ora rayonnan!' },
+            liberte: { name: 'Libèrté', message: '🕊️ Libèrté! Kas out bann shènn!', tip: 'Vré libérasyon!' },
+            controle: { name: 'Kontrol', message: '🧠 Kontrol! Mètriz aou!', tip: 'Kontrol pèrfèk!' },
+            sagesse: { name: 'Lasazès', message: '🧘 Lasazès! Lapé intéryèr!', tip: 'Klarté mantèl!' },
+            gestion: { name: 'Zèsyon', message: '📊 Zèsyon! Optimiz!', tip: 'Éfikasitè!' },
+            agir: { name: 'Azi', message: '🎯 Azi! Pass ann aksyon!', tip: 'Proaktiv!' },
+            combattre: { name: 'Konbat', message: '⚔️ Konbat! Mod konba!', tip: 'Gèryé!' },
+            nepasabandonner: { name: 'Abandonn pa', message: '🚫 Abandonn pa! Persévér!', tip: 'Inébranlab!' },
+            perseverer: { name: 'Persévér', message: '🏆 Persévér! Kontinyé!', tip: 'Détèrminasyon!' }
+        },
+        fun: {
+            disco: { name: 'Mod Disko', message: '🕺 Mod Disko! Alé dans!', tip: 'Mouv disko otomatik!' },
+            giant: { name: 'Zéyan', message: '🦣 Moutón énoroom! Zéyan!', tip: 'Granndèr x3!' },
+            tiny: { name: 'Mikroskopik', message: '🐭 Miniskel! Fasil évit!', tip: 'Mod firtif!' },
+            rainbow: { name: 'Larkansyèl', message: '🌈 Moutón larkansyèl! Férik!', tip: 'Tras koloryé!' },
+            magnet_bonus: { name: 'Bonus Lèman', message: '🧲 Tout bann bonus i atir!', tip: 'Kolèksyon otomatik!' },
+            spring: { name: 'Kangourou', message: '🦘 Mod Kangourou! Voupvoup!', tip: 'Sot sanfin!' },
+            jetpack: { name: 'Jèt-pak', message: '🎒 Jèt-pak aktivé! Vroum!', tip: 'Vol tirbo!' },
+            ninja: { name: 'Ninza', message: '🥷 Mod Ninza! Anparfin!', tip: 'Anformel!' },
+            party: { name: 'Fèt', message: '🎉 Sé lafèt!', tip: 'Konfèti partou!' },
+            coffee: { name: 'Kaféyin', message: '☕ Kaféyin! Vitès x5!', tip: 'Sipèr vitès!' }
+        }
+    },
+    
+    obstacles: {
+        ground: {
+            wheelchair: 'Andikap',
+            car_accident: 'Aksidan',
+            coffin: 'Dèy',
+            safe: 'Povèrté',
+            house: 'Famiy',
+            wolf: 'Vyolans',
+            black_sheep: 'Rèzé',
+            addiction: 'Addiksyon',
+            job_stress: 'Travay',
+            debt: 'Dèt',
+            loneliness: 'Solitid',
+            betrayal: 'Traison'
+        },
+        middle: {
+            depression: 'Déprésyon',
+            anxiety: 'Anksyèté',
+            doubt: 'Dout',
+            phantom: 'Fantom',
+            shark: 'Rèkin',
+            eagle: 'Zègl',
+            thunder: 'Tonn',
+            cruise_ship: 'Pakbo'
+        },
+        sky: {
+            death: 'Lanmor',
+            cancer: 'Kansèr',
+            nuclear: 'Nikléèr',
+            meteor: 'Météor',
+            procrastination: 'Parès',
+            anger: 'Kolèr',
+            madness: 'Lafoli'
+        },
+        richness: {
+            avarice: 'Lavaris',
+            luxure: 'Liksir',
+            nepotisme: 'Népotism',
+            selection: 'Sélèksyon',
+            esclavage: 'Esklavaz',
+            surexploitation: 'Èksplwatasyon'
+        },
+        sins: {
+            pride: 'Orgèy',
+            greed: 'Lavaris',
+            lust: 'Liksir',
+            envy: 'Zalozi',
+            gluttony: 'Gourmandiz',
+            wrath: 'Kolèr',
+            sloth: 'Parès'
+        },
+        fun: {
+            disco_ball: 'Fèt',
+            pizza: 'Rpo',
+            trampoline: 'Voup',
+            banana: 'Glis',
+            magnet: 'Lèman',
+            balloon: 'Lézhèr',
+            tornado: 'Tornada',
+            rocket: 'Fokèt'
+        },
+        funMessages: {
+            disco_ball: '🥹 Lèr fèt! Moutón i dans!',
+            pizza: '🍕 Manz tro! Dizèsyon lann...',
+            trampoline: '🎪 Sipèr voup! 🚀',
+            banana: '🍌 Po fig! Ouuups!',
+            magnet: '🧲 Atiranz kom lèman!',
+            balloon: '🎈 Lézhèr kom inn plim!',
+            tornado: '🌪️ Tourbillon fou!',
+            rocket: '🚀 Lansémaaaaan!'
+        },
+        weapons: {
+            sword: 'Sabr',
+            laser_gun: 'Lazèr',
+            net: 'Filé',
+            shield: 'Boukliyé',
+            hammer: 'Marto',
+            raygun: 'Pisto rayon'
+        },
+        level1Bosses: {
+            whale: 'Balènn',
+            pacman: 'Pakman',
+            dragon: 'Dragon',
+            ufo: 'Sousoup volan',
+            shark: 'Rèkin',
+            cruise_ship: 'Pakbo',
+            robot: 'Robo',
+            alien: 'Èksratèrèstèr',
+            monster: 'Monstr',
+            big_boss: 'Gro boss'
+        }
+    },
+    endless: {
+        bosses: {
+            whale: 'Foukoshima',
+            pacman: 'Kraken',
+            dragon: 'Dragon difé',
+            serpent: 'Sèrpan vénéné',
+            ufo: 'Sousoup volan',
+            shark: 'Rèkin',
+            robot: 'Robo',
+            serpent_stage: 'Sèrpan dann nivo',
+            dragon_stage: 'Dragon dann nivo'
+        },
+        gameOver: {
+            title: 'ZÔ FINI',
+            skull: '💀',
+            score: 'POIN',
+            newRecord: '🏆 NOU RÊKOR! 🏆',
+            record: 'Rèkor',
+            replay: '🔄 ZÔ ÂNKOR',
+            rebirth: 'ALÉ VI! é rèné!\nRTOURNÂ VI!'
+        }
+    },
+    intro: {
+        phases: {
+            paradise: "Sa sé paradi?",
+            shield: "Boukliyé taktik...",
+            sword: "Sabr lazèr...",
+            bomb: "Bonm à iyon...",
+            wtf: "Kèl bordèl sa... 💀",
+            boom: "Boum! 💥",
+            no: "Non! Kosa? 😱"
+        }
     }
 };

@@ -1,7 +1,11 @@
 // GroundObstacles.js - Définition obstacles au sol
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class GroundObstacles {
+    static getTranslatedText(id) {
+        return i18n.translations?.obstacles?.ground?.[id] || '';
+    }
     static definitions = [
         {
             id: 'wheelchair',
@@ -113,6 +117,7 @@ export class GroundObstacles {
         const def = this.definitions[Math.floor(Math.random() * this.definitions.length)];
         return {
             ...def,
+            text: this.getTranslatedText(def.id) || def.text,
             x: GameConfig.CANVAS_WIDTH,
             y: GameConfig.CANVAS_HEIGHT - 80 - def.height,
             type: 'ground'

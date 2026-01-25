@@ -21,6 +21,7 @@ import { audioManager } from '../audio/AudioManager.js';
 import { ScoreManager } from '../endless/ScoreManager.js';
 import { Lighthouse } from '../graphics/Lighthouse.js';
 import { SeaObstacles, Leviathan } from '../obstacles/SeaObstacles.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class Game {
     constructor(mode, trophySystem = null, audioManager = null) {
@@ -318,7 +319,7 @@ export class Game {
                             y: this.canvas.height / 2 + 180,
                             width: 200,
                             height: 40,
-                            text: '⏰ Victoire rapide !'
+                            text: i18n.t('game.messages.quickVictory')
                         };
                     }
 
@@ -345,14 +346,14 @@ export class Game {
                         y: this.canvas.height - 120,
                         width: 200,
                         height: 40,
-                        text: 'Continuer 🌟'
+                        text: i18n.t('game.buttons.continue')
                     },
                     menu: {
                         x: this.canvas.width / 2 - 100,
                         y: this.canvas.height - 70,
                         width: 200,
                         height: 40,
-                        text: 'Menu'
+                        text: i18n.t('game.buttons.menu')
                     }
                 };
 
@@ -603,7 +604,7 @@ export class Game {
                     this.rejectionBubble = {
                         x: this.player.x,
                         y: this.player.y - 60,
-                        text: 'VA VIE! et renai ! RETOURNE VIVRE !',
+                        text: i18n.t('game.messages.quickVictory'),
                         opacity: 1
                     };
                     console.log('🚫 Rejeté du Paradis !');
@@ -679,7 +680,7 @@ export class Game {
                         this.rejectionBubble = {
                             x: this.player.x,
                             y: this.player.y - 60,
-                            text: "non! c pas fini ?",
+                            text: i18n.t('game.messages.notFinished'),
                             opacity: 1
                         };
                     } else {
@@ -853,7 +854,7 @@ export class Game {
                 
                 if (this.notificationSystem) {
                     this.notificationSystem.showNarrative({
-                        text: '🐉 LE LÉVIATHAN APPARAÎT ! Esquive ses attaques !',
+                        text: i18n.t('game.messages.leviathan'),
                         duration: 4000
                     });
                 }
@@ -1536,7 +1537,7 @@ export class Game {
         
         // Afficher la bulle narrative BD pour cet obstacle
         if (this.notificationSystem && obstacle.id) {
-            const messageData = NarrativeData[obstacle.id];
+            const messageData = this.narrativeEngine.getTranslatedMessage(obstacle.id);
             console.log(`📖 Recherche message pour: ${obstacle.id}`, messageData ? '✅ Trouvé' : '❌ Pas trouvé');
             if (messageData && messageData.hope) {
                 console.log(`💭 Affichage bulle: "${messageData.hope.substring(0, 30)}..."`);
@@ -1625,7 +1626,7 @@ export class Game {
         `;
         
         const title = document.createElement('div');
-        title.textContent = '🚪 LA PORTE DU PARADIS';
+        title.textContent = i18n.t('game.level2.title');
         title.style.cssText = `
             color: #FFD700;
             font-size: 24px;
@@ -1634,7 +1635,7 @@ export class Game {
         `;
         
         const message = document.createElement('div');
-        message.textContent = `Tu as survécu ${Math.floor(this.level2Survived / 60)} secondes`;
+        message.textContent = i18n.t('game.level2.survived').replace('{seconds}', Math.floor(this.level2Survived / 60));
         message.style.cssText = `
             color: white;
             font-size: 14px;
@@ -1648,7 +1649,7 @@ export class Game {
         `;
         
         const continueBtn = document.createElement('button');
-        continueBtn.textContent = 'CONTINUER';
+        continueBtn.textContent = i18n.t('game.level2.continue');
         continueBtn.style.cssText = `
             font-family: 'Press Start 2P', monospace;
             font-size: 16px;
@@ -1672,7 +1673,7 @@ export class Game {
         };
         
         const graceBtn = document.createElement('button');
-        graceBtn.textContent = 'CHOISIR LA GRÂCE';
+        graceBtn.textContent = i18n.t('game.level2.chooseGrace');
         graceBtn.style.cssText = `
             font-family: 'Press Start 2P', monospace;
             font-size: 16px;
@@ -1721,7 +1722,7 @@ export class Game {
         // Message de transition
         if (this.notificationSystem) {
             this.notificationSystem.showNarrative({
-                text: 'NIVEAU 3: LA QUÊTE DE LA SAGESSE',
+                text: i18n.t('game.levels.level3Title'),
                 duration: 3000
             });
         }
@@ -1808,7 +1809,7 @@ export class Game {
         // Message d'instruction
         if (this.notificationSystem) {
             this.notificationSystem.showNarrative({
-                text: 'Navigue sur les eaux nocturnes, collecte la sagesse et évite les dangers marins !',
+                text: i18n.t('game.levels.level3Description'),
                 duration: 5000
             });
         }
@@ -1969,17 +1970,17 @@ export class Game {
         const finalMessage = document.createElement('div');
         finalMessage.innerHTML = `
             <div style="color: #FFD700; font-size: 28px; margin-bottom: 20px; text-shadow: 0 0 30px #FFD700;">
-                ✨ BRAVO ✨
+                ${i18n.t('game.messages.finalVictory.title')}
             </div>
             <div style="display: flex; align-items: center; justify-content: space-around; gap: 30px;">
                 <div style="flex: 1; color: white; font-size: 10px; line-height: 2; text-align: left;">
-                    La grâce de Jésus est une sagesse certaine.<br><br>
+                    ${i18n.t('game.messages.finalVictory.grace')}<br><br>
                     <span style="color: #FFD700;">
-                        Garde ta lumière allumée<br>
-                        et ton cœur éveillé.
+                        ${i18n.t('game.messages.finalVictory.keepLight')}<br>
+                        ${i18n.t('game.messages.finalVictory.keepHeart')}
                     </span><br><br>
                     <span style="color: #4A90A4; font-size: 14px; text-shadow: 0 0 10px #4A90A4;">
-                        Choisis la vie.
+                        ${i18n.t('game.messages.finalVictory.chooseLife')}
                     </span>
                 </div>
                 <div style="padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; min-width: 180px;">
@@ -2007,7 +2008,7 @@ export class Game {
                 box-shadow: 0 5px 15px rgba(74,144,164,0.5);
                 transition: all 0.3s;
             " onmouseover="this.style.background='#6AB0C4'" onmouseout="this.style.background='#4A90A4'">
-                RETOUR AU MENU
+                ${i18n.t('game.gameOver.returnMenu')}
             </button>
         `;
         
@@ -2032,7 +2033,7 @@ export class Game {
         // Message de transition
         if (this.notificationSystem) {
             this.notificationSystem.showNarrative({
-                text: 'NIVEAU 2: LES 7 PÉCHÉS CAPITAUX',
+                text: i18n.t('game.levels.level2Title'),
                 duration: 3000
             });
         }
@@ -2102,7 +2103,7 @@ export class Game {
         // Message d'avertissement
         if (this.notificationSystem) {
             this.notificationSystem.showNarrative({
-                text: 'Survie impossible... Résiste le plus longtemps possible!',
+                text: i18n.t('game.levels.level2Description'),
                 duration: 3000
             });
         }
@@ -2137,15 +2138,15 @@ export class Game {
         `;
         
         overlay.innerHTML = `
-            <h1 style="font-size: 48px; margin: 20px; color: #ff6b6b;">GAME OVER</h1>
-            <p style="font-size: 24px; margin: 10px;">🔄 Va vivre! et renais ! RETOURNE VIVRE !</p>
+            <h1 style="font-size: 48px; margin: 20px; color: #ff6b6b;">${i18n.t('game.gameOver.title')}</h1>
+            <p style="font-size: 24px; margin: 10px;">${i18n.t('game.gameOver.rebirth')}</p>
             <p style="font-size: 28px; margin: 15px; color: #00FF00; font-weight: bold;">
-                Score Total: ${totalScore.toLocaleString('fr-FR')}
+                ${i18n.t('game.gameOver.totalScore')}: ${totalScore.toLocaleString(i18n.currentLang === 'en' ? 'en-US' : 'fr-FR')}
             </p>
             <p style="font-size: 16px; margin: 5px; color: #888;">
-                (Score: ${this.score.toLocaleString('fr-FR')} + XP: ${xp.toLocaleString('fr-FR')})
+                (${i18n.t('game.gameOver.score')}: ${this.score.toLocaleString(i18n.currentLang === 'en' ? 'en-US' : 'fr-FR')} + ${i18n.t('game.gameOver.xp')}: ${xp.toLocaleString(i18n.currentLang === 'en' ? 'en-US' : 'fr-FR')})
             </p>
-            <p style="font-size: 20px; margin: 10px;">Obstacles évités: ${this.obstaclesCleared}</p>
+            <p style="font-size: 20px; margin: 10px;">${i18n.t('game.gameOver.obstaclesAvoided')}: ${this.obstaclesCleared}</p>
             <button id="retry-btn" style="
                 margin-top: 30px;
                 padding: 15px 40px;
@@ -2156,7 +2157,7 @@ export class Game {
                 border-radius: 10px;
                 cursor: pointer;
                 transition: all 0.3s;
-            ">Réessayer</button>
+            ">${i18n.t('game.gameOver.retry')}</button>
             <button id="menu-btn" style="
                 margin-top: 15px;
                 padding: 12px 30px;
@@ -2167,7 +2168,7 @@ export class Game {
                 border-radius: 10px;
                 cursor: pointer;
                 transition: all 0.3s;
-            ">Menu Principal</button>
+            ">${i18n.t('game.gameOver.mainMenu')}</button>
         `;
         
         document.body.appendChild(overlay);
@@ -2331,14 +2332,14 @@ export class Game {
                 y: this.canvas.height - 120,
                 width: 200,
                 height: 40,
-                text: 'Continuer 🌟'
+                text: i18n.t('game.buttons.continue')
             },
             menu: {
                 x: this.canvas.width / 2 - 100,
                 y: this.canvas.height - 70,
                 width: 200,
                 height: 40,
-                text: 'Menu'
+                text: i18n.t('game.buttons.menu')
             }
         };
 
@@ -2370,7 +2371,7 @@ export class Game {
             // Message de félicitations
             if (this.notificationSystem) {
                 this.notificationSystem.showNarrative({
-                    text: "Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?",
+                    text: i18n.t('game.messages.finalVictory.continue'),
                     duration: 5000
                 });
             }
@@ -2510,8 +2511,8 @@ export class Game {
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
 
-        ctx.strokeText('IMPATIENCE !', this.canvas.width / 2, 130 + bounceOffset);
-        ctx.fillText('IMPATIENCE !', this.canvas.width / 2, 130 + bounceOffset);
+        ctx.strokeText(i18n.t('game.victory.impatience'), this.canvas.width / 2, 130 + bounceOffset);
+        ctx.fillText(i18n.t('game.victory.impatience'), this.canvas.width / 2, 130 + bounceOffset);
 
         ctx.shadowBlur = 0;
 
@@ -2535,17 +2536,17 @@ export class Game {
         ctx.font = 'bold 18px Impact, Arial Black, Arial';
         ctx.fillStyle = '#FFD700';
         ctx.shadowColor = '#FFD700';
-        ctx.fillText('COMBAT VICTORIEUX JUSQU\'AU BOUT', this.canvas.width / 2, 240);
-        ctx.fillText('PERSÉVÉRANCE = VICTOIRE', this.canvas.width / 2, 265);
+        ctx.fillText(i18n.t('game.victory.victoriousCombat'), this.canvas.width / 2, 240);
+        ctx.fillText(i18n.t('game.victory.perseverance'), this.canvas.width / 2, 265);
         
         // Leçon de vie
         ctx.shadowBlur = 2;
         ctx.font = 'bold 14px Arial';
         ctx.fillStyle = '#87CEEB';
         ctx.shadowColor = '#87CEEB';
-        ctx.fillText('Même si le combat de la vie est dur,', this.canvas.width / 2, 290);
-        ctx.fillText('il faut persévérer et ne jamais abandonner', this.canvas.width / 2, 308);
-        ctx.fillText('car souvent le meilleur est à venir', this.canvas.width / 2, 326);
+        ctx.fillText(i18n.t('game.victory.lifeLesson1'), this.canvas.width / 2, 290);
+        ctx.fillText(i18n.t('game.victory.lifeLesson2'), this.canvas.width / 2, 308);
+        ctx.fillText(i18n.t('game.victory.lifeLesson3'), this.canvas.width / 2, 326);
 
         // Score futuriste
         ctx.shadowBlur = 5;
@@ -2554,7 +2555,7 @@ export class Game {
         ctx.strokeStyle = '#008800';
         ctx.lineWidth = 2;
         ctx.shadowColor = '#00FF00';
-        const scoreText = `SCORE: ${this.victoryScreenData.score.toLocaleString('fr-FR')}`;
+        const scoreText = `${i18n.t('game.victory.scoreLabel')}: ${this.victoryScreenData.score.toLocaleString('fr-FR')}`;
         ctx.strokeText(scoreText, this.canvas.width / 2, 350);
         ctx.fillText(scoreText, this.canvas.width / 2, 350);
 
@@ -2562,7 +2563,7 @@ export class Game {
         ctx.fillStyle = '#FFF';
         ctx.shadowBlur = 3;
         ctx.shadowColor = '#FFF';
-        ctx.fillText(`OBSTACLES DÉTRUITS: ${this.victoryScreenData.obstaclesCleared}`, this.canvas.width / 2, 340);
+        ctx.fillText(`${i18n.t('game.victory.obstaclesDestroyed')}: ${this.victoryScreenData.obstaclesCleared}`, this.canvas.width / 2, 340);
 
         // Bouton "Continuer" futuriste avec effet néon réduit
         const continueBtn = this.victoryButtons.continue;
@@ -2586,7 +2587,7 @@ export class Game {
         ctx.fillStyle = '#000';
         ctx.shadowBlur = 0;
         ctx.font = 'bold 22px Impact, Arial Black, Arial';
-        ctx.fillText('CONTINUER', continueBtn.x + continueBtn.width / 2, continueBtn.y + continueBtn.height / 2 + 8);
+        ctx.fillText(i18n.t('game.victory.continue'), continueBtn.x + continueBtn.width / 2, continueBtn.y + continueBtn.height / 2 + 8);
 
         // Bouton "Menu" futuriste
         const menuBtn = this.victoryButtons.menu;
@@ -2604,7 +2605,7 @@ export class Game {
         ctx.shadowBlur = 3;
         ctx.shadowColor = '#FFF';
         ctx.font = 'bold 18px Impact, Arial Black, Arial';
-        ctx.fillText('MENU', menuBtn.x + menuBtn.width / 2, menuBtn.y + menuBtn.height / 2 + 7);
+        ctx.fillText(i18n.t('game.victory.menu'), menuBtn.x + menuBtn.width / 2, menuBtn.y + menuBtn.height / 2 + 7);
 
         // Réinitialiser les effets
         ctx.shadowBlur = 0;

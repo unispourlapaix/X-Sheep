@@ -1,5 +1,6 @@
 // ObstacleManager.js - Gestion de tous les obstacles
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 import { Physics } from '../core/Physics.js';
 import { GroundObstacles } from './GroundObstacles.js';
 import { SkyObstacles } from './SkyObstacles.js';
@@ -759,7 +760,8 @@ export class ObstacleManager {
         // Incrémenter le compteur de spawn pour ce boss
         this.bossSpawnCount[boss.id] = (this.bossSpawnCount[boss.id] || 0) + 1;
         
-        console.log(`🐉 Boss ${boss.text} ajouté en position ${freePosition + 1}/6 (spawn ${this.bossSpawnCount[boss.id]}/${this.maxSpawnsPerBoss})`);
+        const translatedText = i18n.translations?.obstacles?.level1Bosses?.[boss.id] || boss.text;
+        console.log(`🐉 Boss ${translatedText} ajouté en position ${freePosition + 1}/6 (spawn ${this.bossSpawnCount[boss.id]}/${this.maxSpawnsPerBoss})`);
     }
     
     updateBossLine() {

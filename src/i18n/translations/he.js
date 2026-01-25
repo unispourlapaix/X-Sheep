@@ -1,278 +1,587 @@
-// Traductions françaises (langue par défaut)
+// עברית - Hebrew translations
 export default {
     meta: {
-        language: 'Français',
-        code: 'fr',
-        flag: '🇫🇷'
+        language: 'עברית',
+        code: 'he',
+        flag: '🇮🇱',
+        dir: 'rtl'
     },
     
     menu: {
         title: 'X-Sheep is back',
-        subtitle: "L'Espoir en Action",
-        createdBy: 'Créé avec 💖 par',
-        author: 'Emmanuel Payet',
+        subtitle: 'תקווה בפעולה',
+        createdBy: 'נוצר עם 💖',
+        author: 'עמנואל פאייה',
         
         modes: {
             adventure: {
-                title: 'AVENTURE',
+                title: 'הרפתקה',
                 description: [
-                    'Traverse les épreuves de la vie.',
-                    'Messages narratifs profonds.',
-                    'Atteins la Porte du Paradis.'
+                    'עבור דרך ניסיונות החיים.',
+                    'מסרים נרטיביים עמוקים.',
+                    'הגע לשער גן עדן.'
                 ],
                 stats: {
-                    chapters: 'Chapitres',
-                    minutes: 'Minutes',
-                    hope: 'Espoir'
+                    chapters: 'פרקים',
+                    minutes: 'דקות',
+                    hope: 'תקווה'
                 }
             },
             endless: {
-                title: 'INFINI',
+                title: 'אינסופי',
                 description: [
-                    'Survie sans fin.',
-                    'Score et combos maximaux.',
-                    'Bats tous les records !'
+                    'הישרדות אינסופית.',
+                    'ציונים גבוהים וקומבו.',
+                    'שבור את כל השיאים!'
                 ],
                 stats: {
-                    waves: 'Vagues',
-                    duration: 'Durée',
-                    record: 'Record'
+                    waves: 'גלים',
+                    duration: 'משך זמן',
+                    record: 'שיא'
                 }
             }
         },
         
-        score: 'Score',
-        graphics: {
-            title: 'Choisir le style graphique',
-            normal: 'Normal',
-            pixelArt: 'Pixel Art'
+        score: 'ציון',
+        
+        controls: {
+            graphics: {
+                title: 'בחר סגנון גרפי',
+                normal: 'רגיל',
+                bth: 'Bth',
+                label: {
+                    normal: 'רגיל',
+                    bth: 'Bth'
+                },
+                popup: {
+                    title: 'סגנון גרפי',
+                    modeNormal: '📺 מצב רגיל',
+                    modeBth: '📟 מצב Bth',
+                    willApply: 'השינוי ייושם במשחק הבא',
+                    ok: 'אישור'
+                }
+            },
+            language: {
+                title: 'שנה שפה',
+                change: 'שנה שפה / Change language',
+                panelTitle: '🌍 שפה / Language',
+                ltrSection: 'שפות LTR',
+                rtlSection: 'שפות RTL (العربية / עברית)'
+            }
         }
     },
     
     game: {
         levels: {
-            level1: 'NIVEAU 1: Les Épreuves de la Vie',
-            level2: 'NIVEAU 2: Les 7 Péchés Capitaux',
-            level3: 'NIVEAU 3: Navigation et Sagesse'
+            level1: 'שלב 1: ניסיונות החיים',
+            level2: 'שלב 2: שבעת החטאים',
+            level3: 'שלב 3: שיט וחוכמה',
+            level2Title: 'שלב 2: שבעת החטאים',
+            level2Description: 'הישרדות בלתי אפשרית... החזק מעמד כמה שיותר!',
+            level3Title: 'שלב 3: מסע לחוכמה',
+            level3Description: 'שוט בים הלילה, אסוף חוכמה והימנע מסכנות ימיות!'
         },
         
         buttons: {
-            retry: 'Réessayer',
-            menu: 'Menu Principal',
-            continue: 'Continuer',
-            close: 'Fermer',
-            trophies: 'Voir tous les messages (Trophées)'
+            retry: 'נסה שוב',
+            menu: 'תפריט ראשי',
+            continue: 'המשך 🌟',
+            close: 'סגור',
+            trophies: 'צפה בכל המסרים (גביעים)'
         },
         
         gameOver: {
-            title: 'GAME OVER',
-            reachedLevel: 'Niveau atteint',
-            score: 'Score',
-            obstaclesAvoided: 'Obstacles évités'
+            title: 'משחק נגמר',
+            rebirth: '🔄 לך לחיות! להיוולד מחדש! לחזור לחיים!',
+            totalScore: 'ציון כולל',
+            score: 'ציון',
+            xp: 'ניסיון',
+            obstaclesAvoided: 'מכשולים שנמנעו',
+            retry: 'נסה שוב',
+            mainMenu: 'תפריט ראשי',
+            returnMenu: 'חזור לתפריט'
         },
         
         victory: {
-            title: 'VICTOIRE!',
-            levelCompleted: 'Niveau terminé!',
-            congratulations: 'Bravo ! Tu as persévéré et vaincu tous les obstacles. La patience et la détermination sont les clés du succès. Prêt pour le niveau suivant ?'
+            title: 'ניצחון!',
+            levelCompleted: 'שלב הושלם!',
+            congratulations: 'מזל טוב! התמדת והתגברת על כל המכשולים. סבלנות ונחישות הם המפתח להצלחה. מוכן לשלב הבא?',
+            impatience: 'חוסר סבלנות!',
+            bossesDestroyed: '⚔️ בוסים שהושמדו ⚔️',
+            legendConfirmed: '👑 אגדה מאושרת 👑',
+            victoriousCombat: 'קרב מנצח עד הסוף',
+            perseverance: 'התמדה = ניצחון',
+            lifeLesson1: 'גם כאשר הקרבות של החיים קשים,',
+            lifeLesson2: 'יש להתמיד ולעולם לא לוותר',
+            lifeLesson3: 'כי הטוב ביותר לעתים קרובות עדיין לפנינו',
+            scoreLabel: 'ציון',
+            obstaclesDestroyed: 'מכשולים שהושמדו',
+            continue: 'המשך',
+            menu: 'תפריט'
         },
         
         hud: {
-            lives: 'Vies',
-            score: 'Score',
-            level: 'Niveau',
-            combo: 'Combo',
-            wisdom: 'Sagesse'
+            lives: 'חיים',
+            score: 'ציון',
+            level: 'שלב',
+            combo: 'קומבו',
+            wisdom: 'חוכמה'
+        },
+        
+        messages: {
+            leviathan: '🐉 לויתן מופיע! התחמק מהתקפותיו!',
+            quickVictory: 'לך לחיות! להיוולד מחדש! לחזור לחיים!',
+            quickVictoryLine1: 'לך לחיות! להיוולד מחדש!',
+            quickVictoryLine2: 'לחזור לחיים!',
+            notFinished: 'לא! עדיין לא נגמר?',
+            watchYourLife: 'שמור על החיים שלך!'
+        },
+        
+        ui: {
+            paradise: 'גן עדן',
+            score: 'ציון',
+            souls: 'נשמות',
+            total: 'סה"כ',
+            xp: 'ניסיון',
+            brokenClock: 'שעון שבור - אדון הזמן'
+        },
+        
+        level2: {
+            title: '🚪 שער גן עדן',
+            survived: 'שרדת {seconds} שניות',
+            continue: 'המשך',
+            chooseGrace: 'בחר חסד'
         }
     },
     
     trophies: {
-        title: 'COLLECTION DE TROPHÉES',
-        subtitle: 'Messages de courage et d\'espoir',
-        unlocked: 'Débloqué',
-        locked: 'Verrouillé',
-        share: 'Partager',
+        title: 'אוסף גביעים',
+        menuTitle: '🏆 גביעים ומסרים 🏆',
+        subtitle: 'מסרים של אומץ ותקווה',
+        by: 'עמנואל פאייה',
+        totalXP: 'ניסיון כולל',
+        unlocked: 'משוחרר',
+        unlockedCount: 'גביעים משוחררים',
+        locked: 'נעול',
+        share: 'שתף',
+        close: '🚪 סגור',
+        newTrophy: '🏆 גביע חדש!',
+        xpGained: 'ניסיון',
+        unlockedOn: 'שוחרר ב:',
+        shareButton: '📤 שתף',
+        lockedMessage: 'התגבר על מכשול זה כדי לשחרר את המסר...',
         categories: {
-            life: 'Épreuves de la Vie',
-            existential: 'Menaces Existentielles',
-            richness: 'Péchés de Richesse',
-            mid: 'Dangers Intermédiaires',
-            fun: 'Moments Fun',
-            special: 'Trophées Spéciaux'
+            life: 'ניסיונות החיים',
+            existential: 'איומים קיומיים',
+            richness: 'חטאי עושר',
+            mid: 'סכנות בינוניות',
+            fun: 'רגעים מהנים',
+            special: 'גביעים מיוחדים'
+        },
+        labels: {
+            wheelchair: '♿ כיסא גלגלים',
+            car_accident: '🚗 תאונה',
+            coffin: '⚰️ ארון קבורה',
+            safe: '🏦 כספת',
+            house: '🏠 בית הרוס',
+            wolf: '🐺 זאב',
+            black_sheep: '🐑 כבשה שחורה',
+            addiction: '📦 התמכרות',
+            death: '💀 מוות',
+            cancer: '🎗️ סרטן',
+            nuclear: '☢️ תגובה נגד גרעינית',
+            meteor: '☄️ מטאור',
+            procrastination: '⏰ דחיינות',
+            anger: '😡 כעס',
+            madness: '🌀 שיגעון',
+            avarice: '💰 בצע',
+            luxure: '💋 תאווה',
+            nepotisme: '🤝 נפוטיזם',
+            selection: '👥 ברירה',
+            esclavage: '⛓️ עבדות',
+            surexploitation: '🏭 ניצול יתר',
+            white_sheep: '🐑✨ כבשה לבנה - חסד',
+            charity: '💝 צדקה',
+            gold_coin: '💰 מטבע זהב - חופש',
+            grace: '✝️ חסד - ישו',
+            impatient: '⏰💔 שעון שבור - אדון הזמן',
+            eagle: '🦅 נשר',
+            thunder: '⚡ ברק',
+            disco_ball: '🪩 כדור דיסקו',
+            pizza: '🍕 פיצה',
+            trampoline: '🤸 טרמפולינה',
+            banana: '🍌 בננה',
+            magnet: '🧲 מגנט',
+            balloon: '🎈 בלון',
+            tornado: '🌪️ טורנדו',
+            rocket: '🚀 רקטה'
         }
     },
     
     narrative: {
-        // Obstacles de la vie
         wheelchair: {
-            text: "Ce fauteuil roulant ? Moi aussi je vis avec un handicap... Mais regarde, je peux encore voler avec mes rêves ! Ton corps peut être limité, mais ton esprit est libre. Dieu t'a donné des ailes que personne ne peut briser. 💪✨",
-            hope: "Tu n'es pas défini par tes limitations"
+            text: "כיסא הגלגלים הזה? גם אני חי עם מוגבלות... אבל תראה, אני עדיין יכול לעוף עם החלומות שלי! הגוף שלך עשוי להיות מוגבל, אבל הרוח שלך חופשית. אלוהים נתן לך כנפיים שאף אחד לא יכול לשבור. 💪✨",
+            hope: "אתה לא מוגדר על ידי המגבלות שלך"
         },
         car_accident: {
-            text: "Cette voiture brisée me rappelle mes propres accidents de la vie... Les chocs, les traumatismes. Mais tu sais quoi ? Dieu répare les cœurs brisés. Chaque cicatrice raconte une histoire de survie. Tu es plus fort que tu ne le crois. 🚗💔➡️❤️",
-            hope: "Tes blessures deviennent ta force"
+            text: "המכונית ההרוסה הזו מזכירה לי את התאונות של חיי שלי... ההלם, הטראומה. אבל אתה יודע מה? אלוהים מרפא לבבות שבורים. כל צלקת מספרת סיפור של הישרדות. אתה חזק יותר ממה שאתה חושב. 🚗💔➡️❤️",
+            hope: "הצלקות שלך הופכות לכוח שלך"
         },
         coffin: {
-            text: "Un cercueil... La mort n'est pas la fin, c'est juste une porte vers l'éternité. Je ne crains plus la mort, car je sais que l'amour de Dieu est plus fort. Chaque jour est un cadeau. Vis pleinement ! ⚰️➡️👼",
-            hope: "La vie est éternelle en Dieu"
+            text: "ארון קבורה... המוות אינו סוף, רק דלת לנצח. אני כבר לא מפחד מהמוות, כי אני יודע שאהבת אלוהים חזקה יותר. כל יום הוא מתנה. חיה במלואו! ⚰️➡️👼",
+            hope: "החיים נצחיים באלוהים"
         },
         safe: {
-            text: "Ce coffre-fort fermé... On enferme nos peurs, nos secrets, nos douleurs. Mais Dieu voit tout et pardonne tout. Ouvre ton cœur, libère-toi de ce qui te retient prisonnier. La vraie richesse, c'est la liberté intérieure. 🔒➡️🕊️",
-            hope: "Libère ton cœur, trouve la paix"
+            text: "הכספת הנעולה הזו... אנחנו נועלים את הפחדים, הסודות, הכאב שלנו. אבל אלוהים רואה הכל וסולח להכל. פתח את ליבך, השתחרר ממה שכולא אותך. העושר האמיתי הוא החופש הפנימי. 🔒➡️🕊️",
+            hope: "שחרר את ליבך ומצא שלום"
         },
         house: {
-            text: "Cette maison semble solide... Mais les vraies fondations, ce n'est pas le béton, c'est la foi. Construis ta vie sur l'amour, la compassion, l'entraide. Ton foyer spirituel sera indestructible. 🏠❤️",
-            hope: "Bâtis sur l'amour, pas sur la peur"
+            text: "הבית הזה נראה חזק... אבל הבסיס האמיתי אינו בטון, אלא אמונה. בנה את חייך על אהבה, חמלה, עזרה הדדית. הבית הרוחני שלך יהיה בל ישחת. 🏠❤️",
+            hope: "בנה על אהבה, לא על פחד"
         },
         wolf: {
-            text: "Le loup... Il représente la peur, le prédateur qui te traque. Mais rappelle-toi: tu n'es jamais seul. Dieu est ton berger, il te protège. Face au loup, tu es plus fort que tu ne le penses. 🐺➡️🛡️",
-            hope: "Dieu est ton protecteur"
+            text: "הזאב... מייצג פחד, טורף שרודף אחריך. אבל זכור: אתה אף פעם לא לבד. אלוהים הוא הרועה שלך ומגן עליך. מול הזאב, אתה חזק יותר ממה שאתה חושב. 🐺➡️🛡️",
+            hope: "אלוהים הוא המגן שלך"
         },
         black_sheep: {
-            text: "Le mouton noir... Celui qu'on rejette, qu'on exclut. Moi aussi, j'ai été différent. Mais Dieu aime TOUS ses moutons, peu importe leur couleur. L'exclusion est une illusion. L'amour de Dieu est universel. 🐑🖤➡️💖",
-            hope: "Différent ne veut pas dire inférieur"
+            text: "הכבשה השחורה... זו שנדחתה, הודרה. גם אני הייתי שונה. אבל אלוהים אוהב את כל הכבשים שלו, ללא קשר לצבע. הדרה היא אשליה. אהבת אלוהים היא אוניברסלית. 🐑🖤➡️💖",
+            hope: "שונה לא אומר נחות"
         },
         addiction: {
-            text: "Les dépendances... Alcool, drogues, jeux, tout ce qui nous enchaîne. Moi aussi, j'ai lutté. Mais la liberté existe. Demande de l'aide, accepte la main tendue. Dieu te veut libre, pas esclave. 🍷➡️🕊️",
-            hope: "La liberté est possible, demande de l'aide"
+            text: "התמכרות... אלכוהול, סמים, הימורים, כל מה שכובל אותנו. גם אני נאבקתי. אבל החופש קיים. בקש עזרה, תפוס ביד המושטת. אלוהים רוצה שתהיה חופשי, לא עבד. 🍷➡️🕊️",
+            hope: "חופש אפשרי, בקש עזרה"
         },
         
-        // Obstacles du ciel (existentiels)
         death: {
-            text: "💀 La Mort... Elle fait peur, elle est mystérieuse. Mais la Bible dit qu'elle n'a plus de pouvoir sur ceux qui croient. La mort n'est qu'un passage, pas une fin. Vis chaque jour comme un cadeau. L'éternité t'attend. 🌅",
-            hope: "La mort n'est qu'un passage vers l'éternité"
+            text: "💀 המוות... הוא מפחיד, הוא מסתורי. אבל התנ\"ך אומר שאין לו עוד כוח על המאמינים. המוות הוא רק מעבר, לא סוף. חיה כל יום כמתנה. הנצח מחכה לך. 🌅",
+            hope: "המוות הוא רק מעבר לנצח"
         },
         cancer: {
-            text: "🎗️ Le cancer... Cette maladie terrible qui ronge. Moi aussi, j'ai vu la souffrance. Mais même dans la maladie, Dieu est présent. Il ne t'abandonne pas. La guérison peut venir, mais ta foi reste ta force. 💪🙏",
-            hope: "Même dans la maladie, tu n'es pas seul"
+            text: "🎗️ סרטן... המחלה הנוראה הזו מכרסמת. גם אני ראיתי סבל. אבל גם במחלה, אלוהים נוכח. הוא לא נוטש אותך. הריפוי עשוי לבוא, אך אמונתך נשארת כוחך. 💪🙏",
+            hope: "גם במחלה, אתה לא לבד"
         },
         nuclear: {
-            text: "☢️ Le nucléaire... L'humanité capable de tout détruire. Fukushima, Tchernobyl, la guerre atomique. Face à cette folie, choisis la paix. Sois un artisan de paix, un bâtisseur d'espoir. Le monde a besoin de toi. 🕊️🌍",
-            hope: "La paix commence en toi"
+            text: "☢️ גרעיני... האנושות מסוגלת להשמיד הכל. פוקושימה, צ'רנוביל, מלחמה אטומית. מול השיגעון הזה, בחר בשלום. היה אומן שלום, בונה תקווה. העולם צריך אותך. 🕊️🌍",
+            hope: "השלום מתחיל ממך"
         },
         meteor: {
-            text: "☄️ La météorite... La destruction venue du ciel. Les catastrophes naturelles nous rappellent notre fragilité. Mais ensemble, on est plus forts. Entraide, solidarité, amour: voilà nos vrais boucliers. 🛡️❤️",
-            hope: "Ensemble, on survit à tout"
+            text: "☄️ מטאור... הרס מהשמיים. אסונות טבע מזכירים לנו את שבירותנו. אבל ביחד אנחנו חזקים יותר. עזרה הדדית, סולידריות, אהבה: אלה המגן האמיתי שלנו. 🛡️❤️",
+            hope: "אנחנו עוברים הכל ביחד"
         },
         procrastination: {
-            text: "⏰ La procrastination... Remettre à demain ce qu'on peut faire aujourd'hui. Le temps perdu ne revient jamais. Agis maintenant ! Chaque instant est précieux. Ne laisse pas la peur te paralyser. Ose vivre ! ⏰➡️💪",
-            hope: "Le moment présent est tout ce que tu as"
+            text: "⏰ דחיינות... דוחים למחר את מה שניתן לעשות היום. זמן אבוד לעולם לא יחזור. פעל עכשיו! כל רגע יקר. אל תניח לפחד לשתק אותך. העז לחיות! ⏰➡️💪",
+            hope: "הרגע הנוכחי הוא כל מה שיש לך"
         },
         anger: {
-            text: "😡 La colère... Elle brûle, elle détruit. Moi aussi, j'ai ressenti cette rage. Mais la colère est un poison. Pardonne, libère, avance. Dieu t'aide à transformer ta colère en force constructive. 🔥➡️❤️",
-            hope: "Transforme ta colère en force d'amour"
+            text: "😡 כעס... שורף, הורס. גם אני חשתי את הזעם הזה. אבל הכעס הוא רעל. סלח, שחרר, התקדם. אלוהים עוזר לך להפוך את הכעס שלך לכוח בונה. 🔥➡️❤️",
+            hope: "הפוך את הכעס שלך לכוח של אהבה"
         },
         madness: {
-            text: "🤪 La folie... Perdre la raison, perdre pied. La santé mentale est fragile. Si tu souffres, parle. Demande de l'aide. Tu n'es pas fou, tu es humain. Dieu guérit aussi les esprits brisés. 🧠💔➡️💚",
-            hope: "Ta santé mentale compte, demande de l'aide"
+            text: "🤪 שיגעון... איבוד שפיות, איבוד שליטה. בריאות הנפש שבירה. אם אתה סובל, דבר. בקש עזרה. אתה לא משוגע, אתה אנושי. אלוהים גם מרפא נשמות שבורות. 🧠💔➡️💚",
+            hope: "בריאות הנפש שלך חשובה, בקש עזרה"
         },
         
-        // Péchés de richesse
         avarice: {
-            text: "💰 L'AVARICE - L'amour de l'argent. Accumuler, thésauriser, jamais assez. Mais la richesse matérielle est vide. Le vrai trésor, c'est l'amour, la générosité, le partage. Donne, et tu recevras au centuple. 💸➡️❤️",
-            hope: "La vraie richesse est dans le don"
+            text: "💰 בצע - אהבת כסף. לצבור, לאגור, אף פעם לא מספיק. אבל העושר החומרי ריק. האוצר האמיתי הוא אהבה, נדיבות, שיתוף. תן, ותקבל פי מאה. 💸➡️❤️",
+            hope: "העושר האמיתי הוא בנתינה"
         },
         luxure: {
-            text: "💋 LA LUXURE - La quête insatiable de plaisir charnel. Le corps est beau, l'amour est saint. Mais la luxure est une prison. Respecte-toi, respecte l'autre. L'amour vrai dépasse le désir. 🔥➡️💞",
-            hope: "L'amour vrai transcende le désir"
+            text: "💋 תאווה - החיפוש האינסופי אחר הנאות הגוף. הגוף יפה והאהבה קדושה. אבל התאווה היא כלא. כבד את עצמך, כבד את האחר. אהבה אמיתית עולה על התשוקה. 🔥➡️💞",
+            hope: "אהבה אמיתית עולה על התשוקה"
         },
         nepotisme: {
-            text: "👨‍👩‍👧‍👦 LE NÉPOTISME - Favoriser ses proches au détriment de la justice. C'est de la corruption déguisée. Dieu demande l'équité, pas le favoritisme. Chaque personne mérite sa chance. Sois juste. ⚖️",
-            hope: "La justice avant le favoritisme"
+            text: "👨‍👩‍👧‍👦 נפוטיזם - להעדיף את שלך על חשבון הצדק. זה שחיתות מוסווית. אלוהים דורש הגינות, לא העדפה. כולם ראויים להזדמנות. היה צודק. ⚖️",
+            hope: "צדק לפני העדפה"
         },
         selection: {
-            text: "🧬 LA SÉLECTION - Choisir qui vit, qui meurt, qui mérite. Eugénisme, discrimination, exclusion. Mais Dieu aime chaque vie, chaque être. Personne n'a le droit de jouer à Dieu. Chaque vie a une valeur infinie. ❤️",
-            hope: "Chaque vie a une valeur infinie"
+            text: "🧬 ברירה - לבחור מי חי, מי מת, מי שווה. אאוגניקה, אפליה, הדרה. אבל אלוהים אוהב כל חיים, כל ישות. לאף אחד אין זכות לשחק אלוהים. לכל חיים ערך אינסופי. ❤️",
+            hope: "לכל חיים ערך אינסופי"
         },
         esclavage: {
-            text: "⛓️ L'ESCLAVAGE - Exploiter, dominer, asservir. L'histoire est pleine de ces horreurs. Mais Dieu libère les opprimés. Sois du côté de la liberté, pas de l'oppression. Défends la dignité humaine. 🕊️",
-            hope: "La liberté est un droit universel"
+            text: "⛓️ עבדות - לנצל, לשלוט, לשעבד. ההיסטוריה מלאה בזוועות אלה. אבל אלוהים משחרר את המדוכאים. עמוד בצד החופש, לא הדיכוי. הגן על כבוד האדם. 🕊️",
+            hope: "החופש הוא זכות אוניברסלית"
         },
         surexploitation: {
-            text: "🌍 LA SUREXPLOITATION - Épuiser la Terre, exploiter les ressources sans limite. La planète agonise. Mais il est encore temps. Respecte la Création, préserve la nature. Dieu nous a confié la Terre, pas pour la détruire. 🌱",
-            hope: "Préserve la Création pour demain"
+            text: "🌍 ניצול יתר - להתיש את כדור הארץ, לנצל משאבים ללא הגבלה. כדור הארץ גוסס. אבל עדיין יש זמן. כבד את הבריאה, שמור על הטבע. אלוהים הפקיד אצלנו את כדור הארץ, לא כדי להשמיד אותו. 🌱",
+            hope: "שמור על הבריאה למחר"
         },
         
-        // Obstacles milieu
         eagle: {
-            text: "🦅 L'aigle... Majestueux mais dangereux. Dans la vie, certains prédateurs volent haut. Mais toi aussi, tu peux voler. Ne te laisse pas intimider. Ta force est en toi. Déploie tes ailes ! 🦅✨",
-            hope: "Déploie tes ailes, vole haut"
+            text: "🦅 הנשר... מלכותי אבל מסוכן. בחיים, טורפים מסוימים עפים גבוה. אבל גם אתה יכול לעוף. אל תיבהל. הכוח שלך בפנים. פרוש את כנפיך! 🦅✨",
+            hope: "פרוש את כנפיך ועוף גבוה"
         },
         thunder: {
-            text: "⚡ La foudre... Imprévisible, terrifiante. Les tempêtes de la vie sont inévitables. Mais après l'orage vient le calme. Tiens bon, la lumière revient toujours. 🌩️➡️🌈",
-            hope: "Après la tempête vient l'arc-en-ciel"
+            text: "⚡ ברק... בלתי צפוי, מפחיד. סערות החיים בלתי נמנעות. אבל אחרי הסערה באה השקט. החזק מעמד, האור תמיד חוזר. 🌩️➡️🌈",
+            hope: "אחרי הסערה באה הקשת"
         },
         
-        // Obstacles FUN
         disco_ball: {
-            text: "🪩✨ YEEEES! Boule disco! Danse avec moi! La vie c'est aussi ça : des moments de pure joie absurde! Parfois il faut juste lâcher prise et briller comme une boule à facettes! 💃🕺",
-            hope: "La joie est un acte de résistance !"
+            text: "🪩✨ כן! כדור דיסקו! רקוד איתי! החיים זה גם: רגעי שמחה טהורה ואבסורדית! לפעמים צריך פשוט להירגע ולהאיר כמו כדור מראות! 💃🕺",
+            hope: "שמחה היא מעשה התנגדות!"
         },
         pizza: {
-            text: "🍕 Pizza party dans le ciel! Même le mouton mérite sa part! La vie c'est pas que des épreuves, c'est aussi partager une pizza avec des amis. Célèbre les petits plaisirs! 😋",
-            hope: "Les petits bonheurs comptent aussi !"
+            text: "🍕 מסיבת פיצה בשמיים! גם כבשה זכאית לחלק שלה! החיים זה לא רק ניסיונות, זה גם לחלוק פיצה עם חברים. חגוג את השמחות הקטנות! 😋",
+            hope: "השמחות הקטנות גם הן חשובות!"
         },
         trampoline: {
-            text: "🤸 BOING BOING! Rebondir c'est la vie! Chaque chute est une occasion de rebondir plus haut! Laisse ton cœur d'enfant s'exprimer, saute, ris, vis! 🎪",
-            hope: "Rebondis toujours plus haut !"
+            text: "🤸 באונג! לקפוץ זה החיים! כל נפילה היא הזדמנות לקפוץ גבוה יותר! תן לליבך של ילד להתבטא, קפוץ, צחק, חיה! 🎪",
+            hope: "קפוץ גבוה יותר ויותר!"
         },
         banana: {
-            text: "🍌 Attention banane! Oui, même moi je glisse parfois! On a le droit de tomber, de faire des erreurs hilarantes. L'important c'est de se relever en riant! 😂",
-            hope: "Ris de tes chutes, relève-toi !"
+            text: "🍌 זהירות מבננה! כן, גם אני מחליק לפעמים! יש לנו זכות ליפול, לעשות טעויות מצחיקות. החשוב הוא לקום בחיוך! 😂",
+            hope: "צחק על הנפילות שלך וקום!"
         },
         magnet: {
-            text: "🧲 Aimant géant! Certaines choses nous attirent irrésistiblement. Mais attention à ne pas perdre le contrôle! Choisis ce qui t'attire: le bien ou le chaos? 🤔",
-            hope: "Choisis bien tes attractions !"
+            text: "🧲 מגנט ענק! דברים מסוימים מושכים אותנו בצורה בלתי ניתנת להתנגדות. אבל זהיר לא לאבד שליטה! בחר מה מושך אותך: הטוב או הכאוס? 🤔",
+            hope: "בחר את המשיכות שלך בחוכמה!"
         },
         balloon: {
-            text: "🎈 Ballon! Léger, joyeux, insouciant! La vie devrait être légère comme un ballon. Laisse tes fardeaux au sol, envole-toi vers la joie! 🎉",
-            hope: "Sois léger comme un ballon !"
+            text: "🎈 בלון! קל, שמח, חסר דאגות! החיים צריכים להיות קלים כמו בלון. השאר את הנטל על הקרקע וטוס לקראת השמחה! 🎉",
+            hope: "היה קל כמו בלון!"
         },
         tornado: {
-            text: "🌪️ Tornade loufoque! Parfois la vie est un tourbillon chaotique! Mais même dans le chaos, trouve ton centre, ton ancrage. Le calme au cœur de la tempête! 🧘",
-            hope: "Trouve le calme dans le chaos !"
+            text: "🌪️ טורנדו משוגע! לפעמים החיים הם מערבולת כאוטית! אבל גם בכאוס, מצא את המרכז שלך, העוגן שלך. השקט במרכז הסערה! 🧘",
+            hope: "מצא שקט בכאוס!"
         },
         rocket: {
-            text: "🚀 Fusée cosmique! Parfois il faut viser les étoiles, même si ça semble fou! Ose rêver grand, ose l'impossible! Le ciel n'est qu'une limite imaginaire! 🌟",
-            hope: "Vise les étoiles, ose l'impossible !"
+            text: "🚀 רקטה לחלל! לפעמים צריך לכוון לכוכבים, גם אם זה נראה משוגע! העז לחלום בגדול, העז על הבלתי אפשרי! השמיים הם רק גבול של הדמיון! 🌟",
+            hope: "כוון לכוכבים ותעז על הבלתי אפשרי!"
         },
         
-        // Trophées spéciaux
         charity: {
-            text: "🤝 LA CHARITÉ - Donner sans rien attendre en retour. Partager avec celui qui a faim, vêtir celui qui est nu, consoler celui qui pleure. La charité est l'amour en action. Et cet amour change le monde. ❤️",
-            hope: "L'amour en action change le monde"
+            text: "🤝 צדקה - לתת בלי לצפות לתמורה. לחלוק עם הרעבים, להלביש את העירומים, לנחם את הבוכים. הצדקה היא אהבה בפעולה. והאהבה הזו משנה את העולם. ❤️",
+            hope: "אהבה בפעולה משנה את העולם"
         },
         impatient: {
-            text: "⏱️ L'IMPATIENCE - Toujours pressé, jamais satisfait. Mais Dieu travaille dans son temps, pas le nôtre. Apprends la patience, la confiance. Les meilleures choses prennent du temps. 🌱➡️🌳",
-            hope: "La patience est une force"
+            text: "⏱️ חוסר סבלנות - תמיד ממהר, אף פעם לא מרוצה. אבל אלוהים פועל בזמן שלו, לא שלנו. למד סבלנות, אמון. הדברים הטובים ביותר לוקחים זמן. 🌱➡️🌳",
+            hope: "הסבלנות היא כוח"
         },
         gold_coin: {
-            text: "💰 LA PIÈCE D'OR - Symbole de richesse matérielle. Mais la vraie richesse n'est pas dans l'or. Elle est dans les relations, l'amour, la paix intérieure. Cherche le trésor du cœur, pas celui du coffre. 💎➡️❤️",
-            hope: "Le vrai trésor est dans le cœur"
+            text: "💰 מטבע זהב - סמל לעושר חומרי. אבל העושר האמיתי אינו בזהב. הוא ביחסים, באהבה, בשלווה פנימית. חפש את אוצרות הלב, לא של התיבה. 💎➡️❤️",
+            hope: "האוצר האמיתי הוא בלב"
         },
         grace: {
-            text: "✝️ LA GRÂCE - Ce n'est pas une formule magique ni une incantation. La grâce se personnifie par une personne : Dieu fait homme et nommé Jésus. On ne trompera pas Dieu par des secrets ou cachotteries. La grâce est à lui seul. Et demander grâce avec repentance est une voie de salut pour tout être imparfait. Nos pires défauts n'auront plus d'importance devant lui avec un cœur disposé à être renouvelé, transformé pour le meilleur. Ne vous découragez pas en pensant être le pire pécheur. Demandez à Dieu de vous montrer qui vous êtes vraiment. 🕊️💔",
-            hope: "La grâce : Dieu fait homme"
+            text: "✝️ חסד - זה לא נוסחת קסם או לחש. החסד מתגלם באדם אחד: אלוהים שנעשה אדם ונקרא ישו. אנחנו לא נוכל להטעות את אלוהים בסודות או הסתרות. החסד שייך רק לו. ולבקש חסד בתשובה הוא דרך הגאולה לכל ישות לא מושלמת. החסרונות הגרועים ביותר שלנו לא יהיו משמעותיים לפניו, אם יש לב מוכן להתחדש, להשתנות לטובה. אל תתייאש אם אתה חושב שאתה החוטא הגרוע ביותר. בקש מאלוהים להראות לך מי אתה באמת. 🕊️💔",
+            hope: "חסד: אלוהים שנעשה אדם"
         },
         white_sheep: {
-            text: "🏳️‍🌈🐑 LE MOUTON BLANC - L'innocence, la pureté, mais aussi l'acceptation. Peu importe ton orientation, ta couleur, ton origine: Dieu t'aime tel que tu es. L'homophobie, le racisme, la discrimination sont des péchés. L'amour ne juge pas. L'amour accepte. L'amour libère. Tu es aimé(e), tu es accepté(e), tu es précieux(se). 🌈❤️",
-            hope: "Tu es aimé(e) tel(le) que tu es"
+            text: "🏳️‍🌈🐑 כבשה לבנה - תמימות, טוהר, וגם קבלה. לא משנה הנטייה, צבע העור, המוצא שלך: אלוהים אוהב אותך כמו שאתה. הומופוביה, גזענות, אפליה הם חטא. האהבה לא שופטת. האהבה מקבלת. האהבה משחררת. אתה אהוב, אתה מקובל, אתה יקר ערך. 🌈❤️",
+            hope: "אתה אהוב כמו שאתה"
         },
         
-        // Dialogue final
         finalDialogue: {
-            ant: "Regarde-toi, Mouton! Tu as traversé tous les obstacles! Je n'y croyais pas!",
-            jojo: "Moi non plus, mon frère! Mais tu l'as fait! Tu as prouvé que l'espoir est plus fort que tout!",
-            bee: "Tes ailes invisibles ont volé plus haut que les miennes! Tu es un héros!",
-            sheep: "Merci mes amis... Mais ce n'est pas moi le héros. C'est nous tous ensemble. C'est l'amour, c'est la foi, c'est l'espoir. Et maintenant... je vois la Porte du Paradis...",
-            jesus: "Viens, mon enfant. Tu as bien combattu. Entre dans la joie éternelle. Ta lutte n'a pas été vaine. L'amour a vaincu."
+            title: '🐑 דיאלוג סופי 🐑',
+            antLabel: '🐜 נמלה:',
+            jojoLabel: '🐐 ג\'וג\'ו העז:',
+            beeLabel: '🐝 דבורה:',
+            sheepLabel: '🐑 כבשת האומץ:',
+            jesusLabel: '✝️ ישו:',
+            author: '- עמנואל פאייה',
+            viewTrophies: '🏆 צפה בכל המסרים (גביעים)',
+            ant: "תראה את עצמך, כבשה! עברת את כל המכשולים! זה מדהים!",
+            jojo: "גם אני לא מאמין, אחי! אבל עשית את זה! הוכחת שהתקווה חזקה מהכל!",
+            bee: "הכנפיים הבלתי נראות שלך עפו גבוה יותר משלי! אתה גיבור!",
+            sheep: "תודה חברים שלי... אבל הגיבור לא אני. הגיבור זה כולנו ביחד. זו אהבה, זו אמונה, זו תקווה. ועכשיו... אני רואה את שער גן עדן...",
+            jesus: "בוא, ילדי. נלחמת היטב. היכנס לשמחה הנצחית. המאבק שלך לא היה לשווא. האהבה ניצחה."
         }
     },
     
     notifications: {
-        levelTransition: 'Passage au niveau suivant...',
-        trophyUnlocked: 'Trophée débloqué !',
-        powerUpCollected: 'Power-up collecté !',
-        lifeRestored: 'Vie restaurée !'
+        levelTransition: 'מעבר לשלב הבא...',
+        trophyUnlocked: 'גביע משוחרר!',
+        powerUpCollected: 'שדרוג נאסף!',
+        lifeRestored: 'חיים שוחזרו!'
+    },
+    
+    messages: {
+        finalVictory: {
+            title: '✨ ברבו ✨',
+            grace: 'חסדו של ישו הוא חוכמה בטוחה.',
+            keepLight: 'שמור על האור שלך',
+            keepHeart: 'ועל הלב הערני שלך.',
+            chooseLife: 'בחר בחיים.',
+            continue: 'מזל טוב! התמדת והתגברת על כל המכשולים. סבלנות ונחישות הם המפתח להצלחה. מוכן לשלב הבא?'
+        }
+    },
+    
+    proverbs: {
+        firstProverb: 'החופש הוא הכוח לעוף',
+        proverbs: [
+            'מים זורמים לעולם לא חוזרים',
+            'רגוע כמים עומדים',
+            'טיפה באוקיינוס',
+            'אחרי הסערה באה השקט',
+            'המים לוקחים צורת הכלי',
+            'הסבלנות מרה, אך פירותיה מתוקים',
+            'שתיקה זהב',
+            'הכל בא למי שיודע לחכות',
+            'הלילה מביא עצה',
+            'הכוכבים זורחים לכולם',
+            'האוקיינוס עשוי מטיפות',
+            'המסע הארוך ביותר מתחיל בצעד אחד',
+            'החוכמה מתחילה בפליאה',
+            'דע את עצמך',
+            'האמת נמצאת בתחתית הבאר',
+            'החכם לומד מטעויות',
+            'החיוך הוא העקום הכי יפה',
+            'הזמן מרפא את כל הפצעים',
+            'השלווה הפנימית שווה את כל האוצרות',
+            'כל סוף הוא התחלה חדשה'
+        ]
+    },
+    
+    powerUps: {
+        spiritual: {
+            courage: { name: 'אומץ', message: '💪 אומץ! אתה יכול להתמודד עם הכל!', tip: 'קפיצה על!' },
+            force: { name: 'כוח', message: '⚡ כוח אלוהי! לוחם אור!', tip: 'הרוס הכל!' },
+            patience: { name: 'סבלנות', message: '🕰️ סבלנות! עוף ברוגע!', tip: 'טיסה מבוקרת!' },
+            resilience: { name: 'חוסן', message: '🛡️ חוסן! יש לך שריון!', tip: 'מגן מופעל!' },
+            assurance: { name: 'ביטחון', message: '👑 ביטחון! אתה זוהר!', tip: 'הילה קורנת!' },
+            liberte: { name: 'חופש', message: '🕊️ חופש! שבור את השלשלאות!', tip: 'שחרור אמיתי!' },
+            controle: { name: 'שליטה', message: '🧠 שליטה! שלוט בעצמך!', tip: 'שליטה מושלמת!' },
+            sagesse: { name: 'חוכמה', message: '🧘 חוכמה! שלווה פנימית!', tip: 'בהירות נפשית!' },
+            gestion: { name: 'ניהול', message: '📊 ניהול! אופטימיזציה!', tip: 'יעילות!' },
+            agir: { name: 'לפעול', message: '🎯 לפעול! לעבור לפעולה!', tip: 'יוזמה פעילה!' },
+            combattre: { name: 'להילחם', message: '⚔️ להילחם! מצב קרבי!', tip: 'לוחם!' },
+            nepasabandonner: { name: 'לא לוותר', message: '🚫 לא לוותר! התמיד!', tip: 'בל יעורער!' },
+            perseverer: { name: 'להתמיד', message: '🏆 להתמיד! המשך!', tip: 'נחישות!' }
+        },
+        fun: {
+            disco: { name: 'מצב דיסקו', message: '🕺 מצב דיסקו! בואו לרקוד!', tip: 'מהלכי דיסקו אוטומטיים!' },
+            giant: { name: 'ענק', message: '🦣 כבשה ענקית! ענק!', tip: 'גודל x3!' },
+            tiny: { name: 'זעיר', message: '🐭 קטן מאוד! קל להתחמק!', tip: 'מצב התגנבות!' },
+            rainbow: { name: 'קשת', message: '🌈 כבשת קשת! קסום!', tip: 'עקבות צבעוניים!' },
+            magnet_bonus: { name: 'מגנט בונוס', message: '🧲 כל הבונוסים נמשכים!', tip: 'איסוף אוטומטי!' },
+            spring: { name: 'קנגורו', message: '🦘 מצב קנגורו! באונג!', tip: 'קפיצות אינסופיות!' },
+            jetpack: { name: 'ג\'טפק', message: '🎒 ג\'טפק מופעל! זום!', tip: 'טיסת טורבו!' },
+            ninja: { name: 'נינג\'ה', message: '🥷 מצב נינג\'ה! שקוף!', tip: 'חסר צורה!' },
+            party: { name: 'מסיבה', message: '🎉 זו מסיבה!', tip: 'קונפטי בכל מקום!' },
+            coffee: { name: 'קפאין', message: '☕ קפאין! מהירות x5!', tip: 'מהירות על!' }
+        }
+    },
+    
+    obstacles: {
+        ground: {
+            wheelchair: 'מוגבלות',
+            car_accident: 'תאונה',
+            coffin: 'אובדן',
+            safe: 'עוני',
+            house: 'משפחה',
+            wolf: 'אלימות',
+            black_sheep: 'דחייה',
+            addiction: 'התמכרות',
+            job_stress: 'עבודה',
+            debt: 'חוב',
+            loneliness: 'בדידות',
+            betrayal: 'בגידה'
+        },
+        middle: {
+            depression: 'דיכאון',
+            anxiety: 'חרדה',
+            doubt: 'ספק',
+            phantom: 'רוח רפאים',
+            shark: 'כריש',
+            eagle: 'נשר',
+            thunder: 'ברק',
+            cruise_ship: 'ספינת תענוגות'
+        },
+        sky: {
+            death: 'מוות',
+            cancer: 'סרטן',
+            nuclear: 'גרעיני',
+            meteor: 'מטאור',
+            procrastination: 'עצלות',
+            anger: 'כעס',
+            madness: 'שיגעון'
+        },
+        richness: {
+            avarice: 'בצע',
+            luxure: 'תאווה',
+            nepotisme: 'נפוטיזם',
+            selection: 'ברירה',
+            esclavage: 'עבדות',
+            surexploitation: 'ניצול'
+        },
+        sins: {
+            pride: 'גאווה',
+            greed: 'בצע',
+            lust: 'תאווה',
+            envy: 'קנאה',
+            gluttony: 'גרגרנות',
+            wrath: 'זעם',
+            sloth: 'עצלות'
+        },
+        fun: {
+            disco_ball: 'מסיבה',
+            pizza: 'מנוחה',
+            trampoline: 'באונג',
+            banana: 'החלקה',
+            magnet: 'מגנט',
+            balloon: 'קל',
+            tornado: 'טורנדו',
+            rocket: 'רקטה'
+        },
+        funMessages: {
+            disco_ball: '🥹 זמן מסיבה! הכבשה רוקדת!',
+            pizza: '🍕 אכלתי יותר מדי! עיכול איטי...',
+            trampoline: '🎪 סופר באונג! 🚀',
+            banana: '🍌 קליפת בננה! אוףףף!',
+            magnet: '🧲 נמשך כמו מגנט!',
+            balloon: '🎈 קל כנוצה!',
+            tornado: '🌪️ מערבולת משוגעת!',
+            rocket: '🚀 שיגור!'
+        },
+        weapons: {
+            sword: 'חרב',
+            laser_gun: 'לייזר',
+            net: 'רשת',
+            shield: 'מגן',
+            hammer: 'פטיש',
+            raygun: 'קרן'
+        },
+        level1Bosses: {
+            whale: 'לוויתן',
+            pacman: 'פקמן',
+            dragon: 'דרקון',
+            ufo: 'עב"ם',
+            shark: 'כריש',
+            cruise_ship: 'ספינת תענוגות',
+            robot: 'רובוט',
+            alien: 'חייזר',
+            monster: 'מפלצת',
+            big_boss: 'הבוס הגדול'
+        }
+    },
+    endless: {
+        bosses: {
+            whale: 'פוקושימה',
+            pacman: 'קראקן',
+            dragon: 'דרקון אש',
+            serpent: 'נחש ארס',
+            ufo: 'עב"ם',
+            shark: 'כריש',
+            robot: 'רובוט',
+            serpent_stage: 'נחש השלב',
+            dragon_stage: 'דרקון השלב'        },
+        gameOver: {
+            title: 'משחק נגמר',
+            skull: '💀',
+            score: 'ניקוד',
+            newRecord: '🏆 שיא חדש! 🏆',
+            record: 'שיא',
+            replay: '🔄 שחק שוב',
+            rebirth: 'לך לחיות! והיולד מחדש!\nחזור לחיים!'
+        }
+    },
+    intro: {
+        phases: {
+            paradise: "זה גן עדן?",
+            shield: "מגן טקטי...",
+            sword: "חרב לייזר...",
+            bomb: "פצצת יונים...",
+            wtf: "איזה בלגן זה... 💀",
+            boom: "בום! 💥",
+            no: "לא! מה? 😱"
+        }
     }
 };

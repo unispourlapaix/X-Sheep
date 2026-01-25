@@ -1,5 +1,6 @@
 // EndlessMode.js - Mode infini avec scoring
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 import { VisualBoss } from '../graphics/VisualBoss.js';
 import SerpentBoss from '../bosses/SerpentBoss.js';
 import DragonBoss from '../bosses/DragonBoss.js';
@@ -155,6 +156,12 @@ export class EndlessMode {
         this.bossCommentDuration = 180;  // 3 secondes
         this.onomatopoeia = null;
         this.onomatopoeiaTimer = 0;
+    }
+    
+    // Traduction dynamique des boss
+    getTranslatedBossText(id, isStage = false) {
+        const key = isStage ? `${id}_stage` : id;
+        return i18n.translations?.endless?.bosses?.[key];
     }
     
     resetBoss() {
@@ -736,7 +743,8 @@ export class EndlessMode {
         ctx.fillStyle = this.currentBoss.color;
         ctx.font = 'bold 16px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText(this.currentBoss.text, this.currentBoss.x, this.currentBoss.y + this.currentBoss.size / 2 + 15);
+        const bossText = this.getTranslatedBossText(this.currentBoss.id, this.isStageBoss) || this.currentBoss.text;
+        ctx.fillText(bossText, this.currentBoss.x, this.currentBoss.y + this.currentBoss.size / 2 + 15);
         
         // Afficher le bouclier pour les boss de palier
         if (this.isStageBoss && this.currentBoss.hasShield && this.currentBoss.shield > 0) {
@@ -1024,6 +1032,7 @@ export class EndlessMode {
     
     showSimpleGameOver() {
         const isNewRecord = this.game.score > this.highScore;
+        const t = this.game.i18n?.t.bind(this.game.i18n) || ((key) => key);
         
         const modal = document.createElement('div');
         modal.innerHTML = `
@@ -1034,15 +1043,15 @@ export class EndlessMode {
                     <h1 style="color:#FF0000;font-size:80px;margin:0;
                                text-shadow:0 0 30px #FF0000, 0 0 60px #FF0000;
                                animation:pulse 2s ease-in-out infinite">
-                        GAME OVER
+                        ${t('endless.gameOver.title')}
                     </h1>
-                    <div style="font-size:50px;margin:25px 0">💀</div>
+                    <div style="font-size:50px;margin:25px 0">${t('endless.gameOver.skull')}</div>
                     <p style="color:#FFD700;font-size:32px;margin:15px 0">
-                        SCORE: ${this.game.score.toLocaleString()}
+                        ${t('endless.gameOver.score')}: ${this.game.score.toLocaleString()}
                     </p>
                     ${isNewRecord ? 
-                        '<p style="color:#FFD700;font-size:26px;margin:10px 0">🏆 NOUVEAU RECORD ! 🏆</p>' :
-                        `<p style="color:#999;font-size:22px;margin:10px 0">Record: ${this.highScore.toLocaleString()}</p>`
+                        `<p style="color:#FFD700;font-size:26px;margin:10px 0">${t('endless.gameOver.newRecord')}</p>` :
+                        `<p style="color:#999;font-size:22px;margin:10px 0">${t('endless.gameOver.record')}: ${this.highScore.toLocaleString()}</p>`
                     }
                     <br>
                     <button id="endless-replay-btn"
@@ -1053,7 +1062,7 @@ export class EndlessMode {
                                    transition:transform 0.2s"
                             onmouseover="this.style.transform='scale(1.1)'"
                             onmouseout="this.style.transform='scale(1)'">
-                        🔄 REJOUER
+                        ${t('endless.gameOver.replay')}
                     </button>
                 </div>
             </div>

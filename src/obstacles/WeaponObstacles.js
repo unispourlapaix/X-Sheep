@@ -1,5 +1,6 @@
 // WeaponObstacles.js - Armes ramassables au sol pour combattre les dangers
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class WeaponObstacles {
     static definitions = [
@@ -59,6 +60,10 @@ export class WeaponObstacles {
         }
     ];
     
+    static getTranslatedText(id) {
+        return i18n.translations?.obstacles?.weapons?.[id];
+    }
+    
     static getRandom() {
         const def = this.definitions[Math.floor(Math.random() * this.definitions.length)];
         return {
@@ -66,7 +71,8 @@ export class WeaponObstacles {
             x: GameConfig.CANVAS_WIDTH,
             y: GameConfig.CANVAS_HEIGHT - 80 - def.height,
             type: 'weapon',
-            isWeapon: true
+            isWeapon: true,
+            text: this.getTranslatedText(def.id) || def.text
         };
     }
 }

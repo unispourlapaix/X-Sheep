@@ -9,40 +9,44 @@ export class LanguageSelector {
     }
 
     createUI() {
-        // Bouton flottant pour ouvrir le sélecteur
+        // Bouton flottant pour ouvrir le sélecteur - ajouté au groupe de contrôles
         this.button = document.createElement('div');
         this.button.id = 'lang-selector-btn';
         this.button.style.cssText = `
-            position: fixed;
-            top: 140px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #FFD700;
-            border-radius: 10px;
             cursor: pointer;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #FFD700;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            z-index: 100;
+            font-size: 30px;
             transition: all 0.3s;
         `;
         
         const currentLang = i18n.getAvailableLanguages().find(l => l.code === i18n.currentLang);
         this.button.textContent = currentLang?.flag || '🌍';
-        this.button.title = 'Change language / Changer de langue';
+        this.button.title = i18n.t('menu.controls.language.change');
         
         this.button.addEventListener('click', () => this.toggle());
-        document.body.appendChild(this.button);
+        
+        // Ajouter au groupe de contrôles plutôt qu'au body
+        const controlsGroup = document.getElementById('controls-group');
+        if (controlsGroup) {
+            controlsGroup.appendChild(this.button);
+        } else {
+            // Fallback si le groupe n'existe pas
+            document.body.appendChild(this.button);
+        }
 
-        // Panel des langues
+        // Panel des langues - s'ouvre juste en dessous du groupe de boutons
         this.panel = document.createElement('div');
         this.panel.id = 'lang-selector-panel';
         this.panel.style.cssText = `
             position: fixed;
-            top: 200px;
+            top: 140px;
             right: 20px;
             background: rgba(255, 255, 255, 0.95);
             border: 3px solid #FFD700;
@@ -67,7 +71,7 @@ export class LanguageSelector {
             border-bottom: 2px solid #FFD700;
             padding-bottom: 10px;
         `;
-        title.textContent = '🌍 Language / Langue';
+        title.textContent = i18n.t('menu.controls.language.panelTitle');
         this.panel.appendChild(title);
 
         // Liste des langues
@@ -78,12 +82,12 @@ export class LanguageSelector {
         const rtlLangs = languages.filter(l => l.dir === 'rtl');
 
         // Section LTR
-        const ltrSection = this.createLanguageSection('LTR Languages', ltrLangs);
+        const ltrSection = this.createLanguageSection(i18n.t('menu.controls.language.ltrSection'), ltrLangs);
         this.panel.appendChild(ltrSection);
 
         // Section RTL
         if (rtlLangs.length > 0) {
-            const rtlSection = this.createLanguageSection('RTL Languages (العربية / עברית)', rtlLangs);
+            const rtlSection = this.createLanguageSection(i18n.t('menu.controls.language.rtlSection'), rtlLangs);
             this.panel.appendChild(rtlSection);
         }
 

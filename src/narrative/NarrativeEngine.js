@@ -13,10 +13,13 @@ export class NarrativeEngine {
     // Obtenir le message traduit
     getTranslatedMessage(obstacleId) {
         // Essayer d'utiliser les traductions i18n d'abord
-        if (i18n && i18n.translations && i18n.translations.narrative && i18n.translations.narrative[obstacleId]) {
-            return i18n.translations.narrative[obstacleId];
+        const translated = i18n?.translations?.narrative?.[obstacleId];
+        if (translated) {
+            console.log(`✅ Traduction trouvée pour ${obstacleId}:`, translated.hope?.substring(0, 30));
+            return translated;
         }
         // Fallback sur NarrativeData français
+        console.log(`⚠️ Fallback FR pour ${obstacleId}`);
         return NarrativeData[obstacleId];
     }
     

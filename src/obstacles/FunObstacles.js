@@ -1,5 +1,6 @@
 // FunObstacles.js - Obstacles hilarants qui apparaissent toutes les 2 minutes
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class FunObstacles {
     static definitions = [
@@ -93,6 +94,14 @@ export class FunObstacles {
         }
     ];
     
+    static getTranslatedText(id) {
+        return i18n.translations?.obstacles?.fun?.[id];
+    }
+    
+    static getTranslatedMessage(id) {
+        return i18n.translations?.obstacles?.funMessages?.[id];
+    }
+    
     static getRandom() {
         const def = this.definitions[Math.floor(Math.random() * this.definitions.length)];
         
@@ -111,7 +120,9 @@ export class FunObstacles {
             ...def,
             x: GameConfig.CANVAS_WIDTH,
             y: Math.max(minY, Math.min(maxY, y)),
-            type: 'fun'
+            type: 'fun',
+            text: this.getTranslatedText(def.id) || def.text,
+            message: this.getTranslatedMessage(def.id) || def.message
         };
     }
 }

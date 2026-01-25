@@ -63,12 +63,17 @@ export class I18nManager {
      * Obtenir une traduction
      */
     t(key) {
+        // Si les traductions ne sont pas chargées, retourner la clé
+        if (!this.translations || Object.keys(this.translations).length === 0) {
+            return key;
+        }
+        
         const keys = key.split('.');
         let value = this.translations;
         
         for (const k of keys) {
             value = value?.[k];
-            if (!value) {
+            if (value === undefined) {
                 console.warn(`Traduction manquante: ${key}`);
                 return key;
             }
@@ -109,7 +114,8 @@ export class I18nManager {
             { code: 'zh', name: '中文', flag: '🇨🇳', dir: 'ltr' },
             { code: 'jp', name: '日本語', flag: '🇯🇵', dir: 'ltr' },
             { code: 'ko', name: '한국어', flag: '🇰🇷', dir: 'ltr' },
-            { code: 'rc', name: 'Lingala', flag: '🇨🇩', dir: 'ltr' },
+            { code: 'rc', name: 'Kréol Rénioné', flag: '🇷🇪', dir: 'ltr' },
+            { code: 'ln', name: 'Lingala', flag: '🇨🇩', dir: 'ltr' },
             { code: 'ar', name: 'العربية', flag: '🇸🇦', dir: 'rtl' },
             { code: 'he', name: 'עברית', flag: '🇮🇱', dir: 'rtl' }
         ];

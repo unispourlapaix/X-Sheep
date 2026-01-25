@@ -66,21 +66,29 @@
             ">🏆</div>
         </div>
         
-        <!-- Icône paramètres (rendu graphique) -->
-        <div id="render-toggle-btn" onclick="toggleRenderSettings()" style="
+        <!-- Groupe de contrôles: Réglages graphiques + Langue -->
+        <div id="controls-group" style="
             position: fixed;
             top: 20px;
             right: 20px;
-            cursor: pointer;
-            text-align: center;
             z-index: 100;
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-radius: 10px;
-            border: 2px solid #FFD700;
-        " title="Choisir le style graphique">
-            <div id="render-icon" style="font-size: 30px;">📺</div>
-            <div id="render-label" style="font-size: 10px; color: #FFD700;">Normal</div>
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        ">
+            <!-- Icône paramètres (rendu graphique) -->
+            <div id="render-toggle-btn" onclick="toggleRenderSettings()" style="
+                cursor: pointer;
+                text-align: center;
+                background: rgba(0,0,0,0.7);
+                padding: 10px;
+                border-radius: 10px;
+                border: 2px solid #FFD700;
+            " data-i18n-title="menu.controls.graphics.title">
+                <div id="render-icon" style="font-size: 30px;">📺</div>
+                <div id="render-label" style="font-size: 10px; color: #FFD700;">Normal</div>
+            </div>
+            <!-- Le bouton de langue sera ajouté ici dynamiquement par LanguageSelector.js -->
         </div>
         
         <div class="mode-selector">
@@ -354,6 +362,15 @@
             // Mettre à jour l'icône et le label
             updateRenderIcon(newRender);
             
+            // Récupérer les traductions
+            const i18n = window.app?.i18n;
+            const t = i18n ? (key) => i18n.t(key) : (key) => key;
+            
+            const renderNames = {
+                pixel: t('menu.controls.graphics.popup.modeNormal'),
+                voxel: t('menu.controls.graphics.popup.modeBth')
+            };
+            
             // Créer popup de confirmation
             const popup = document.createElement('div');
             popup.style.cssText = `
@@ -370,18 +387,13 @@
                 box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
             `;
             
-            const renderNames = {
-                pixel: '📺 Mode Normal',
-                voxel: '📟 Mode Bth'
-            };
-            
             popup.innerHTML = `
-                <h2 style="color: #FFD700; margin: 0 0 20px 0; font-size: 24px;">Style Graphique</h2>
+                <h2 style="color: #FFD700; margin: 0 0 20px 0; font-size: 24px;">${t('menu.controls.graphics.popup.title')}</h2>
                 <p style="color: white; font-size: 18px; margin: 20px 0;">
                     ${renderNames[newRender]}
                 </p>
                 <p style="color: #87CEEB; font-size: 14px; margin: 15px 0;">
-                    Le changement sera appliqué à la prochaine partie
+                    ${t('menu.controls.graphics.popup.willApply')}
                 </p>
                 <button onclick="this.parentElement.remove()" style="
                     background: linear-gradient(135deg, #FFD700, #FFA500);
@@ -393,7 +405,7 @@
                     color: #333;
                     cursor: pointer;
                     margin-top: 20px;
-                ">OK</button>
+                ">${t('menu.controls.graphics.popup.ok')}</button>
             `;
             
             document.body.appendChild(popup);
@@ -404,23 +416,43 @@
         }
         
         // Fonction pour mettre à jour l'icône de rendu
-        function updateRenderIcon(mode) {
+        window.updateRenderIcon = function(mode) {
             const icon = document.getElementById('render-icon');
             const label = document.getElementById('render-label');
             
+            // Récupérer les traductions
+            const i18n = window.app?.i18n;
+            const t = i18n ? (key) => i18n.t(key) : (key) => {
+                // Fallback avec valeurs par défaut
+                const fallbacks = {
+                    'menu.controls.graphics.label.normal': 'Normal',
+                    'menu.controls.graphics.label.bth': 'Bth',
+                    'menu.controls.graphics.title': 'Choisir le style graphique'
+                };
+                return fallbacks[key] || key;
+            };
+            
             if (mode === 'voxel') {
                 icon.textContent = '📟'; // TV rétro pour mode Bth
-                label.textContent = 'Bth';
+                label.textContent = t('menu.controls.graphics.label.bth');
             } else {
                 icon.textContent = '📺'; // TV moderne pour mode normal
-                label.textContent = 'Normal';
+                label.textContent = t('menu.controls.graphics.label.normal');
             }
-        }
+            
+            // Mettre à jour le title
+            const btn = document.getElementById('render-toggle-btn');
+            if (btn) {
+                btn.title = t('menu.controls.graphics.title');
+            }
+        };
         
         // Initialiser l'icône au chargement
         window.addEventListener('DOMContentLoaded', () => {
             const currentRender = localStorage.getItem('xsheep_renderMode') || 'pixel';
-            updateRenderIcon(currentRender);
+            if (window.updateRenderIcon) {
+                window.updateRenderIcon(currentRender);
+            }
         });
     </script>
 </body>

@@ -1,7 +1,12 @@
 // RichnessObstacles.js - Obstacles des péchés de richesse
 import { GameConfig } from '../config/GameConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class RichnessObstacles {
+    static getTranslatedText(id) {
+        const translated = i18n.translations?.obstacles?.richness?.[id];
+        return translated || '';
+    }
     static definitions = [
         {
             id: 'avarice',
@@ -57,6 +62,7 @@ export class RichnessObstacles {
         const def = this.definitions[Math.floor(Math.random() * this.definitions.length)];
         return {
             ...def,
+            text: this.getTranslatedText(def.id) || def.text,
             x: GameConfig.CANVAS_WIDTH,
             y: GameConfig.CANVAS_HEIGHT - 80 - def.height,
             type: 'richness'
