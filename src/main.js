@@ -52,7 +52,13 @@ class App {
         // Menu principal avec callback de rafraîchissement
         this.menu = new MenuSystem({
             onModeSelected: (mode) => this.startGame(mode),
-            onShow: () => this.refreshScores(),
+            onShow: () => {
+                this.refreshScores();
+                // Réafficher le sélecteur de langue quand on revient au menu
+                if (this.languageSelector) {
+                    this.languageSelector.show();
+                }
+            },
             audioManager: this.audioManager
         });
         
@@ -171,6 +177,11 @@ class App {
         
         // Cacher le menu
         this.menu.hide();
+        
+        // Cacher le sélecteur de langue
+        if (this.languageSelector) {
+            this.languageSelector.hide();
+        }
         
         // Initialiser le jeu avec le système de trophées partagé ET l'audioManager existant
         this.game = new Game(mode, this.trophySystem, this.audioManager);

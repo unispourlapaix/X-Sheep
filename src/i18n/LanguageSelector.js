@@ -14,7 +14,7 @@ export class LanguageSelector {
         this.button.id = 'lang-selector-btn';
         this.button.style.cssText = `
             position: fixed;
-            top: 80px;
+            top: 140px;
             right: 20px;
             width: 50px;
             height: 50px;
@@ -42,7 +42,7 @@ export class LanguageSelector {
         this.panel.id = 'lang-selector-panel';
         this.panel.style.cssText = `
             position: fixed;
-            top: 140px;
+            top: 200px;
             right: 20px;
             background: rgba(255, 255, 255, 0.95);
             border: 3px solid #FFD700;
@@ -212,6 +212,15 @@ export class LanguageSelector {
     close() {
         this.panel.style.display = 'none';
         this.isOpen = false;
+    }
+
+    hide() {
+        if (this.button) this.button.style.display = 'none';
+        if (this.panel) this.panel.style.display = 'none';
+    }
+
+    show() {
+        if (this.button) this.button.style.display = 'flex';
     }
 
     destroy() {

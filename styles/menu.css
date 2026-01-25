@@ -505,9 +505,35 @@ body {
 [dir="rtl"] #lang-selector-btn {
     right: auto;
     left: 20px;
+    top: 140px;
 }
 
 [dir="rtl"] #lang-selector-panel {
     right: auto;
     left: 20px;
+    top: 200px;
+}
+
+/* Mobile - ajuster position pour éviter chevauchement */
+@media screen and (max-width: 768px) {
+    #lang-selector-btn {
+        top: 70px !important;
+        right: 10px !important;
+    }
+    
+    #lang-selector-panel {
+        top: 130px !important;
+        right: 10px !important;
+        width: 220px !important;
+    }
+    
+    [dir="rtl"] #lang-selector-btn {
+        right: auto !important;
+        left: 10px !important;
+    }
+    
+    [dir="rtl"] #lang-selector-panel {
+        right: auto !important;
+        left: 10px !important;
+    }
 }
