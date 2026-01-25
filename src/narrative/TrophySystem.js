@@ -1,5 +1,6 @@
 // TrophySystem.js - Système de trophées et XP
 import { NarrativeData } from './narrativeData.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class TrophySystem {
     constructor() {
@@ -494,6 +495,12 @@ export class TrophySystem {
     }
     
     getObstacleLabel(id) {
+        // Utiliser les traductions i18n si disponibles
+        if (i18n && i18n.translations && i18n.translations.trophies && i18n.translations.trophies.labels) {
+            return i18n.translations.trophies.labels[id] || id;
+        }
+        
+        // Fallback sur les labels français
         const labels = {
             wheelchair: '♿ Fauteuil Roulant',
             car_accident: '🚗 Accident',
@@ -520,7 +527,17 @@ export class TrophySystem {
             charity: '💝 Charité',
             gold_coin: '💰 Pièce d\'Or - Liberté',
             grace: '✝️ La Grâce - Jésus',
-            impatient: '⏰💔 Horloge brisée - Maître du temps'
+            impatient: '⏰💔 Horloge brisée - Maître du temps',
+            eagle: '🦅 Aigle',
+            thunder: '⚡ Foudre',
+            disco_ball: '🪩 Boule Disco',
+            pizza: '🍕 Pizza',
+            trampoline: '🤸 Trampoline',
+            banana: '🍌 Banane',
+            magnet: '🧲 Aimant',
+            balloon: '🎈 Ballon',
+            tornado: '🌪️ Tornade',
+            rocket: '🚀 Fusée'
         };
         return labels[id] || 'Obstacle';
     }
