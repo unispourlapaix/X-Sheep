@@ -5,6 +5,7 @@ export class I18nManager {
         this.translations = {};
         this.rtlLanguages = ['ar', 'he'];
         this.onLanguageChange = null;
+        this.cache = new Map(); // Cache pour traductions fréquentes
     }
 
     /**
@@ -30,6 +31,7 @@ export class I18nManager {
             }
             
             this.translations = module.default || module;
+            this.cache.clear(); // Vider le cache lors du changement de langue
             console.log(`🌍 Traductions chargées: ${lang}`);
         } catch (e) {
             console.error(`Erreur chargement langue ${lang}:`, e);
@@ -63,6 +65,11 @@ export class I18nManager {
      * Obtenir une traduction
      */
     t(key) {
+        // Vérifier le cache d'abord
+        if (this.cache.has(key)) {
+            return this.cache.get(key);
+        }
+        
         // Si les traductions ne sont pas chargées, retourner la clé
         if (!this.translations || Object.keys(this.translations).length === 0) {
             return key;
@@ -74,9 +81,16 @@ export class I18nManager {
         for (const k of keys) {
             value = value?.[k];
             if (value === undefined) {
-                console.warn(`Traduction manquante: ${key}`);
+                if (process.env.NODE_ENV !== 'production') {
+                    console.warn(`Traduction manquante: ${key}`);
+                }
                 return key;
             }
+        }
+        
+        // Mettre en cache le résultat (limiter à 100 entrées pour éviter fuite mémoire)
+        if (this.cache.size < 100) {
+            this.cache.set(key, value);
         }
         
         return value;
