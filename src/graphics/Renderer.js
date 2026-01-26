@@ -57,7 +57,7 @@ export class Renderer {
         this.backgroundImage.onerror = () => {
             console.log('⚠️ Background image not found - Using canvas rendering');
         };
-        this.backgroundImage.src = 'assets/background.png';
+        this.backgroundImage.src = '/assets/background.png';
     }
     
     render() {
