@@ -24,16 +24,13 @@ export class AudioManager {
         const pathSegments = window.location.pathname.split('/').filter(Boolean);
         const base = pathSegments.length > 0 && pathSegments[0] !== 'index.html' ? `/${pathSegments[0]}/` : '/';
         
-        // Cache buster pour forcer le rechargement des MP3
-        const cacheBuster = `?v=${Date.now()}`;
-        
         this.musicTracks = [
-            `${base}music/Ilsuffitpas.mp3${cacheBuster}`,
-            `${base}music/LavoixducielmurmurelAmour.mp3${cacheBuster}`,
-            `${base}music/Jojo-notre-beau-Petit-mouton.mp3${cacheBuster}`,
-            `${base}music/DansQuelMondeOnVit.mp3${cacheBuster}`,
-            `${base}music/Nabandonnejamais.mp3${cacheBuster}`,
-            `${base}music/forteresses_de_peur_xT.mp3${cacheBuster}`
+            `${base}music/Ilsuffitpas.mp3`,
+            `${base}music/LavoixducielmurmurelAmour.mp3`,
+            `${base}music/Jojo-notre-beau-Petit-mouton.mp3`,
+            `${base}music/DansQuelMondeOnVit.mp3`,
+            `${base}music/Nabandonnejamais.mp3`,
+            `${base}music/forteresses_de_peur_xT.mp3`
         ];
         this.currentTrackIndex = 0;
     }
@@ -73,7 +70,8 @@ export class AudioManager {
         
         this.backgroundMusic = new Audio();
         this.backgroundMusic.volume = this.musicVolume;
-        this.backgroundMusic.loop = false; // On gère manuellement pour changer de piste
+        this.backgroundMusic.loop = false;
+        this.backgroundMusic.preload = 'auto'; // Précharger pour éviter NS_BINDING_ABORTED
         
         // Charger et jouer la première piste
         this.playNextTrack();
@@ -93,7 +91,11 @@ export class AudioManager {
         if (!this.backgroundMusic) return;
         
         this.currentTrack = this.musicTracks[this.currentTrackIndex];
+        
+        // Attendre que la piste précédente soit terminée avant de charger la suivante
+        this.backgroundMusic.pause();
         this.backgroundMusic.src = this.currentTrack;
+        this.backgroundMusic.load(); // Force le chargement
         
         // Tenter de jouer (peut échouer si pas d'interaction utilisateur)
         this.backgroundMusic.play().catch(err => {
