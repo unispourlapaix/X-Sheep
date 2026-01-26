@@ -24,13 +24,16 @@ export class AudioManager {
         const pathSegments = window.location.pathname.split('/').filter(Boolean);
         const base = pathSegments.length > 0 && pathSegments[0] !== 'index.html' ? `/${pathSegments[0]}/` : '/';
         
+        // Cache buster pour forcer le rechargement des MP3
+        const cacheBuster = `?v=${Date.now()}`;
+        
         this.musicTracks = [
-            `${base}music/Ilsuffitpas.mp3`,
-            `${base}music/LavoixducielmurmurelAmour.mp3`,
-            `${base}music/Jojo-notre-beau-Petit-mouton.mp3`,
-            `${base}music/DansQuelMondeOnVit.mp3`,
-            `${base}music/Nabandonnejamais.mp3`,
-            `${base}music/forteresses_de_peur_xT.mp3`
+            `${base}music/Ilsuffitpas.mp3${cacheBuster}`,
+            `${base}music/LavoixducielmurmurelAmour.mp3${cacheBuster}`,
+            `${base}music/Jojo-notre-beau-Petit-mouton.mp3${cacheBuster}`,
+            `${base}music/DansQuelMondeOnVit.mp3${cacheBuster}`,
+            `${base}music/Nabandonnejamais.mp3${cacheBuster}`,
+            `${base}music/forteresses_de_peur_xT.mp3${cacheBuster}`
         ];
         this.currentTrackIndex = 0;
     }
