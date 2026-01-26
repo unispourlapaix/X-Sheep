@@ -49,6 +49,12 @@ export class Renderer {
     }
     
     loadBackgroundImage() {
+        // Background image désactivé - utilise toujours le rendu canvas
+        // Si besoin de réactiver, créer public/assets/background.png
+        console.log('ℹ️ Using canvas rendering (background.png disabled)');
+        return;
+        
+        /* Code désactivé pour éviter 404
         this.backgroundImage = new Image();
         this.backgroundImage.onload = () => {
             this.useBackgroundImage = true;
@@ -63,6 +69,7 @@ export class Renderer {
         const base = pathSegments.length > 0 && pathSegments[0] !== 'index.html' ? `/${pathSegments[0]}/` : '/';
         
         this.backgroundImage.src = `${base}assets/background.png`;
+        */
     }
     
     render() {
