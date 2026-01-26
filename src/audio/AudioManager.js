@@ -19,13 +19,14 @@ export class AudioManager {
         this.backgroundMusic = null;
         this.musicVolume = 0.5;
         this.currentTrack = null;
+        const base = import.meta.env.BASE_URL;
         this.musicTracks = [
-            '/music/Ilsuffitpas.mp3',
-            '/music/LavoixducielmurmurelAmour.mp3',
-            '/music/Jojo-notre-beau-Petit-mouton.mp3',
-            '/music/DansQuelMondeOnVit.mp3',
-            '/music/Nabandonnejamais.mp3',
-            '/music/forteresses_de_peur_xT.mp3'
+            `${base}music/Ilsuffitpas.mp3`,
+            `${base}music/LavoixducielmurmurelAmour.mp3`,
+            `${base}music/Jojo-notre-beau-Petit-mouton.mp3`,
+            `${base}music/DansQuelMondeOnVit.mp3`,
+            `${base}music/Nabandonnejamais.mp3`,
+            `${base}music/forteresses_de_peur_xT.mp3`
         ];
         this.currentTrackIndex = 0;
     }
