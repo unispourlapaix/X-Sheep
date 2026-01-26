@@ -134,8 +134,13 @@ export default {
             quickVictoryLine2: '生き返れ！',
             notFinished: 'まだ終わってない？',
             watchYourLife: 'ライフに注意！'
-        },
-        
+        },        
+        corruption: {
+            light: 'あなたの心はまだ軽い 💖',
+            medium: '金があなたを重くし始める... ⚠️',
+            heavy: '欲があなたを押しつぶす！ 😰',
+            prisoner: 'あなたは富の囚人！ 💰⛓️'
+        },        
         ui: {
             paradise: '楽園',
             score: 'スコア',

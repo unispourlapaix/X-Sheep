@@ -135,8 +135,13 @@ export default {
             quickVictoryLine2: 'عد للحياة!',
             notFinished: 'لا! لم ينته الأمر؟',
             watchYourLife: '!انتبه لحياتك'
-        },
-        
+        },        
+        corruption: {
+            light: 'قلبك لا يزال خفيفاً 💖',
+            medium: 'الذهب يبدأ يثقلك... ⚠️',
+            heavy: 'الطمع يثقل عليك! 😰',
+            prisoner: 'أنت سجين ثروتك! 💰⛓️'
+        },        
         ui: {
             paradise: 'الجنة',
             score: 'النقاط',

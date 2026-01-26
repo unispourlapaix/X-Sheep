@@ -136,6 +136,13 @@ export default {
             watchYourLife: 'WATCH YOUR LIFE!'
         },
         
+        corruption: {
+            light: 'Your heart is still light 💖',
+            medium: 'Gold begins to weigh you down... ⚠️',
+            heavy: 'Greed weighs on you! 😰',
+            prisoner: 'You are prisoner of your wealth! 💰⛓️'
+        },
+        
         ui: {
             paradise: 'PARADISE',
             score: 'Score',

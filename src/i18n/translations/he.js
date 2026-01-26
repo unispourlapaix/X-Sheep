@@ -135,8 +135,13 @@ export default {
             quickVictoryLine2: 'לחזור לחיים!',
             notFinished: 'לא! עדיין לא נגמר?',
             watchYourLife: 'שמור על החיים שלך!'
-        },
-        
+        },        
+        corruption: {
+            light: 'לבך עדיין קל 💖',
+            medium: 'הזהב מתחיל להכביד עליך... ⚠️',
+            heavy: 'החמדנות כובדת עליך! 😰',
+            prisoner: 'אתה שבוי של עושרך! 💰⛓️'
+        },        
         ui: {
             paradise: 'גן עדן',
             score: 'ציון',

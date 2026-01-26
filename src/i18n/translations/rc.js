@@ -136,6 +136,13 @@ export default {
             watchYourLife: 'Vèy out bann lavi!'
         },
         
+        corruption: {
+            light: 'Ou kœr i énkor léjé 💖',
+            medium: "L'or i komans lourdir aou... ⚠️",
+            heavy: 'Lavidité i pèz aou! 😰',
+            prisoner: 'Ou é prizoniyé dê ou richès! 💰⛓️'
+        },
+        
         ui: {
             paradise: 'Paradi',
             score: 'Pwin',

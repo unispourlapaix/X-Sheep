@@ -134,8 +134,13 @@ export default {
             quickVictoryLine2: '¡VUELVE A VIVIR!',
             notFinished: '¡no! ¿no terminó?',
             watchYourLife: '¡CUIDADO CON TU VIDA!'
-        },
-        
+        },        
+        corruption: {
+            light: 'Tu corazón aún es ligero 💖',
+            medium: 'El oro comienza a pesarte... ⚠️',
+            heavy: '¡La codicia te pesa! 😰',
+            prisoner: '¡Eres prisionero de tu riqueza! 💰⛓️'
+        },        
         ui: {
             paradise: 'PARAÍSO',
             score: 'Puntuación',

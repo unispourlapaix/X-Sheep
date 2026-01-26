@@ -1,4 +1,5 @@
 // CorruptionManager.js - Gestion de la corruption par richesse
+import { i18n } from '../i18n/I18nManager.js';
 import { GameConfig } from '../config/GameConfig.js';
 
 export class CorruptionManager {
@@ -42,13 +43,13 @@ export class CorruptionManager {
         const level = this.getCorruptionLevel();
         
         if (level < 0.2) {
-            return "Ton cœur est encore léger 💖";
+            return i18n.t('game.corruption.light');
         } else if (level < 0.5) {
-            return "L'or commence à t'alourdir... ⚠️";
+            return i18n.t('game.corruption.medium');
         } else if (level < 0.8) {
-            return "La cupidité te pèse ! 😰";
+            return i18n.t('game.corruption.heavy');
         } else {
-            return "Tu es prisonnier de ta richesse ! 💰⛓️";
+            return i18n.t('game.corruption.prisoner');
         }
     }
 }

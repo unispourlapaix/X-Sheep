@@ -136,6 +136,13 @@ export default {
             watchYourLife: 'ATTENTION À TA VIE !'
         },
         
+        corruption: {
+            light: 'Ton cœur est encore léger 💖',
+            medium: "L'or commence à t'alourdir... ⚠️",
+            heavy: 'La cupidité te pèse ! 😰',
+            prisoner: 'Tu es prisonnier de ta richesse ! 💰⛓️'
+        },
+        
         ui: {
             paradise: 'PARADIS',
             score: 'Score',

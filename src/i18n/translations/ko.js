@@ -136,6 +136,13 @@ export default {
             watchYourLife: '생명을 조심하세요!'
         },
         
+        corruption: {
+            light: '당신의 마음은 여전히 가볍다 💖',
+            medium: '금이 당신을 무결게 하기 시작한다... ⚠️',
+            heavy: '탐욕이 당신을 짓누른다! 😰',
+            prisoner: '당신은 당신의 부의 포로다! 💰⛓️'
+        },
+        
         ui: {
             paradise: '천국',
             score: '점수',

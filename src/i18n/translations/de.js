@@ -134,8 +134,13 @@ export default {
             quickVictoryLine2: 'KEHRE ZUM LEBEN ZURÜCK!',
             notFinished: 'nein! ist es nicht vorbei?',
             watchYourLife: 'ACHTUNG AUF DEIN LEBEN!'
-        },
-        
+        },        
+        corruption: {
+            light: 'Dein Herz ist noch leicht 💖',
+            medium: 'Gold beginnt dich zu belasten... ⚠️',
+            heavy: 'Gier drückt dich! 😰',
+            prisoner: 'Du bist Gefangener deines Reichtums! 💰⛓️'
+        },        
         ui: {
             paradise: 'PARADIES',
             score: 'Punkte',

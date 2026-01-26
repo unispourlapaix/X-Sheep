@@ -134,8 +134,13 @@ export default {
             quickVictoryLine2: '回归生活！',
             notFinished: '不！还没结束？',
             watchYourLife: '小心你的生命！'
-        },
-        
+        },        
+        corruption: {
+            light: '你的心还很轻 💖',
+            medium: '黄金开始压沉你... ⚠️',
+            heavy: '贪婪压沉你！ 😰',
+            prisoner: '你是你财富的囚徒！ 💰⛓️'
+        },        
         ui: {
             paradise: '天堂',
             score: '分数',

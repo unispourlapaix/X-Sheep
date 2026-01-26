@@ -136,6 +136,13 @@ export default {
             watchYourLife: 'Keba na bomoi na yo!'
         },
         
+        corruption: {
+            light: 'Motema na yo ezali nanu pɛmpɛ 💖',
+            medium: 'Wolo ebandi kozinda yo... ⚠️',
+            heavy: 'Lokoso ezali kozinda yo! 😰',
+            prisoner: 'Ozali mokangami ya bozwi na yo! 💰⛓️'
+        },
+        
         ui: {
             paradise: 'Paradiso',
             score: 'Ntángo',
