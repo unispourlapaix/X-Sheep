@@ -20,12 +20,12 @@ export class AudioManager {
         this.musicVolume = 0.5;
         this.currentTrack = null;
         this.musicTracks = [
-            'music/Ilsuffitpas.mp3',
-            'music/LavoixducielmurmurelAmour.mp3',
-            'music/Jojo-notre-beau-Petit-mouton.mp3',
-            'music/DansQuelMondeOnVit.mp3',
-            'music/Nabandonnejamais.mp3',
-            'music/forteresses_de_peur_xT.mp3'
+            '/music/Ilsuffitpas.mp3',
+            '/music/LavoixducielmurmurelAmour.mp3',
+            '/music/Jojo-notre-beau-Petit-mouton.mp3',
+            '/music/DansQuelMondeOnVit.mp3',
+            '/music/Nabandonnejamais.mp3',
+            '/music/forteresses_de_peur_xT.mp3'
         ];
         this.currentTrackIndex = 0;
     }
