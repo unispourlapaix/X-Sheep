@@ -57,7 +57,11 @@ export class Renderer {
         this.backgroundImage.onerror = () => {
             console.log('⚠️ Background image not found - Using canvas rendering');
         };
-        const base = import.meta.env.BASE_URL;
+        
+        // Détection du base path pour GitHub Pages
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        const base = pathSegments.length > 0 && pathSegments[0] !== 'index.html' ? `/${pathSegments[0]}/` : '/';
+        
         this.backgroundImage.src = `${base}assets/background.png`;
     }
     

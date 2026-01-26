@@ -19,7 +19,11 @@ export class AudioManager {
         this.backgroundMusic = null;
         this.musicVolume = 0.5;
         this.currentTrack = null;
-        const base = import.meta.env.BASE_URL;
+        
+        // Détection du base path pour GitHub Pages
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        const base = pathSegments.length > 0 && pathSegments[0] !== 'index.html' ? `/${pathSegments[0]}/` : '/';
+        
         this.musicTracks = [
             `${base}music/Ilsuffitpas.mp3`,
             `${base}music/LavoixducielmurmurelAmour.mp3`,
