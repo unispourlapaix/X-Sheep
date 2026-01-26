@@ -3,6 +3,8 @@
  * Sons calmes, graves et bas pour X-Sheep
  */
 
+import { MusicPlayer } from './MusicPlayer.js';
+
 export class AudioManager {
     constructor() {
         this.audioContext = null;
@@ -15,24 +17,8 @@ export class AudioManager {
         // Son de fusée continu
         this.rocketSound = null;
         
-        // Musique de fond
-        this.backgroundMusic = null;
-        this.musicVolume = 0.5;
-        this.currentTrack = null;
-        
-        // Détection du base path pour GitHub Pages
-        const pathSegments = window.location.pathname.split('/').filter(Boolean);
-        const base = pathSegments.length > 0 && pathSegments[0] !== 'index.html' ? `/${pathSegments[0]}/` : '/';
-        
-        this.musicTracks = [
-            `${base}music/Ilsuffitpas.mp3`,
-            `${base}music/LavoixducielmurmurelAmour.mp3`,
-            `${base}music/Jojo-notre-beau-Petit-mouton.mp3`,
-            `${base}music/DansQuelMondeOnVit.mp3`,
-            `${base}music/Nabandonnejamais.mp3`,
-            `${base}music/forteresses_de_peur_xT.mp3`
-        ];
-        this.currentTrackIndex = 0;
+        // Nouveau système de musique
+        this.musicPlayer = new MusicPlayer();
     }
     
     /**
@@ -46,96 +32,39 @@ export class AudioManager {
             this.initialized = true;
             console.log('🔊 AudioManager initialisé');
             
-            // Ne plus démarrer automatiquement la musique ici
-            // La musique sera démarrée au début de chaque niveau
+            // Initialiser le lecteur de musique
+            this.musicPlayer.init();
         } catch (e) {
             console.error('Erreur initialisation audio:', e);
         }
     }
     
     /**
-     * Démarrer la musique de fond en autoplay
+     * Démarrer la musique de fond
      */
-    startBackgroundMusic() {
-        // Si la musique existe déjà et n'est pas en pause, la reprendre
-        if (this.backgroundMusic) {
-            if (this.backgroundMusic.paused) {
-                this.backgroundMusic.play().catch(err => {
-                    console.log('⚠️ Erreur reprise musique:', err.message);
-                });
-                console.log('🎵 Musique reprise');
-            }
-            return; // Déjà en cours
-        }
-        
-        this.backgroundMusic = new Audio();
-        this.backgroundMusic.volume = this.musicVolume;
-        this.backgroundMusic.loop = false;
-        this.backgroundMusic.preload = 'auto'; // Précharger pour éviter NS_BINDING_ABORTED
-        
-        // Charger et jouer la première piste
-        this.playNextTrack();
-        
-        // Écouter la fin de la piste pour passer à la suivante
-        this.backgroundMusic.addEventListener('ended', () => {
-            this.playNextTrack();
-        });
-        
-        console.log('🎵 Musique de fond démarrée en autoplay');
-    }
-    
-    /**
-     * Jouer la piste suivante
-     */
-    playNextTrack() {
-        if (!this.backgroundMusic) return;
-        
-        this.currentTrack = this.musicTracks[this.currentTrackIndex];
-        
-        // Attendre que la piste précédente soit terminée avant de charger la suivante
-        this.backgroundMusic.pause();
-        this.backgroundMusic.src = this.currentTrack;
-        this.backgroundMusic.load(); // Force le chargement
-        
-        // Tenter de jouer (peut échouer si pas d'interaction utilisateur)
-        this.backgroundMusic.play().catch(err => {
-            console.log('⚠️ Autoplay bloqué, en attente interaction utilisateur:', err.message);
-        });
-        
-        console.log(`🎵 Lecture: ${this.currentTrack}`);
-        
-        // Passer à la piste suivante (boucle)
-        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.musicTracks.length;
+    async startBackgroundMusic() {
+        await this.musicPlayer.start();
     }
     
     /**
      * Mettre en pause la musique
      */
     pauseMusic() {
-        if (this.backgroundMusic) {
-            this.backgroundMusic.pause();
-        }
+        this.musicPlayer.pause();
     }
     
     /**
      * Reprendre la musique
      */
-    resumeMusic() {
-        if (this.backgroundMusic) {
-            this.backgroundMusic.play().catch(err => {
-                console.log('Erreur reprise musique:', err);
-            });
-        }
+    async resumeMusic() {
+        await this.musicPlayer.resume();
     }
     
     /**
      * Changer le volume de la musique (0 à 1)
      */
     setMusicVolume(volume) {
-        this.musicVolume = Math.max(0, Math.min(1, volume));
-        if (this.backgroundMusic) {
-            this.backgroundMusic.volume = this.musicVolume;
-        }
+        this.musicPlayer.setVolume(volume);
     }
     
     /**
