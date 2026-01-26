@@ -81,9 +81,6 @@ export class I18nManager {
         for (const k of keys) {
             value = value?.[k];
             if (value === undefined) {
-                if (process.env.NODE_ENV !== 'production') {
-                    console.warn(`Traduction manquante: ${key}`);
-                }
                 return key;
             }
         }
