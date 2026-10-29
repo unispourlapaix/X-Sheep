@@ -1,0 +1,181 @@
+X-SHEEP — AVENTURE AU JETPACK & VOL INFINI
+Révision du 29 octobre 2026
+
+OUVRIR
+JOUER.html est autonome : ouvrir ce fichier dans un navigateur.
+Pour les sources séparées, ouvrir index.html avec tilt.js, adventure.js, game.js et style.css.
+
+AVENTURE
+Vol libre au jetpack, avec accélération, inertie, rebonds aux bords et freinage.
+Flèches, ZQSD ou WASD : propulsion. Espace / X : freiner.
+B ou bouton FREINER : freinage bref. P / Échap : pause.
+C ou DONNER OR : donner l’or accumulé, alléger sa laine et regagner une vie.
+M : son. Sur téléphone, guider le jetpack en glissant sur la scène.
+
+À chaque rencontre : monter chercher le bidon de carburant tout en haut.
+La collecte remplit le réservoir et fait apparaître le boss dans le haut
+de l’écran. Son souffle repousse le mouton vers le bas. Une fois la descente
+terminée, bonus et équipement apparaissent dans la partie basse.
+Aucun boss ne se déclenche sur simple minuterie. Le cycle recommence après
+chaque victoire. L’objectif est intégré dans un bandeau compact en bas, sous la scène et au-dessus des commandes, pour dégager le haut.
+Chaque boss est invulnérable : récupérer le bon bonus, puis toucher le boss. Le bonus se consomme lors de la victoire.
+Un mauvais bonus ne permet pas de tuer le boss. Les tirs et les bombes
+ne peuvent pas contourner cette règle dans l’aventure.
+Le bonus requis est signalé, persiste et réapparaît s’il manque.
+
+AFFINITÉS REPRISES DU JEU ORIGINAL
+Filet : Baleine. Épée : Dragon, Requin. Laser : OVNI, Pacman.
+Bouclier : Paquebot. Marteau : Robot, Monstre. Rayon : Alien, Robot.
+Adaptations de cette refonte : Marteau contre Big Boss, Sagesse contre Léviathan.
+Neuf boss rencontrés deux fois, puis Big Boss et Léviathan : vingt rencontres.
+
+HUMOUR ET RÉCIT
+Répliques nouvelles inspirées du ton absurde, satirique et porteur d’espoir
+du jeu original : productivité, népotisme, exploitation, avarice,
+greenwashing, bureaucratie, liberté de penser.
+Pizza, disco, trampoline, banane, aimant, ballon, tornade et fusée.
+L’or fait pousser la laine et alourdit le pilotage ; le don libère le mouton.
+Les 23 pouvoirs sont toujours disponibles en complément des outils contre boss.
+Il s’agit d’une réécriture jouable, pas d’une copie de tous les dialogues,
+trophées, traductions ou séquences du jeu source.
+
+VOL INFINI
+La version arcade précédente est conservée dans ce mode : ascension verticale,
+mouton ailé, tirs, six armes cycliques, bombes, eau, 23 pouvoirs, vagues,
+boss de palier avec bouclier et record local.
+Espace ou X maintenu : tirer. B : bombe. Tirs automatiques au tactile.
+
+VÉRIFICATIONS
+Tests du vol libre, inertie, freinage, rebond, pause, absence de contournement
+par tirs/bombes, mauvais et bon bonus, élimination au contact, consommation,
+disponibilité des bonus requis et vingt rencontres complètes.
+Huit objets absurdes, don d’or, et simulation de cinq minutes avec rendu.
+Vérification du vol infini : tirs, bombes, boss de palier, record et interface.
+Contrôle visuel dans le navigateur. Pas de validation tactile sur appareil physique.
+
+CRÉATION ORIGINALE
+Emmanuel Payet — https://www.emmanuelpayet.art/
+https://unispourlapaix.github.io/X-Sheep/
+Le site GitHub public n’a pas été modifié. Aucun déploiement distant effectué.
+
+PILOTAGE PAR INCLINAISON
+Ouvrir INCLINAISON dans l’en-tête, puis ACTIVER LES CAPTEURS.
+Sur mobile compatible, l’activation est également tentée au lancement
+de la partie. Accepter l’autorisation si le navigateur la demande.
+Tenir le téléphone dans la position de jeu et CALIBRER LE POINT NEUTRE.
+Réglages mémorisés : sensibilité de 0,5 à 3, zone morte de 0 à 8 degrés,
+inversion horizontale et verticale. Aperçu en direct des deux axes.
+La première donnée valide calibre automatiquement la posture de départ.
+Le changement portrait/paysage recale les axes et le point neutre.
+DÉSACTIVER revient au pilotage tactile/clavier. Ceux-ci restent prioritaires.
+Le panneau met la partie en pause et la reprend à sa fermeture.
+Les commandes du capteur s’annulent si aucune donnée récente n’est reçue.
+Aucune donnée de capteur n’est envoyée sur un serveur.
+Selon l’appareil, un hébergement HTTPS est nécessaire. L’absence de capteur
+ou un refus d’accès est signalé sans empêcher le jeu tactile/clavier.
+Référence technique : https://developer.mozilla.org/en-US/docs/Web/API/DeviceOrientationEvent
+
+VALIDATION DE CETTE RÉVISION
+Vingt cycles carburant → apparition haute → poussée → équipement → boss
+vérifiés automatiquement. Test de la collecte et de la poussée dans le
+navigateur, affichage mobile et réglage de sensibilité vérifiés.
+Autorisations accordées/refusées, calibration, zone morte, inversion,
+rotation paysage et interruption de données testées avec événements simulés.
+L’inclinaison sur un téléphone physique reste à vérifier sur cet appareil.
+JOUER-INCLINAISON.html et JOUER.html contiennent tous les scripts.
+MINES ET ARRIVÉE DU BOSS — DERNIÈRE RÉVISION
+Trois bidons sont répartis dans le haut de l’écran. Il faut tous les ramasser.
+Le boss entre alors progressivement depuis le haut, puis repousse le mouton
+vers le bas. L’équipement apparaît après la poussée.
+La grille de mines est présente pendant l’ascension et le combat.
+Les mines sont visibles pour permettre l’esquive. Les chiffres des cases
+proches donnent le nombre de mines actives dans les huit cases voisines.
+Une mine touchée explose une seule fois ; les protections habituelles restent actives.
+La poussée imposée par le boss ne peut pas provoquer de dégât de mine.
+Une voie centrale sans mine et les zones d’équipement sont préservées.
+Collecte partielle, arrivée animée, indices, explosions et vingt cycles vérifiés.
+
+DIFFICULTÉ PROGRESSIVE DES BIDONS
+Le quota commence à 3 bidons et augmente de 1 toutes les deux rencontres,
+jusqu’à 12 bidons pour les dernières rencontres. Le compteur indique la cible.
+Trois bidons restent visibles au maximum : les suivants apparaissent dans
+les emplacements libérés, à distance du mouton pour éviter la collecte automatique.
+Le boss attend la collecte de la totalité du quota. Les vingt quotas ont été vérifiés.
+
+SAUT INTERSTELLAIRE ENTRE LES GRILLES
+Après chaque boss vaincu, le mouton accélère vers le haut et quitte la grille.
+Une transition étoilée conduit au secteur suivant, avec une nouvelle disposition
+des mines et une teinte différente. Le mouton arrive hors écran par le bas,
+remonte dans le couloir central sûr, puis rend le contrôle au joueur.
+Le quota de carburant continue de progresser. La pause fige la transition.
+Le dernier boss déclenche aussi un saut, puis l’écran de victoire.
+Transition, arrivée, nouvelle grille, pause et victoire finale vérifiées.
+
+MINES CACHÉES EN FIN D’AVENTURE
+Sur les rencontres 18, 19 et 20, les mines deviennent invisibles.
+Les chiffres de proximité restent lisibles pour déduire les cases dangereuses.
+Les mines touchées explosent normalement et laissent une marque.
+Le bonus Sagesse étend la lecture des chiffres, sans révéler les mines.
+Seuils de visibilité, maintien des indices et dégâts vérifiés.
+
+MÉMORISATION DES MINES
+Rencontres 1 à 17 : les mines sont visibles pendant la collecte du carburant
+et l’arrivée du boss. Dès sa poussée, elles deviennent invisibles jusqu’à sa défaite.
+Leur position reste identique : mémoriser la grille avant la descente.
+Les chiffres de proximité restent disponibles pendant le combat.
+Rencontres 18 à 20 : les mines restent cachées dès le début, comme précédemment.
+La visibilité est réinitialisée pour chaque nouvelle grille après le saut.
+
+INFORMATIONS EN BAS
+Les dialogues et messages d’information sont intégrés sous l’objectif,
+à la place de l’ancienne barre Pause / Vol / Donner / Freiner.
+Ils ne recouvrent plus la scène. Les actions restent accessibles depuis
+le menu COMMANDES de l’en-tête et par les raccourcis clavier habituels.
+
+AMBIANCE SPATIALE FEUTRÉE
+Le bouton SON active une nappe douce, un souffle de jetpack lié à la propulsion,
+des collectes arrondies et un glissement sonore de saut interstellaire.
+Synthèse locale Web Audio, sans téléchargement. Ondes sinusoïdales, filtres graves,
+attaques et fins progressives, écho discret, niveau modéré et compression du mix.
+Le bouton SON coupe l’ensemble. Pause et onglet masqué atténuent le son.
+Démarrage après action sur SON, conformément au fonctionnement audio du navigateur.
+Graphe audio réutilisé, enveloppes, pause, mute et visibilité vérifiés avec un contexte simulé.
+
+SON ACTIF PAR DÉFAUT ET RETOURS LOGIQUES
+Le bouton affiche SON ON dès l’ouverture. Le premier clic, toucher ou appui
+sur une touche débloque l’audio ; aucune activation manuelle de SON n’est requise.
+Le bouton permet toujours de couper l’ensemble de l’ambiance et des effets.
+Effets distincts : collecte et réserve complète de carburant, équipement adapté
+ou inadapté, or, don, impact, bouclier, explosion de mine, arrivée du boss,
+poussée, salve, victoire, entrée sur grille, frein, tir, bombe, objets amusants.
+Un signal discret avertit de la proximité d’une mine et du carburant faible.
+Les sons conservent des attaques douces, des filtres et un mix compressé.
+Activation par geste, 21 événements, sourdine et pause testés avec contexte simulé.
+
+DÉFAITE VISIBLE AVANT LE SAUT
+Le boss vaincu reste présent pendant deux secondes : tremblement, puis
+explosion en particules ou aspiration dans un trou noir, en alternance.
+Le saut interstellaire ne démarre qu’une fois sa disparition terminée.
+Le « pok pop pok » accompagne la défaite ; le souffle du saut vient après.
+La pause fige cette animation. Récompense et progression ne sont comptées qu’une fois.
+Animations, ordre des phases et absence de double récompense vérifiés.
+
+TRADUCTIONS — 15 LANGUES D’ORIGINE
+Sélecteur dans l’en-tête : français, anglais, espagnol, allemand, italien,
+portugais, russe, ukrainien, chinois, japonais, coréen, créole réunionnais,
+lingala, arabe et hébreu. Le choix est mémorisé localement.
+Changer la langue recharge le jeu et recommence la partie.
+337 textes et fragments traduits : interface, objectifs, dialogues satiriques,
+bonus, outils, boss, mines, sauts, messages et réglages de l’inclinaison.
+L’arabe et l’hébreu disposent d’une direction de lecture adaptée ; les commandes
+et la géométrie de la scène restent identiques.
+Les traductions sont intégrées : aucune requête de traduction pendant le jeu.
+Le fichier traductions.json permet leur relecture et correction.
+Qualité : traductions automatiques pour 13 langues, adaptation rédigée pour le
+créole réunionnais. Elles constituent une première version à relire par des
+locuteurs, particulièrement pour l’humour, le lingala et le créole réunionnais.
+Tests des 15 langues : armes, objectifs, parcours et rendu simulé sans erreur.
+Sélecteur, objectifs anglais, affichage arabe et retour au français vérifiés
+visuellement dans le navigateur. L’ensemble des dialogues n’a pas été relu
+par des locuteurs natifs.
+Pour les sources séparées, conserver i18n.js avec les autres scripts.
