@@ -14,3 +14,5 @@
 header>b span{padding:0 1px}.overlay h2 span{font-size:inherit;vertical-align:baseline}
 
 #language{width:60px;min-width:0;padding:5px 1px;font:10px Arial,sans-serif;border:1px solid #78998a;background:#18333e;color:#ece4c8}.cabinet{direction:ltr}html[dir=rtl] aside,html[dir=rtl] #banter,html[dir=rtl] #mission,html[dir=rtl] #motion-panel{direction:rtl;text-align:right}html[lang=ar] canvas,html[lang=he] canvas{font-family:Arial,sans-serif}@media(max-width:650px){header{gap:5px;padding:0 6px}header>b{font-size:16px}header>div{flex-wrap:wrap;justify-content:flex-end;gap:0}#language{width:48px;font-size:9px}#control-menu>summary{font-size:6px;padding:8px 4px}header button{font-size:7px!important;padding:8px 4px}}
+
+#weapon{pointer-events:auto;touch-action:manipulation;min-height:44px;max-width:55%;padding:4px 8px;border:1px solid #e8c77d66;background:#142b35e8;font:inherit;color:#f4d892;letter-spacing:0}#weapon:not(:disabled)::before{content:"🔫 ↻ ";}#weapon:disabled{pointer-events:none;border-color:transparent;background:transparent;color:inherit;cursor:default}
