@@ -2,7 +2,7 @@
 // Soft space ambience and the original MP3 playlist.
 const SpaceAudio={
  music:null,musicReady:false,musicPending:false,musicBlocked:false,musicIndex:0,musicPath:0,
- tracks:['Ilsuffitpas.mp3','LavoixducielmurmurelAmour.mp3','Jojo-notre-beau-Petit-mouton.mp3','DansQuelMondeOnVit.mp3','Nabandonnejamais.mp3','forteresses_de_peur_xT.mp3','Des_Maux_dans_mon_viseur.mp3','Je-dis-boum.mp3'],
+ tracks:['Ilsuffitpas.mp3','LavoixducielmurmurelAmour.mp3','Jojo-notre-beau-Petit-mouton.mp3','Des_Maux_dans_mon_viseur.mp3','Je-dis-boum.mp3','Nabandonnejamais.mp3','DansQuelMondeOnVit.mp3','forteresses_de_peur_xT.mp3'],
  prepareMusic(){if(this.music)return;this.music=new Audio();this.music.volume=.24;this.music.preload='none';this.music.addEventListener('ended',()=>{this.musicIndex=(this.musicIndex+1)%this.tracks.length;this.musicBlocked=false;this.loadMusic();this.syncMusic()});this.music.addEventListener('error',()=>{this.musicPending=false;if(this.musicPath<2){this.musicPath++;this.loadMusic();this.syncMusic()}else this.musicBlocked=true});this.loadMusic()},
  loadMusic(){this.music.src=['../music/','../public/music/','music/'][this.musicPath]+this.tracks[this.musicIndex]},
  syncMusic(){if(!this.musicReady)return;this.prepareMusic();if(muted||document.hidden||state==='paused'){this.music.pause();return}if(this.music.paused&&!this.musicPending&&!this.musicBlocked){this.musicPending=true;const promise=this.music.play();if(promise?.then)promise.then(()=>{this.musicPending=false;if(muted||document.hidden||state==='paused')this.music.pause()}).catch(()=>{this.musicPending=false;this.musicBlocked=true});else this.musicPending=false}},
