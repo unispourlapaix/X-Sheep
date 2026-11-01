@@ -27,3 +27,5 @@ header>b span{padding:0 1px}.overlay h2 span{font-size:inherit;vertical-align:ba
 @media(max-width:650px){.cabinet .screen,.cabinet:has(#mission:not([hidden])) .screen{width:100%;height:auto;aspect-ratio:9/16;min-height:0;max-height:none}}
 
 #share-season{align-self:flex-end;padding:5px 9px;background:#18333e;color:#fff1ca;border:1px solid #e8c77d66;font-size:17px}
+
+#share-preview{width:min(440px,calc(100vw - 24px));max-height:92svh;overflow:auto;padding:12px;border:1px solid #f7d8b1;background:#fff4e3;color:#34475e;border-radius:16px;box-shadow:0 20px 90px #0008}#share-preview::backdrop{background:#102238bb}#share-preview-image{width:100%;height:auto;display:block;border-radius:9px}#share-preview-close{display:block;margin:0 0 8px auto;padding:0;width:32px;height:32px;font-size:24px;border:0;color:#34475e}#share-preview-send{width:100%;margin-top:12px;background:#34475e;color:#fff4e3;border:0;border-radius:8px;padding:15px;font-size:11px}
