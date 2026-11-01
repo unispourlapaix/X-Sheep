@@ -18,3 +18,12 @@ header>b span{padding:0 1px}.overlay h2 span{font-size:inherit;vertical-align:ba
 #weapon{pointer-events:auto;touch-action:manipulation;min-height:44px;max-width:55%;padding:4px 8px;border:1px solid #e8c77d66;background:#142b35e8;font:inherit;color:#f4d892;letter-spacing:0}#weapon:not(:disabled)::before{content:"🔫 ↻ ";}#weapon:disabled{pointer-events:none;border-color:transparent;background:transparent;color:inherit;cursor:default}
 
 #weapon:not(:disabled){position:relative;min-height:26px;width:48px;max-width:48px;height:26px;padding:2px 3px;border:0;border-radius:4px;background:#142b35a8;font:12px monospace;line-height:22px}#weapon:not(:disabled)::before{content:none}#weapon:not(:disabled)::after{content:"";position:absolute;inset:-9px 0}#weapon:disabled{width:auto;max-width:55%;min-height:0;padding:0}
+
+/* Reserve the same space whether a message is present or not. */
+.info-tray{height:112px;min-height:112px;max-height:112px;margin-top:5px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+#mission{height:66px;min-height:66px;max-height:66px;overflow:auto;margin-top:5px}
+.cabinet #mission[hidden]{display:block!important;visibility:hidden}
+.cabinet .screen{width:100%;height:auto;aspect-ratio:9/16;min-height:0;max-height:none;flex-shrink:0}
+@media(max-width:650px){.cabinet .screen,.cabinet:has(#mission:not([hidden])) .screen{width:100%;height:auto;aspect-ratio:9/16;min-height:0;max-height:none}}
+
+#share-season{align-self:flex-end;padding:5px 9px;background:#18333e;color:#fff1ca;border:1px solid #e8c77d66;font-size:17px}
