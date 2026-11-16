@@ -471,12 +471,12 @@ for(const s of shots)Endless.drawShot(s);Endless.draw();
 if(boss){if(['serpent','leviathan','dragon'].includes(boss.id))for(let i=7;i>0;i--){const x=boss.x+Math.sin(boss.t*2-i*.7)*24,y=boss.y-i*8;rect(x-8,y-6,16,12,boss.id==='dragon'?'#966955':'#5e8f7b');rect(x-7,y-6,14,3,'#acc298')}sprite(boss.id,boss.x,boss.y,boss.id==='leviathan'||boss.id==='big_boss'?6:4);if(boss.hitUntil>clock){g.strokeStyle='#f1c298';g.lineWidth=2;g.strokeRect(Math.round(boss.x-39),Math.round(boss.y-31),78,62);text('−'+boss.lastDamage,boss.x,boss.y-41-(.32-(boss.hitUntil-clock))*35,'#f5c5a0',16)}if(boss.shield>0){g.strokeStyle='#b4e6e8';g.strokeRect(Math.round(boss.x-48),Math.round(boss.y-40),96,80)}}
 if(state==='menu'){player.x=180;player.y=490}drawSheep();for(const p of particles)rect(p.x,p.y,2,2,p.color);if(state==='won'){rect(98,155,7,240,'#e3c58c');rect(255,155,7,240,'#e3c58c');rect(98,148,164,7,'#fff0bd')}g.restore()}
 function loop(t){const dt=Math.min(.04,(t-last)/1000||.016);last=t;SpaceAudio.update();if(state==='menu')distance+=dt*8;tick(dt);draw();requestAnimationFrame(loop)}
-function startFromMenu(selectedMode){
+function startFromMenu(selectedMode,event){
  if(state!=='menu')return;
  start(selectedMode);
- if(!document.fullscreenElement&&!document.webkitFullscreenElement)changeFullscreen();
+ if(event?.pointerType==='touch'&&!document.fullscreenElement&&!document.webkitFullscreenElement)changeFullscreen();
 }
-$('adventure').onclick=()=>startFromMenu('adventure');$('endless').onclick=()=>startFromMenu('endless');$('pause').onclick=pause;$('bomb').onclick=bombFire;$('resume').onclick=()=>state==='paused'?pause():start(mode);$('home').onclick=()=>{Adventure.stopInput();$('mission').hidden=true;$('banter').hidden=true;state='menu';boss=null;powers={};keys={};pointer=null;level=0;distance=score=0;lives=5;fuel=100;bombs=3;weaponIndex=0;enemies=[];items=[];shots=[];particles=[];ui();$('mode-label').textContent=I18n.t("VOL VERTICAL");$('modal').hidden=true;$('menu').hidden=false;$('boss-hud').hidden=true;$('toast').textContent='';$('adventure').focus()};
+$('adventure').onclick=event=>startFromMenu('adventure',event);$('endless').onclick=event=>startFromMenu('endless',event);$('pause').onclick=pause;$('bomb').onclick=bombFire;$('resume').onclick=()=>state==='paused'?pause():start(mode);$('home').onclick=()=>{Adventure.stopInput();$('mission').hidden=true;$('banter').hidden=true;state='menu';boss=null;powers={};keys={};pointer=null;level=0;distance=score=0;lives=5;fuel=100;bombs=3;weaponIndex=0;enemies=[];items=[];shots=[];particles=[];ui();$('mode-label').textContent=I18n.t("VOL VERTICAL");$('modal').hidden=true;$('menu').hidden=false;$('boss-hud').hidden=true;$('toast').textContent='';$('adventure').focus()};
 function toggleSound(){muted=!muted;if(!muted)SpaceAudio.unlock();else SpaceAudio.quiet();$('sound').textContent=muted?I18n.t("SON OFF"):I18n.t("SON ON");tone(660)}$('sound').onclick=toggleSound;
 function changeFullscreen(){
  const root=document.documentElement;
